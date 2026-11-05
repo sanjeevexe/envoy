@@ -20,7 +20,7 @@ Underneath all three is a **memory** of what Envoy has seen in apps, in email an
 
 **What is actually new.** Operating phone apps with an agent has been done (Mobilerun, Gemini on Android, AGI Inc.). Envoy's contribution is making it dependable, cheap and callable:
 
-1. **App routines.** One successful run is compiled into a reusable program with inputs, a check before and after every step, element-based targeting that works on any screen size, and self-repair that fixes only the broken step and saves the fix.
+1. **App routines.** One successful run is compiled into a reusable program with inputs, checks before and after its steps, element-based targeting that works on any screen size, and self-repair that fixes only the broken step and saves the fix.
 2. **Learned routines as agent tools.** A routine shared with agents appears in their tool list with typed inputs, the moment it's shared. An agent calls `instagram_reel_song(song_title, song_artist, caption)`; Envoy replays it on the phone, and asks the person before the post.
 3. **A trustworthy shared memory.** Facts pulled from app screens, email and photos land in one graph. Each fact records where and when it was seen, newer facts replace stale ones, and the same trip seen in an email and an app becomes one entity.
 4. **A device layer that routes between phones.** One interface over emulators (on the Mac or in the cloud) and real Android phones, with routines that run on either. Agents can see the phones and pick one.
@@ -36,7 +36,7 @@ Envoy succeeds if a routine learned from one run works on new inputs, survives U
 
 1. An agent, driven by Meta models, completes multi-step tasks in real Android apps on a cloud emulator.
 2. Successful runs become app routines that take inputs, verify every step, and repair themselves.
-3. A shared memory graph, filled from app screens, Gmail, Calendar and iPhone photos, that every interface reads and writes in real time. (Calendar wasn't built.)
+3. A shared memory graph, filled from app screens, Gmail and iPhone photos, that every interface reads and writes in real time.
 4. Users interact by web chat, voice, an MCP connector (for Muse or other assistants), and an iPhone companion app.
 5. Users sign in themselves through a live view, approve irreversible actions, and control what is remembered.
 6. A device layer ready for real Android phones, tested on a borrowed phone once available.
@@ -275,7 +275,7 @@ Every step is stored with its before and after screens, the action and its eleme
 
 ## App routines
 
-An app routine is a small program compiled from one successful agent run: it takes inputs, checks the screen before and after every step, finds buttons by what they are rather than where they were, and repairs only the step that breaks. Reruns need no model calls while every check passes.
+An app routine is a small program compiled from one successful agent run: it takes inputs, checks the screen before and after its steps, finds buttons by what they are rather than where they were, and repairs only the step that breaks. Reruns need no model calls while every check passes.
 
 ![Routine lifecycle: compile once, run many times, repair locally](diagrams/routine-lifecycle.png)
 
@@ -487,7 +487,7 @@ Every interface talks to the same task API and memory service, and every change 
 | iPhone companion | Approve actions from notifications, follow a running task, watch or take over the phone, send screenshots and photos in | The web app added to the Home Screen, over Tailscale Serve HTTPS on the user's tailnet; Web Push; a 6-digit pairing code |
 | MCP server | Agents use Envoy's phones, routines and memory: Muse (a custom connector, on the Mac and in its iPhone app), the Spark agent, Claude Code, or any MCP client | MCP Python SDK 2.3, Streamable HTTP, stateless; a bearer key per agent |
 | Siri | "Ask Envoy" from Siri, the Action Button or Control Center; Envoy's one-line answer is spoken back | An Apple Shortcut that posts to `/api/siri` with a `siri`-scoped token (`docs/siri.md`) |
-| Gmail | Envoy reads confirmation emails into memory | Gmail API, read-only, on a personal Google Cloud project. The Calendar API was planned but not built |
+| Gmail | Envoy reads confirmation emails into memory | Gmail API, read-only, on a personal Google Cloud project |
 | Scheduler | Tasks that run at a time, or when something happens on the phone, in email or in memory | Envoy's own scheduler inside the backend |
 
 ### Tasks: the shared unit of work
@@ -580,7 +580,7 @@ Envoy was built to plug into the real Muse app without depending on it. Three ro
 | --- | --- | --- |
 | 1. Envoy's own assistant, built on Muse Spark | Nothing beyond the Meta API | Works. It is the chat in Envoy's web app, and the fallback |
 | 2. Muse custom connector | A public HTTPS address that serves only `/mcp`, and a key the person pastes into Muse's secure credentials field | **Works, and it's the front door.** Muse in its iPhone app and Muse for Mac reach Envoy through a Tailscale Funnel address that serves `/mcp` and nothing else. Muse has run check-ins, `send_to_phone`, `create_trigger` and `phone_updates` (Oct 27–29, `docs/muse-link.md`), and called shared routine tools by name (Nov 2) |
-| 3. Listed connector or Meta AI Connectors preview | The Muse Connector Platform's review, or the preview's waitlist | Drafts in `docs/connector-application.md`; not submitted |
+| 3. Listed connector or Meta AI Connectors preview | The Muse Connector Platform's review, or the preview's waitlist | Not submitted |
 
 What Muse's client does, as measured:
 - It calls `initialize` and then the tool on every request. It declares no client capabilities, so Envoy can't push to it.
@@ -857,7 +857,6 @@ envoy/
   eval/             # task sets, injected UI changes, runners, reports
   scripts/          # setup, Muse's Funnel address, agent keys, Shortcuts, cloud
   site/             # the showcase site
-  bridge-android/, relay/, ios/   # planned, not built (README only)
 ```
 
 ### Test apps
@@ -1098,28 +1097,13 @@ The runs drove these changes:
 
 ## Phase 7 results
 
-*Draft (Oct 29): the final numbers come from one run of every suite on the `eval-final` tag, now Nov 3, 17:00–22:00 ET.* Details in `docs/phase-7-results.md`; report in `eval/results/final/report.md`.
+*The final numbers are in `eval/results/final/report.md` (all 10 suites on the `eval-final` tag, Nov 3). This section records the passes before it.* Details in `docs/phase-7-results.md`.
 
 The measurement passes found 31 problems, each fixed and tested: compiler gaps (answers on the first screen, a value whose ID every row shares, a switch's state, a price before its details), safety-gate gaps (a tap at a point skipped the rules; uninstall, erase and call buttons), and grading errors in the suites themselves (a shape-graded price from the wrong menu item, a right answer graded wrong).
 
 AndroidWorld's 13 agent changes were tested on SkyLark and the real apps before merging, with `main`'s agent run the same evening as an A/B. The first round checked in the wrong flight through Home's "Check in" (4 of 11 plans). After three follow-ups and a compiler fix, every SkyLark suite passed: 10 of 10 routines compiled, agent and routines 120 of 120 with no side effects, and the merged agent needs a median 2 steps per task where `main`'s needed 4 ($0.0073 against $0.0090). On real apps it over-checked answers already on screen (contacts_count 25 steps against 0), so that fix and a real-app rerun came first; the changes merged into `main` on Oct 29 (`105d04e`).
 
 Several coding sessions shared one Mac, so each device was claimed through a lock and only one session merged into `main`. Two outside failures shaped the evaluation: AndroidWorld's emulator controller restarted the shared adb server (now refused), and the Meta API's billing failed from Oct 29, 02:16 (a new account; every run now checks the key first).
-
-## Open questions
-
-These are the answers that could change the design; most can be settled in Phase 0 or at kickoff.
-
-- [ ] **Credits:** how much, and do they cover Muse Wonder, SAM 3.1 and Voice Transcribe?
-- [x] **Speed:** how long does one Muse Spark 1.3 step take at low and minimal reasoning effort? Answered in Phase 0: a median of 0.87 s at low and 0.99 s at minimal, and low is also more reliable.
-- [x] **Grounding on phones:** how accurate is Spark's visual grounding on tall phone screenshots (1080 by 2400), and does SAM 3.1 segment UI elements usefully? Answered in Phase 0: grounding hit 3 of 3 targets (center error at most 22 px), and SAM 3.1 works with specific noun phrases.
-- [ ] **Limits:** maximum output tokens, and the minimum prompt length for caching.
-- [x] **Path into Muse:** Muse builds custom connectors itself when a user asks (reportedly as an MCP client in Meta's cloud), listed connectors go through a review on the Muse Connector Platform, and Meta AI Connectors is a waitlisted preview. Which, if any, can Envoy use during the hackathon? Answered in Phase 0: the custom-connector route works (see Path into Muse).
-- [x] **Real apps:** which shopping and food apps run on the emulator without blocking sign-in? Answered in Phase 0: Target, Starbucks, Chipotle and Amazon; DoorDash runs but its guest mode hangs; Uber Eats won't install.
-- [x] **Android phone:** the IPaT loan arrives Wednesday, Oct 28; which Android version does it run (Android 15 changes notification access). Answered in Phase 6: a Google Pixel 5 on Android 13, so Android 15's notification limits don't apply to it (they weren't tested).
-- [x] **Sign-in codes on iPhone:** does a Shortcuts message automation forward codes while the phone is locked? Answered in Phase 5: yes, about 2 s after the message, once the shortcut has been run by hand to grant its network permission.
-- [x] **Official rules:** a demo video of at most 3 minutes on YouTube, showing only what was built during the hackathon; due Nov 4, 9 PM ET (`docs/submission.md`).
-- [x] **Apple account:** decided: the iPhone companion is a Home Screen web app, so no paid account is needed.
 
 ## Sources
 

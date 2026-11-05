@@ -39,8 +39,6 @@ for a 1080p screen recording.
 - **The real posts, night of Nov 1:** on the user's go, it started the showcase's posts on the live Envoy, and the user
   approved each on their iPhone (`docs/demo-showcase.md`).
 
-Do one warm-up task before filming: the first task after an API start took 43 s before its first step.
-
 ## Run it
 
 From the repo root, with `.env` holding `META_API_KEY`:

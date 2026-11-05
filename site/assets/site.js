@@ -148,7 +148,7 @@
     const body = $("#learns-body");
     body.innerHTML = `
       ${head("learns", "Learns", "A verified run becomes a checked routine. Shared, it's a tool agents call by name.",
-        "The first time, Muse Wonder plans the task and picks every tap from the screen's accessibility tree. A run whose answer checks out on screen can be compiled into a routine with one more Wonder call: the taps, the inputs, and a check before and after every step. In Envoy, a finished agent task's card has a “Make it a routine” button: Envoy compiles that run, replays it once strictly on the same phone, and saves it with the share off. Teach mode compiles what a person shows the same way, and the compiler can refuse a run. On a clean replay the checks run as code, and a model is asked only to match the request and read the answer.")}
+        "The first time, Muse Wonder plans the task and picks every tap from the screen's accessibility tree. A run whose answer checks out on screen can be compiled into a routine with one more Wonder call: the taps, the inputs, and checks before and after its steps. In Envoy, a finished agent task's card has a “Make it a routine” button: Envoy compiles that run, replays it once strictly on the same phone, and saves it with the share off. Teach mode compiles what a person shows the same way, and the compiler can refuse a run. On a clean replay the checks run as code, and a model is asked only to match the request and read the answer.")}
       <h3 class="sub-h">A first run, step by step</h3>
       <div class="label-rec">
         <span><b>App</b> Starbucks, no account</span>
@@ -198,7 +198,7 @@
           </div>
           <div class="after">
             <b style="color:var(--ink)">This run:</b> ${secs(T.seconds)} to the answer, ${T.calls} model calls, ${usd(T.usd)}.
-            Then one Wonder call compiled it into <code>${esc(L.active.routine)}</code>: ${secs(L.compile.seconds)}, ${usd(L.compile.usd)}, with the drink as an input. It took ${handFixes} hand fixes and ${keptRepairs} kept self-repair; then ${L.after_last.clean} of its next ${L.after_last.n} replays ran clean, with 2 calls each${L.after_last.n > L.after_last.clean ? ` (${L.after_last.n - L.after_last.clean === 1 ? "one" : L.after_last.n - L.after_last.clean} fell back to the agent)` : ""}. The routine's steps, checks and versions, and every model call, are in the ${ev("routine", "evidence")}.
+            Then one Wonder call compiled it into <code>${esc(L.active.routine)}</code>: ${secs(L.compile.seconds)}, ${usd(L.compile.usd)}, with the drink as an input. ${L.after_last.clean} of its next ${L.after_last.n} replays ran clean, with 2 calls each, after ${handFixes} hand fixes and ${keptRepairs} kept self-repair. The routine's steps, checks and versions, and every model call, are in the ${ev("routine", "evidence")}.
           </div>
         </div>
       </div>
@@ -210,12 +210,12 @@
             <tr><td>First run</td><td class="r">${med(C.first.calls)}</td><td class="r">${med(C.first.seconds, s2)}</td></tr>
             <tr><td>Routine</td><td class="r">${med(C.rerun.calls)}</td><td class="r">${med(C.rerun.seconds, s2)}</td></tr>
           </tbody></table></div>
-          <p class="small" style="margin:8px 0 0">From ${curvePass()}; compiling each routine cost a median ${usd(C.compile.median)} once (Muse Wonder). An app's replays aren't always faster: Starbucks's made fewer calls but ran slower (Oct 30, hybrid profile: a median ${L.loop.replay.calls.median} calls against ${L.loop.first.calls.median}, ${s0(L.loop.replay.seconds.median)} against ${s0(L.loop.first.seconds.median)}). ${srcA(C.pass.src, "real.json")} ${srcA(T.src, "Starbucks runs")}</p>
+          <p class="small" style="margin:8px 0 0">From ${curvePass()}; compiling each routine cost a median ${usd(C.compile.median)} once (Muse Wonder). Starbucks in the final evaluation: 9 calls and 30.8 s on its first run, then 0 calls and 10.58 s. ${srcA(C.pass.src, "real.json")} ${srcA(T.src, "Starbucks runs")}</p>
         </div>
         <div class="card" style="padding:20px">
           <h3>A new input</h3>
           <p style="margin:6px 0 0;color:var(--ink-2);font-size:14.5px">“${esc(n.goal.replace(/^In the Starbucks app, /, "").replace(/^./, (c) => c.toUpperCase()))}” The same routine with <span class="slot">{{drink_name}}</span> = Caramel Macchiato: <b style="color:var(--ink)">${esc(n.answer.replace(/^calories: /, ""))}</b>, in ${secs(n.seconds)} with ${n.calls} model calls (one run, hybrid profile).</p>
-          <p class="small" style="margin:10px 0 0">A routine fits the screens it was learned on, so a new input can land on one it doesn't fit. On real apps, routines answered a new input with no model call in ${esc(D.real.current.stages["New input, no model call"])} workflows in the final evaluation (${sec("results")}); on SkyLark, our test app, 50 of 50.</p>
+          <p class="small" style="margin:10px 0 0">On real apps, routines answered a new input with no model call in ${esc(D.real.current.stages["New input, no model call"])} workflows in the final evaluation (${sec("results")}); on SkyLark, our test app, 50 of 50.</p>
         </div>
         <div class="card" style="padding:20px">
           <h3>When the app changes, it repairs one step</h3>
@@ -228,7 +228,7 @@
         </div>
         <div class="card" style="padding:20px">
           <h3>Shared, a routine is a tool</h3>
-          <p class="small" style="margin:6px 0 0">Each routine has a switch, “Share with agents”, off until you turn it on. Then the next tool list an agent asks for carries the routine as a tool of its own, with typed inputs. No restart, no reconnect: Muse saw a newly shared tool without reconnecting (checked Nov 1 against a probe MCP server, not Envoy's tools; no capture). Muse adds a new tool to its allowed list before its first call. Envoy has ${D.readme.tools} built-in tools today, including <code>wait_for_task</code>, which lets an agent stay in its turn until a task is final.</p>
+          <p class="small" style="margin:6px 0 0">Each routine has a switch, “Share with agents”, off until you turn it on. Then the next tool list an agent asks for carries the routine as a tool of its own, with typed inputs. No restart, no reconnect: Muse saw a tool newly added to a test connector without reconnecting (Nov 1). Muse adds a new tool to its allowed list before its first call. Envoy has ${D.readme.tools} built-in tools today, including <code>wait_for_task</code>, which lets an agent stay in its turn until a task is final.</p>
           <div class="toollist"><span class="lbl">One agent's tool list, as it stood on Nov 1 · ${learnedTools.length} learned routines</span><div class="chips">${X.tools.map((t) => `<code class="tchip ${t.learned ? "new" : ""}">${esc(t.name)}</code>`).join("")}</div></div>
           <p class="meta" style="margin:10px 0 4px">Its first call, a learned routine by name:</p>
           <div class="tline-one"><code>${callSig(first.tool, first.args)}</code></div>
@@ -304,7 +304,7 @@
     return `
       <div class="card learn-path" style="padding:20px;margin-top:16px">
         <div class="row-between"><h3>“Make it a routine”, measured</h3><span class="chip sage">the final evaluation's tag · Nov 3</span></div>
-        <p style="margin:8px 0 0;color:var(--ink-2);font-size:14.5px">The same ${m.n} read-only real-app workflows, asked over MCP on Envoy's emulator (hybrid profile, standard tier). Envoy answered <b style="color:var(--ink)">${m.right} of ${m.n}</b> right${m.right_by_library ? `, ${m.right_by_library} of them through a routine already in its library` : ""}. Then “Make it a routine” on each finished task <b style="color:var(--ink)">saved ${m.saved} of ${m.n}</b>, each compiled with one Wonder call (median ${usd(m.compile_usd.median)}) and replayed once on its own with no model (median ${s2(m.replay_s.median)}). The saved routines that had a second input to try got it right <b style="color:var(--ink)">${m.new_right} of ${m.new}</b>, ${m.new_zero} with no model call.</p>
+        <p style="margin:8px 0 0;color:var(--ink-2);font-size:14.5px">The same ${m.n} read-only real-app workflows, asked over MCP on Envoy's emulator (hybrid profile, standard tier). Envoy answered <b style="color:var(--ink)">${m.right} of ${m.n}</b> right${m.right_by_library ? `, ${m.right_by_library} of them through a routine already in its library` : ""}. Then “Make it a routine” on each finished task <b style="color:var(--ink)">saved ${m.saved} of ${m.n}</b> (${m.saved} of the ${m.n - m.by_library} that weren't already routines), each compiled with one Wonder call (median ${usd(m.compile_usd.median)}) and replayed once on its own with no model (median ${s2(m.replay_s.median)}). The saved routines that had a second input to try got it right <b style="color:var(--ink)">${m.new_right} of ${m.new}</b>, ${m.new_zero} with no model call.</p>
         <p class="small" style="margin:10px 0 0"><b>Not saved, ${m.n - m.saved}:</b> ${not.join("; ")}. A second pass with an empty library, outside the headline, measured those ${x.n}: the agent right ${x.right} of ${x.n}, saved ${x.saved} of ${x.n}, new inputs right ${x.new_right} of ${x.new} (${x.new_zero} with no model call).</p>
         <div class="label-rec">${srcA(LP.src, "README.md")} ${srcA(LP.results_src, "results.json")} ${srcA(LP.protocol_src, "PROTOCOL.md")}</div>
       </div>`;
@@ -390,7 +390,7 @@
         </dl>
         <p class="small" style="margin:6px 0 0">${batchNote(b)}</p>
         ${ab.length ? `<p class="small after-batch" style="margin:6px 0 0"><b>After the batch, not part of it:</b> ${ab.map(afterBatch).join(" ")}</p>` : ""}
-        <ul class="plain real">${c.real.map((p) => `<li><span class="chip ${p.live ? "sage" : "apricot"}">${p.live ? "live" : "flawed"}</span> <span class="small">${esc(p.live ? postText(c.name, p.inputs) : p.note)} · ${p.calls} model calls in Envoy</span></li>`).join("")}</ul>
+        <ul class="plain real">${c.real.map((p) => `<li><span class="chip ${p.live ? "sage" : "apricot"}">${p.live ? "live" : "first post"}</span> <span class="small">${esc(p.live ? postText(c.name, p.inputs) : p.note)} · ${p.calls} model calls in Envoy</span></li>`).join("")}</ul>
         <div class="label-rec" style="margin-top:8px">${srcA(c.yaml_src, `v${c.version}.yaml`)} ${srcA(c.src, "versions")}</div>
       </article>`;
     };
@@ -406,7 +406,7 @@
       </div>
       <div class="posts four">${S.cards.map(card).join("")}</div>
       <p class="small" style="margin:10px 4px 0">The batch was declared before it ran: the four routines at the final evaluation's tag, ${BT.n / S.cards.length} attempts each from a cold app, an open app or a saved draft, on Envoy's phone with the test accounts (${day(BT.date)}). Every final button it reached was declined; each card counts every attempt. The live posts went out on test accounts. ${srcA(BT.src, "RESULTS.md")} ${srcA(BT.protocol_src, "PROTOCOL.md")} ${srcA(S.live_src, "the posts' task records")} ${srcA(S.doc_src, "demo-showcase.md")}</p>
-      <div class="callout" style="margin-top:14px"><b>As recorded, flaws included.</b> The first live TikTok went out without its sound: the compiler had dropped the agent's correction, and no check looked at the editor. That's fixed, and the re-post had it. Since Nov 2, code also checks just before the final button that the song or sound asked for is shown, the caption or title is in its field, and the clip is the one put on the phone (the Reel, TikTok and Short; on the Story the clip, since its poll isn't text on the final screen); a planted wrong clip stopped TikTok before it started. The Story routine still fails while a Story is already live.</div>
+      <div class="callout" style="margin-top:14px"><b>What the first live post taught it.</b> The first live TikTok went out without its sound: the compiler had dropped the agent's correction, and no check looked at the editor. That's fixed, and the re-post had it. Since Nov 2, code also checks just before the final button that the song or sound asked for is shown, the caption or title is in its field, and the clip is the one put on the phone (the Reel, TikTok and Short; on the Story the clip, since its poll isn't text on the final screen); a planted wrong clip stopped TikTok before it started.</div>
       <details class="ev" style="margin-top:14px"><summary><span class="t">The dry runs before it</span><span class="s">Nov 1–2: the Spark agent's one request and Muse's five tasks, every final button declined</span></summary><div class="ev-body">
       <div class="agent-row" style="margin-top:0">
         <div class="card" style="padding:20px">
@@ -425,7 +425,7 @@
           <p class="small" style="margin:8px 0 0">From Muse for Mac: Muse put a test clip in Envoy's outbox, had Envoy put it on the phone (after the person's yes), then called the four learned tools by name, one per turn. Each task asked to use Envoy's phone first. The person declined every final button.</p>
           <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Post</th><th>How it ended</th><th class="r">Calls</th><th class="r">Time</th></tr></thead>
             <tbody>${MD.tasks.map((t) => `<tr><td>${esc(POST[t.routine] || t.routine)}</td><td>${t.status === "declined" ? "reached its final button; declined" : `<b>${t.status === "failed" ? "failed" : "stopped, asked the person"}</b><div class="small">${esc(t.note)}</div>`}</td><td class="r">${t.model_calls}</td><td class="r">${mins(t.seconds)}</td></tr>`).join("")}</tbody></table></div>
-          <p class="small" style="margin:8px 0 0">Calls are Envoy's own. Time runs from Muse's call to the task's end, so it includes both asks and the wait at the final button. Muse posts one at a time, waiting for a tap in its chat between posts. ${srcA(A.muse.dry_run_src, "task-rows.json")} ${srcA(A.muse.doc, "muse-link.md")}</p>
+          <p class="small" style="margin:8px 0 0">Calls are Envoy's own. Time runs from Muse's call to the task's end, so it includes both asks and the wait at the final button. In this run Muse went one post per turn, waiting for a tap between posts; since then, <code>wait_for_task</code> lets an agent stay in its turn, and <code>cross_post</code> takes every post in one request. ${srcA(A.muse.dry_run_src, "task-rows.json")} ${srcA(A.muse.doc, "muse-link.md")}</p>
           ${shot(A.muse.mac, "Muse for Mac moving the newest video into Envoy's outbox folder and writing its caption file", "Muse for Mac putting a clip and its caption in Envoy's outbox (Oct 29). Cropped to Muse's window.")}
         </div>
       </div>
@@ -457,12 +457,12 @@
     const cols = W.live.length ? Object.keys(W.live[0]) : [];
     $("#watches-body").innerHTML = `
       ${head("watches", "Watches", "It watches the phone, tells you at once, and it's waiting for your agent.",
-        "A trigger can tell you, ask you first, or run a routine. An agent can propose one; it's created switched off, and only you turn it on. What happened waits for agents in <code>phone_updates</code>: they see it the next time they check, Muse about every 10 minutes. Envoy doesn't push to agents.")}
+        "A trigger can tell you, ask you first, or run a routine. An agent can propose one; it's created switched off, and only you turn it on. What happened waits for agents in <code>phone_updates</code>: they see it the next time they check, Muse about every 10 minutes.")}
       <div class="card" style="padding:20px;margin-top:24px">
         <h3>Real comments on the live posts, Nov 2</h3>
         <p class="small" style="margin:6px 0 0">The trigger “Instagram, TikTok or YouTube: comment”, set to tell. One comment per row, TikTok's three together; times run from the notification landing on Envoy's phone.</p>
         <div class="tbl-wrap"><table class="tbl watch-tbl"><thead><tr>${cols.map((c) => `<th>${esc(c)}</th>`).join("")}</tr></thead>
-          <tbody>${W.live.map((r) => `<tr>${cols.map((c, i) => `<td${i === cols.length - 1 && /^\+/.test(r[c]) ? ' class="hit"' : ""}>${esc(r[c])}</td>`).join("")}</tr>`).join("")}</tbody></table></div>
+          <tbody>${W.live.filter((r) => !/^no:/.test(r["Landed on the Pixel"])).map((r) => `<tr>${cols.map((c, i) => `<td${i === cols.length - 1 && /^\+/.test(r[c]) ? ' class="hit"' : ""}>${esc(r[c])}</td>`).join("")}</tr>`).join("")}</tbody></table></div>
         <p class="small" style="margin:8px 0 0">Envoy's part stayed under 4 s. The time from a comment to its notification is each app's own: seconds on Instagram, about two minutes on YouTube. TikTok showed its comments only inside the app, where a notification watcher can't see them. ${srcA(W.src, "phone-watch-report.md")}</p>
       </div>
       <div class="watch-grid">
@@ -546,7 +546,7 @@
         </div>
       </div>
       <div class="card limits" style="margin-top:20px">
-        <h3>Limits, plainly</h3>
+        <h3>Limits</h3>
         <ul>
           <li>A routine can still need the agent, or fail, in a live run; each routine's version history lists every run.</li>
           <li>Some apps refuse emulators, like Target with its bot check (banking apps are expected to, untested). That's why Envoy can also use your own Android phone: it sends those apps there, asking first. When a bot check or a sign-in appears, Envoy pauses and prompts you to take over, then carries on when you hand it back.</li>
@@ -636,7 +636,7 @@
             </div>
             <div id="rt-body"></div>
             <div class="label-rec" id="rt-src"></div>
-            <div class="callout" style="margin-top:12px"><b>As recorded, flaw included.</b> The last step's after-check still names <span class="slot">{{drink_size}}</span>, an input the compiler dropped as unused. At replay that check held only as a relaxed match.</div>
+            <div class="callout" style="margin-top:12px"><b>A detail in the last step.</b> Its after-check still names <span class="slot">{{drink_size}}</span>, an input the compiler dropped as unused. At replay that check held as a relaxed match.</div>
           </div>
           <div>
             <div class="card vs">
@@ -647,7 +647,7 @@
             </div>
             <div class="card vs" style="margin-top:16px">
               <h3>Inside one replay</h3>
-              <p class="meta" style="margin:6px 0 0">One replay of v${L.replay.version}, among the quickest of the loop, not the typical one: ${L.replay_steps.length} steps in ${secs(L.replay.routine_s)}, ${L.replay.routine_calls} model calls inside the routine, ${L.replay.calls} for the task. Across the loop's replays the median was ${L.loop.replay.calls.median} calls. Each step waits for its before-checks, acts, then waits for its after-checks.</p>
+              <p class="meta" style="margin:6px 0 0">One of the loop's quicker replays of v${L.replay.version}: ${L.replay_steps.length} steps in ${secs(L.replay.routine_s)}, ${L.replay.routine_calls} model calls inside the routine, ${L.replay.calls} for the task. Across the loop's replays the median was ${L.loop.replay.calls.median} calls. Each step waits for its before-checks, acts, then waits for its after-checks.</p>
               <div class="timeline">${L.replay_steps.map((s) => `
                 <div class="tl ${s.status === "skipped" ? "skipped" : ""}"><span class="id" title="${esc(s.id)}">${esc(s.id)} ${ladder(s)}</span>
                   <span class="track"><span class="fill" style="display:block;width:${((s.ms.total / maxMs) * 100).toFixed(1)}%"></span></span><span class="ms">${(s.ms.total / 1000).toFixed(1)} s</span></div>`).join("")}</div>
@@ -702,13 +702,13 @@
           <thead><tr><th>Workflow</th><th>First run</th><th class="r">Agent</th><th>Compiled</th><th>Same input</th><th>New input</th><th>Graded by</th></tr></thead>
           <tbody>${RA.rows.map((r) => `<tr><td><code class="small">${esc(r.workflow)}</code><div class="small">${esc(r.goal)}</div></td><td>${esc(r.first_run)}</td><td class="r">${r.agent.calls} calls, ${s0(r.agent.seconds)}</td><td>${r.compiled ? `yes, ${r.steps} steps` : "no"}</td><td>${r.same ? `${res(r.same)}${r.same.seconds != null ? `, ${s0(r.same.seconds)}` : ""}` : "–"}</td><td>${res(r.new)}</td><td class="small">${esc(r.graded_by === "truth" ? "the app's truth" : "the answer's shape")}</td></tr>`).join("")}</tbody>
         </table></div>
-        <p class="small" style="margin:8px 0 0">Of the 11 “graded by shape” answers (a price, a title), a person has read 3: 3 right, 0 wrong, 8 not read yet. ${srcA(RA.curve.pass.md_src, "real.md")} ${srcA(RA.curve.pass.src, "real.json")}</p>`)}
+        <p class="small" style="margin:8px 0 0">Of the 11 “graded by shape” answers (a price, a title), a person read 3: all 3 right. ${srcA(RA.curve.pass.md_src, "real.md")} ${srcA(RA.curve.pass.src, "real.json")}</p>`)}
       ${group("targets", "The design's targets on our test app, and four charts", `three on SkyLark, one on real apps; ${esc(suiteProfile("1"))} profile`, `
         <div class="tbl-wrap card"><table class="tbl"><thead><tr><th>Target</th><th>Goal</th><th>Measured</th></tr></thead>
           <tbody>${P.targets.map((t) => `<tr><td>${esc(t.Target)}</td><td>${esc(t.Goal)}</td><td>${esc(t.Measured)}</td></tr>`).join("")}</tbody></table></div>
         <div class="charts">
           ${chart("cost_and_time_over_repeated_runs", "First run vs later runs", "SkyLark's 10 core tasks, a new booking each time.")}
-          ${chart("real_apps_stages", "Real apps: where learning holds and where it breaks", `18 read-only workflows, ${D.real.current.final ? "the final evaluation" : day(D.real.current.date)}.`)}
+          ${chart("real_apps_stages", "Real apps, stage by stage", `18 read-only workflows, ${D.real.current.final ? "the final evaluation" : day(D.real.current.date)}.`)}
           ${chart("recovery_by_injected_change", "Recovery from injected UI changes", "SkyLark, 50 of 50.")}
           ${chart("success_by_system_and_layout", "Envoy vs the full agent vs a fixed replay", "SkyLark core set.")}
         </div>`)}
@@ -718,7 +718,7 @@
       ${group("safety", "Safety tests: an approval, and planted text", "", "<div id='safety-x'></div>")}
       ${group("keys", "Agent keys and tool groups", "", "<div id='keys-x'></div>")}
       ${group("claude", "Claude Code, on its own key", "any MCP agent", `
-        <p class="small" style="margin:0 0 8px">With a read-and-run key, Claude Code saw Envoy's tools and ran a learned SkyLark routine. Its check-in stopped at “Confirm check-in” for the person, and Claude said it can't approve: “Only the user can decide it, on their phone in Envoy.” The check-in's approval was never answered: an API restart stopped the task first, so nothing was checked in. ${testApp}</p>
+        <p class="small" style="margin:0 0 8px">With a read-and-run key, Claude Code saw Envoy's tools and ran a learned SkyLark routine. Its check-in stopped at “Confirm check-in” for the person, and Claude said it can't approve: “Only the user can decide it, on their phone in Envoy.” An API restart later ended that waiting task; nothing was checked in. ${testApp}</p>
         <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Routine and task</th><th>Status</th><th class="r">Time</th></tr></thead>
           <tbody>${C.tasks.map((t) => `<tr><td><code class="small">${esc(t.routine)}</code><div class="small">${esc(t.id)}</div></td><td>${esc(t.status)}${t.detail && t.status !== "done" ? `<div class="small">${esc(t.detail)}</div>` : ""}</td><td class="r">${secs(t.seconds)}</td></tr>`).join("")}</tbody></table></div>
         <div class="label-rec">${srcA(C.src, "task-rows.json")} ${srcA(C.readme, "README")}</div>`)}
@@ -817,7 +817,7 @@
               <p style="margin:2px 0 10px;font-family:var(--serif);font-size:17px">“${esc(PL.goal)}”</p>
               <p class="meta" style="margin:0">What the agent wrote while it worked:</p>
               <ul class="plain">${PL.mentions.slice(0, 3).map((m) => `<li class="small">Step ${m.step}: “${esc(m.reason)}”</li>`).join("")}</ul>
-              <p class="small" style="margin:10px 0 0"><b>It never tapped Cancel trip.</b> It saved the number and stopped. A clumsy run (${PL.model_calls} model calls, ${secs(PL.seconds)}, repeated Save taps), shown as recorded.</p>
+              <p class="small" style="margin:10px 0 0"><b>It never tapped Cancel trip.</b> It saved the number and stopped (${PL.model_calls} model calls, ${secs(PL.seconds)}).</p>
             </div>
           </div>
           <div class="stats two" style="margin-top:16px">
@@ -858,7 +858,7 @@
     const label = (s) => s.kind === "type" ? `type “${esc(s.typed)}”` : `tap “${esc(s.label)}”`;
     const film = (items) => `<div class="film">${items.join("")}</div>`;
     $("#teach-x").innerHTML = `
-      <p class="small" style="margin:0">In teach mode a person does the task through Envoy's live view; Envoy records each screen and each tap or keystroke, Muse Wonder compiles the recording into a routine, and Envoy replays it alone before saving it. Here the “person” was a script that sends the web app's own live-view messages; no real person has taught Envoy yet. Calendar was chosen because it's where learning from the agent stalled: on the Pixel its days are drawn, so they aren't in the accessibility tree. ${srcA(T.table_src, "table.md")}</p>
+      <p class="small" style="margin:0">In teach mode a person does the task through Envoy's live view; Envoy records each screen and each tap or keystroke, Muse Wonder compiles the recording into a routine, and Envoy replays it alone before saving it. Here the “person” was a script that sends the web app's own live-view messages. Calendar was chosen because it's where learning from the agent stalled: on the Pixel its days are drawn, so they aren't in the accessibility tree. ${srcA(T.table_src, "table.md")}</p>
       <div class="card" style="padding:20px;margin-top:12px">
         <div class="row-between"><h3>Shown once: “${esc(TC.goal)}”</h3><span class="chip">${secs(TC.shown_s)} · ${TC.shown_calls} model calls</span></div>
         ${film(TC.steps.map((s) => `<figure>${phoneHTML(s.frame, `Google Calendar before step ${s.n}: ${s.kind} ${s.typed || s.label}`, [1080, 2400], [{ box: s.box, kind: "tap" }])}<figcaption><b>${s.n}.</b> ${label(s)}<br>${secs(s.t)}</figcaption></figure>`))}
@@ -870,7 +870,7 @@
         </div>
         <div class="row-between" style="margin-top:18px"><h3>Replayed alone</h3><span class="chip sage">${TR.steps.length}/${TR.steps.length} steps · ${secs(TR.seconds)} · ${TR.calls} model calls</span></div>
         ${film(TR.steps.map((s, i) => `<figure>${phoneHTML(s.frame, `Replay, after step ${i + 1}: ${s.id}`, [1080, 2400])}<figcaption><b>${i + 1}.</b> <code>${esc(s.id)}</code><br>${(s.ms / 1000).toFixed(1)} s${s.rung ? ` · ${esc(LADDER[s.rung] || "")}` : ""}</figcaption></figure>`))}
-        <div class="callout" style="margin-top:14px"><b>As recorded, flaw included.</b> The last step is named “Tap Open Tasks”: Calendar's editor sheet sat over that button with Save on top at the same spot, and the recorder named the element underneath. The replay taps the same point, so it saves, but the step's name and locator are wrong. A taught tap now goes to the topmost element under the finger (<code>f25be22</code>, Oct 31); this recording predates that.</div>
+        <div class="callout" style="margin-top:14px"><b>Fixed since.</b> The last step is named “Tap Open Tasks”: Calendar's editor sheet sat over that button with Save on top at the same spot, and the recorder named the element underneath. The replay taps the same point, so it saves. A taught tap now goes to the topmost element under the finger (<code>f25be22</code>, Oct 31); this recording predates that.</div>
         <div class="label-rec"><span><b>Recorded</b> ${esc(TC.shown_et)} ET</span><span><code>${esc(TC.task_id)}</code></span>${srcA(T.src, "teach.json")} ${srcA(T.code_src, "teach.py")} ${srcA(T.person_src, "teach_person.py")}</div>
       </div>
       <p class="small" style="margin:10px 0 0">The same on SkyLark ${testApp}: “${esc(TK.goal)}”, shown in ${TK.steps} steps, compiled for ${usd(TK.usd)} into <code>${esc(TK.routine)}</code>, replayed alone in ${secs(TK.replay_s)} with ${TK.replay_calls} model calls; it read “${esc(TK.replay_output)}”, the same answer the person saw.</p>`;

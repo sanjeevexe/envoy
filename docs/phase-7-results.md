@@ -1,6 +1,6 @@
 # Phase 7 results: the final evaluation
 
-**Status (Oct 29, early morning): measurement passes done; AndroidWorld's agent changes tested and not yet merged (they merged later that day, `105d04e`); the Meta API down since 02:16 ("402 Billing verification failed"), so nothing that calls a model can run until the new account's key is in.** The final numbers come from one run of every suite on the frozen commit, tagged `eval-final`; that run moved to Nov 3, 17:00–22:00 ET. Until then this file records what the measurement passes found and what changed because of it. Plan: `prompts/phase-7-plan.md`. Report: `eval/results/final/report.md`.
+**The final numbers are in `eval/results/final/report.md`: all 10 suites on the `eval-final` tag, Nov 3.** This page records what the measurement passes before it found (up to Oct 29) and what changed because of it. Plan: `prompts/phase-7-plan.md`.
 
 ## What was built
 

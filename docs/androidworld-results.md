@@ -4,6 +4,8 @@
 
 AndroidWorld (Google Research; Rawles et al., 2024; Apache-2.0) is a benchmark of 116 parameterized tasks across 20 open-source Android apps, set up, randomized and scored by its own code on a live emulator. This page reports Envoy on it: the headline success rate, its cost and speed, where it fails and why, what general changes fixed, and what routines did across seeds.
 
+**The shipped default, Nov 3:** 74 of 116 tasks (63.8%), +20 −3 over the Oct 28 run (p = 0.0005; not a model-only comparison; below).
+
 **Headline.** Envoy as on `main` before these changes (the Oct 28 baseline) solved 21 of 116 tasks (18.1%) on the standard tier. With 13 general agent changes, found on the dev half only (merged into `main` on Oct 29), it solved 57 (49.1%). On the held-out half, never used to choose a change, that is 31 of 58 (53.4%) against 12 (+20 −1, p < 0.0001). Both runs are seed 30, pass@1, at about $0.04 and 38 s per task (median $0.030).
 
 **Routines.** Envoy compiled 59 routines from its solved runs, and 22 did their own seed-30 task on their own. On three new seeds of their 23 tasks:

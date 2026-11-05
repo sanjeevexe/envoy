@@ -115,7 +115,7 @@ with OAuth. Envoy's agent keys are bearer keys, so this test uses Claude Code.
 
 ## The Spark agent (Meta's models)
 
-`agents/meta-agent/` is a small agent on Muse Spark 1.3 that talks to Envoy only over MCP, with a page for filming at
+`agents/meta-agent/` is a small agent on Muse Spark 1.3 that talks to Envoy only over MCP, with a page at
 `http://127.0.0.1:8790`. Details are in its README. Make a key named "Spark agent" (Read and Run). Save it to a file only
 you can read, straight from the clipboard:
 

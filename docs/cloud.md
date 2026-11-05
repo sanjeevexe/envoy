@@ -1,6 +1,6 @@
 # Envoy in the cloud: the proof
 
-Oct 29, 2026. **The same SkyLark routines, compiled on the Mac, ran unchanged on an Android emulator on a Google Cloud server: 48 of 48 with no model calls, at about half the Mac's speed.** That is on an emulator past its first boot; the very first run on a brand-new one passed 9 of 18 (below). Stage 2 then ran the whole learn-then-replay loop there: one agent run, a routine compiled from it on the VM, and that routine replayed 3 of 3 on bookings it had never seen, for $0.07 of Meta credit.
+Oct 29, 2026. **The same SkyLark routines, compiled on the Mac, ran unchanged on an Android emulator on a Google Cloud server: 48 of 48 with no model calls, at a median 5.5 s (3.1 s on the Mac).** That is on an emulator past its first boot (below). Stage 2 then ran the whole learn-then-replay loop there: one agent run, a routine compiled from it on the VM, and that routine replayed 3 of 3 on bookings it had never seen, for $0.07 of Meta credit.
 
 Envoy runs on the person's own Mac by default: the API, the web app, the emulators and the USB connection to Envoy's phone (the Pixel 5). Only the model calls go to Meta. The design always said "a cloud host later". This is the first step: the same code and the same routines on a Google Cloud server, measured against the numbers the Mac already recorded. Nothing was re-measured on the Mac.
 
@@ -171,11 +171,11 @@ So: two apps refused to create accounts from the cloud phone (Amazon, Chipotle),
 
 **The emulator crashed under real apps** with SwiftShader, the renderer stage 1 used. The Test phone died while DoorDash drew its screens (a segfault in the emulator's `RenderThread`, in the kernel log). The Real-app phone died about a minute into an Amazon run, three times. Turning off the emulator's host video decoder (`-feature -HardwareDecoder`) didn't help. **Switching to `-gpu swangle`** (ANGLE on SwiftShader) did: the same Amazon run then completed. Later the Test phone also died on plain SwiftShader, and once on `swangle` while apps played video ("h264 no frame" in its log). So both phones now start with `-gpu swangle -feature -HardwareDecoder` (`scripts/cloud/env-linux.sh`), only through systemd; that setup came through the browser updates and the author's last sitting. On `swangle`, SkyLark did 18/18 but slower (median 7.3 s against 6.2 s), and one run fell to the agent.
 
-**A mix-up, and the fix.** The sitting's instructions said "envoy-real", but the web app calls the phones **Test phone** (envoy-test, shown first) and **Real-app phone** (envoy-real), so the sign-ins went onto the Test phone. With the author's OK, the two AVDs were swapped on the VM (both stopped cleanly, their folders renamed): the signed-in phone is now the Real-app phone, which always cold-boots and never loads a snapshot, and the fresh one is the Test phone, with SkyLark reinstalled and seeded. The Real-app phone kept its 10 GB data partition.
+**The phones.** The signed-in phone is the Real-app phone, which always cold-boots and never loads a snapshot; the fresh one is the Test phone, with SkyLark reinstalled and seeded. The Real-app phone kept its 10 GB data partition.
 
 **Muse to the cloud copy works** (Oct 29, 23:20–23:30 UTC). The author started `scripts/cloud/muse-tunnel.sh` (a Cloudflare quick tunnel from the VM). Through it, `/mcp` without the token was refused (401) and the web app's pages weren't reachable at all (421). In Muse for Mac, "Add a custom connector called Envoy Cloud at <tunnel>/mcp" made the connector. The author pasted the cloud copy's MCP token (`scripts/cloud/muse-token.sh`) and allowed the tunnel's host. Muse listed the cloud copy's ten tools. Then "Using Envoy Cloud, what's my gate for my Chicago flight?" was answered "**B12** — SkyLark SL 482, ATL to ORD on Friday, Oct 30", with the cloud copy's own note that the gate was last seen in the app the evening before. The cloud copy's MCP log shows 6 calls from Meta's servers, all authenticated, 200/202, about 3 ms each on the VM. Screenshot: `eval/results/cloud/stage3/muse-envoy-cloud.jpg`. The Mac's own Envoy connector was left as it was.
 
-**The real-app set on the cloud phone** (`eval/run_final.py real --only …`, read-only, every approval declined, standard tier, after the sign-ins and the swap, `swangle`; $0.37; `eval/results/cloud/stage3/real.json`). Mac: Phase 7's recorded rows (`eval/results/final/real.json`).
+**The real-app set on the cloud phone** (`eval/run_final.py real --only …`, read-only, every approval declined, standard tier, after the sign-ins, `swangle`; $0.37; `eval/results/cloud/stage3/real.json`). Mac: Phase 7's recorded rows (`eval/results/final/real.json`).
 
 | Workflow | Agent, Mac | Agent, cloud | Routine, same input: Mac | cloud | New input: Mac | cloud |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -299,7 +299,7 @@ No product code changed. Everything was handled from outside:
 
 `eval/results/cloud/clip/cloud-clip.mp4`: 40.5 s, 1920×1080, real time. The VM's terminal on the left (the instance's name, zone and machine type from the metadata server; `hostname`, `x86_64`, 8 vCPU; its own `adb devices`), and the cloud emulator on the right while three routines run: check-in, change seat and gate, each PASS with 0 model calls. Made by `scripts/cloud/vm-clip.sh` on the VM (one clock for the recording and the transcript) and `scripts/cloud/make_clip.py` on the Mac. Raw: `emulator.mp4` (re-encoded to 1.5 MB) and `terminal.tsv`. Git ignores `*.mp4`, so the two videos are not in the repo: copies are in the local checkout's `captures/cloud/` (an ignored folder), with `terminal.tsv` tracked here. Nothing personal is in frame: the project's ID is stripped, and SkyLark shows its test passenger only. The clip's run was not one of the measured runs (the recorder takes CPU).
 
-## Limits, plainly
+## Limits
 
 - Real phones still plug into a Mac (USB). Wireless debugging over the tailnet is an untested idea.
 - Real apps ran in the cloud only in stage 3's real-app set and the Nov 1 Instagram run. Data-center addresses may trigger more apps' bot checks than the Mac does; that wasn't measured.

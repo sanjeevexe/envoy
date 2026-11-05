@@ -6,12 +6,12 @@ Until the phone came, an emulator stood in for it (`ENVOY_TEST_PHONE`): the same
 
 Plan: `prompts/phase-6-plan.md`. Results: `eval/results/phase6/`.
 
-## Not finished
+## Status
 
 - [x] **The gate** on the real phone (Pixel 5, Android 13), four times through the API; portability and all 10 core routines on it.
 - [x] **Phone measurements:** scrcpy, the live view on the Mac and on the iPhone over the tailnet, a takeover, a touch that pauses a run, the banner on stock Android 13.
 - [x] **Answers:** the phone is a Pixel 5 on Android 13 (Android 15's notification limits don't apply to it, and weren't tested); the Envoy bridge is **not needed** (settling and set-text held on the phone).
-- [ ] **Not done (optional):** sign-in codes from the notification shade. The phone has a SIM, but no service sent it a code tonight, and Envoy doesn't sign in for you. A real-app routine from `envoy-real` on the phone: the phone was set up with no Google account, so it has no Play Store apps.
+- [ ] **Not done (optional):** sign-in codes from the notification shade. The phone has a SIM, but no service sent it a code tonight, and Envoy doesn't sign in for you.
 
 ## What was built
 

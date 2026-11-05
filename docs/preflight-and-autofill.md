@@ -1,6 +1,6 @@
 # Before I start, and saved logins
 
-Two features from the final wave (Oct 29 – Nov 1, 2026). **Before I start** tells you what to expect before Envoy starts a task. **Saved logins** would let the phone's own password manager fill a sign-in, so Envoy never sees, reads or types a password. The second is an experiment first, and it is built only if that experiment comes out clean.
+Two features from the final wave (Oct 29 – Nov 1, 2026). **Before I start** tells you what to expect before Envoy starts a task. **Saved logins** lets the phone's own password manager fill a sign-in, so Envoy never sees, reads or types a password. It began as an experiment, came out clean on both kinds of phone, and ships off by default.
 
 ## Before I start
 

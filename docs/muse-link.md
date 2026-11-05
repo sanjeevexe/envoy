@@ -24,7 +24,7 @@ Built since (Nov 1, `docs/technical-design.md`):
 
 The section "Nov 1–2: routine tools and the cross-post dry run" (at the end) puts them together.
 
-Muse for Mac and Envoy's backend run on the same Mac, so a folder both can reach is the most robust handoff: it works even if Muse for Mac can't use a custom connector at all.
+Muse for Mac and Envoy's backend run on the same Mac, so a folder both can reach is the most robust handoff.
 
 Muse is an AI client like any other. It never decides an offer or an approval. Nothing Muse puts in the outbox becomes a task until you accept its offer in Envoy. Tasks it starts with `run_task` or a routine tool begin at once; their irreversible steps, and using Envoy's phone, wait for your OK.
 
@@ -124,7 +124,6 @@ Oct 29, 1:24–2:12 pm ET, in the Muse app on your iPhone (driven through iPhone
 
 **What it means for the demo:**
 - The phone half of "Muse covers the web and the Mac, Envoy adds the phone" works in the real Muse app today: Muse watches the phone on a schedule, reports what's new in plain words, sends files, and proposes recurring work, and every decision stays in Envoy.
-- The demo's first scene can be Muse for Mac itself: "move my newest edit to Envoy's outbox with a caption for Instagram" gives the clip and its sidecar, and Envoy asks "Post it to Instagram?" (with the Instagram template and the late-sidecar fix in main). Choosing "Always allow" on Muse's two file prompts beforehand saves the two prompts on camera.
 - Pushing to Muse isn't possible (no client capabilities); its scheduled tasks are the way to be timely.
 - On Oct 29 the quick tunnel's URL changed each run, so the connector was added again each time; since Nov 1 the Funnel address is permanent.
 
@@ -151,7 +150,7 @@ On Nov 2, 11:38–12:20 ET, the person asked Muse for Mac to post one clip from 
 
 - **The path.** Muse copied the clip into Envoy's outbox and called `send_to_phone`. Envoy asked on the iPhone, and the person said yes. Muse then called the shared routine tools by name: `instagram_reel_song`, `tiktok_post_sound` and `youtube_short_sound`.
 - **The runs.** Each task first asked "use Envoy's phone?" on the iPhone. The Reel, the TikTok and the Short each reached their final button with the song and the caption, at 0, 3 and 0 model calls in Envoy's replay (one run each). From Muse's call to the decline, phone ask and approval wait included, the tasks took 195.5, 75.1 and 77.4 s.
-- **Back to Muse.** Muse read each result through `phone_updates` and reported it correctly (working notes, not in the repo).
-- **Muse did one post per turn.** After starting each task, it ends its turn with reply buttons ("I've approved/declined X in Envoy") and waits for a tap before the next. It also waits once after `send_to_phone`, to check the clip landed, since the routines take the gallery's newest video. Expect a tap in Muse after `send_to_phone` and after each post (working notes, not in the repo), plus a "use Envoy's phone?" ask and an approval on the iPhone for each post. Since then, `wait_for_task` lets an agent stay in its turn, and `cross_post` takes every post in one request.
+- **Back to Muse.** Muse read each result through `phone_updates` and reported it correctly.
+- **Muse did one post per turn.** After starting each task, it ends its turn with reply buttons ("I've approved/declined X in Envoy") and waits for a tap before the next. It also waits once after `send_to_phone`, to check the clip landed, since the routines take the gallery's newest video. Expect a tap in Muse after `send_to_phone` and after each post, plus a "use Envoy's phone?" ask and an approval on the iPhone for each post. Since then, `wait_for_task` lets an agent stay in its turn, and `cross_post` takes every post in one request.
 - **Found and fixed.** The poll Story's "use Envoy's phone?" went unanswered for 15 minutes. That silence counted as "use the emulator", so the task moved to an emulator with no Instagram, which opened the Play Store. Since `947bf44` (Nov 2), no answer ends the task as not done, and only the person's "no" moves a task to an emulator.
-- **Still open.** The poll Story routine fails while a Story is already live. Its first tap opens the live Story's poll results; on the retry, the agent fallback then used 30 model calls without finishing.
+- **The Story retry.** A Story from the night before was still live, so the routine's first tap opened its poll results, and the agent fallback used 30 model calls without finishing.

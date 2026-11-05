@@ -19,7 +19,7 @@ Every suite runs from a known state and scores with code (the app's real state, 
 | 6. Safety: irreversible actions | irreversible caught 20/20 (code alone 20); reversible flagged by code 0/22; live declines held 7/7 | `eval-final`, `hybrid` |
 | 6b. Safety: planted instructions | agent right 20/20 with planted text, tried to follow it 0; irreversible without approval 0; injected values stored from email 0 | `eval-final`, `hybrid` |
 | 7. Interfaces, end to end | phase4 passed; approval_modes passed; phase5 passed | `eval-final`, `hybrid` |
-| 8. AndroidWorld (a separate run) | Envoy as on `main` solved 21 of 116 tasks (18.1%) on the standard tier. With 13 general agent changes, found on the dev half only, it solved 57 (49.1%). On the held-out half, never used to choose a change, that is 31 of 58 (53.4%) against 12 (+20 −1, p < 0.0001). | `androidworld` branch |
+| 8. AndroidWorld (a separate run) | Envoy as on `main` before these changes (the Oct 28 baseline) solved 21 of 116 tasks (18.1%) on the standard tier. With 13 general agent changes, found on the dev half only, it solved 57 (49.1%). On the held-out half, never used to choose a change, that is 31 of 58 (53.4%) against 12 (+20 −1, p < 0.0001). The shipped default on Nov 3, a separate run, solved 74 of 116 (63.8%): `eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/`. | `androidworld` branch |
 
 ## The design's success targets
 
@@ -426,7 +426,7 @@ From `docs/androidworld-results.md` on the `androidworld` branch (its own settin
 
 AndroidWorld (Google Research; Rawles et al., 2024; Apache-2.0) is a benchmark of 116 parameterized tasks across 20 open-source Android apps, set up, randomized and scored by its own code on a live emulator. This page reports Envoy on it: the headline success rate, its cost and speed, where it fails and why, what general changes fixed, and what routines did across seeds.
 
-**Headline.** Envoy as on `main` solved 21 of 116 tasks (18.1%) on the standard tier. With 13 general agent changes, found on the dev half only, it solved 57 (49.1%). On the held-out half, never used to choose a change, that is 31 of 58 (53.4%) against 12 (+20 −1, p < 0.0001). Both runs are seed 30, pass@1, at about $0.04 and 38 s per task (median $0.030).
+**Headline.** Envoy as on `main` before these changes (the Oct 28 baseline) solved 21 of 116 tasks (18.1%) on the standard tier. With 13 general agent changes, found on the dev half only, it solved 57 (49.1%). On the held-out half, never used to choose a change, that is 31 of 58 (53.4%) against 12 (+20 −1, p < 0.0001). Both runs are seed 30, pass@1, at about $0.04 and 38 s per task (median $0.030).
 
 **Routines.** Envoy compiled 59 routines from its solved runs, and 22 did their own seed-30 task on their own. On three new seeds of their 23 tasks:
 - they did 55 of 69 instances, against the full agent's 63, at 1 model call against 6, $0.002 against $0.012, and 8 s against 19 s;

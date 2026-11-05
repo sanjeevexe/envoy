@@ -1,6 +1,6 @@
 # agent
 
-The agent loop: plan, then observe → decide → check policy → act → verify → record, one Muse Spark 1.3 call per step.
+The agent loop: plan, then observe → decide → check policy → act → verify → record, one model call per step (Muse Wonder on the default `hybrid` profile).
 
 | File | What |
 | --- | --- |
@@ -16,7 +16,7 @@ The agent loop: plan, then observe → decide → check policy → act → verif
 2. **Sign-in?** A password field, a secure window with a text field, or a sign-in form means stop with status `handoff` (`policy/signin.py`). The agent never types passwords.
 3. **Pop-up?** A known interruption is dismissed in code.
 4. **Stuck?** If the same screen comes back three times with no effect: first tell the model, then press back, then fail.
-5. **Decide:** Muse Spark 1.3 at `low` effort, with structured output (`models/schemas.py` StepOutput). The model sees:
+5. **Decide:** the step model (Muse Wonder on `hybrid`; Muse Spark 1.3 at `low` on `spark`), with structured output (`models/schemas.py` StepOutput). The model sees:
    - the cached instructions
    - the goal and plan
    - the last 5 actions and their outcomes

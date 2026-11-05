@@ -28,7 +28,7 @@ Task sets, injected UI changes, runners and reports. `fixtures/phase0/` holds th
 
 ## Phase 7: the final evaluation
 
-One command per suite, `uv run --project backend python eval/run_final.py <suite>`, and `eval/run_final.sh` for all of them in order (one emulator of ours at a time). Each writes `results/final/<suite>.json` and `<suite>.md` with the commit (and whether it is the `eval-final` tag), the tier, and the model calls, tokens and dollars it caused (summed from `logs/model_costs.jsonl` by the suite's task-ID prefix). `run_final.py report` builds `results/final/report.md` and `results/final/charts/`. The final run is Nov 3, 17:00–22:00 ET, on the `eval-final` tag; until then `results/final/` holds runs on development commits, each marked with its commit.
+One command per suite, `uv run --project backend python eval/run_final.py <suite>`, and `eval/run_final.sh` for all of them in order (one emulator of ours at a time). Each writes `results/final/<suite>.json` and `<suite>.md` with the commit (and whether it is the `eval-final` tag), the tier, and the model calls, tokens and dollars it caused (summed from `logs/model_costs.jsonl` by the suite's task-ID prefix). `run_final.py report` builds `results/final/report.md` and `results/final/charts/`. The final run was Nov 3, on the `eval-final` tag (`cf78fa0`); `results/final/` holds it.
 
 | File | What |
 | --- | --- |

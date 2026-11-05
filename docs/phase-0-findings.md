@@ -255,7 +255,7 @@ Part B repeats this on real apps' sign-in and payment screens.
 
 ## A6. Connector application drafts
 
-`docs/connector-application.md` has both drafts. The approve capability is deliberately absent, and the drafts explain why.
+Both drafts were written and not sent. The approve capability is deliberately absent from them.
 - **Muse Connector Platform:** the review asks for business verification, a privacy policy, a data-processing questionnaire and a test account that stays live during review. A solo project is unlikely to clear it before Nov 4. Submitting still costs little.
 - **Meta AI Connectors waitlist:** wants a REST API, "live or in active development". The REST fallback with OpenAPI fits.
 

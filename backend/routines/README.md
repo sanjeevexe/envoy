@@ -1,6 +1,6 @@
 # routines
 
-App routines (design doc, App routines): one successful agent run (or the person's demonstration in teach mode) compiled into a small program with inputs, code checks before and after every step, element-based locators, and local self-repair saved as versioned patches. Reruns make no model calls while every check passes. A routine the person shares with agents is also an MCP tool of its own (`api/sharing.py`, `mcp_server/server.py`); nothing here changes for that.
+App routines (design doc, App routines): one successful agent run (or the person's demonstration in teach mode) compiled into a small program with inputs, code checks before and after its steps, element-based locators, and local self-repair saved as versioned patches. Reruns make no model calls while every check passes. A routine the person shares with agents is also an MCP tool of its own (`api/sharing.py`, `mcp_server/server.py`); nothing here changes for that.
 
 | File | What |
 | --- | --- |

@@ -540,7 +540,7 @@ window.ENVOY = {
       "detail": "routine step open_story_creation failed (after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)) and the agent could not finish (step_limit); asking the user",
       "model_calls": 30,
       "cost_usd": 0.4251,
-      "note": "The retry, on Envoy's phone. A Story from the night before was still live, so the routine's first tap opened it instead of a new Story; the agent's fallback ran out of steps and asked the person. Still open."
+      "note": "The retry, on Envoy's phone. A Story from the night before was still live, so the routine's first tap opened it instead of a new Story; the agent's fallback ran out of steps and asked the person."
      }
     ]
    },
@@ -985,7 +985,7 @@ window.ENVOY = {
        "caption": "Posted by Envoy · test"
       },
       "created": "2026-11-02 01:41:39",
-      "note": "published without its song: the routine tapped the sound's row, but the sound never reached the editor; then the run failed its done-check"
+      "note": "went up without its song: a compiler bug, since fixed; the re-post below has it"
      },
      {
       "task": "task-1102-023044-d081",
@@ -5572,7 +5572,7 @@ window.ENVOY = {
    },
    {
     "suite": "8. AndroidWorld (a separate run)",
-    "result": "Envoy as on main solved 21 of 116 tasks (18.1%) on the standard tier. With 13 general agent changes, found on the dev half only, it solved 57 (49.1%). On the held-out half, never used to choose a change, that is 31 of 58 (53.4%) against 12 (+20 −1, p < 0.0001).",
+    "result": "Envoy as on main before these changes (the Oct 28 baseline) solved 21 of 116 tasks (18.1%) on the standard tier. With 13 general agent changes, found on the dev half only, it solved 57 (49.1%). On the held-out half, never used to choose a change, that is 31 of 58 (53.4%) against 12 (+20 −1, p < 0.0001). The shipped default on Nov 3, a separate run, solved 74 of 116 (63.8%): eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/.",
     "ran_on": "androidworld branch",
     "profile": "",
     "tier": ""
@@ -5772,7 +5772,7 @@ window.ENVOY = {
   "ours": [
    {
     "title": "App routines",
-    "text": "compiling one successful run into a program with inputs, code checks before and after every step, element-based locators, local self-repair saved as versioned patches with a trial period and rollback, and portability across screen sizes and devices. No routine, macro or workflow library is used; the format, compiler, locator scoring, check writer, executor, fallback ladder, patcher and store are Envoy's own code."
+    "text": "compiling one successful run into a program with inputs, code checks before and after its steps, element-based locators, local self-repair saved as versioned patches with a trial period and rollback, and portability across screen sizes and devices. No routine, macro or workflow library is used; the format, compiler, locator scoring, check writer, executor, fallback ladder, patcher and store are Envoy's own code."
    },
    {
     "title": "A memory graph built from phone screens",
@@ -6142,7 +6142,7 @@ window.ENVOY = {
    },
    {
     "what": "8. AndroidWorld (a separate run)",
-    "value": "Envoy as on main solved 21 of 116 tasks (18.1%) on the standard tier. With 13 general agent changes, found on the dev half only, it solved 57 (49.1%). On the held-out half, never used to choose a change, that is 31 of 58 (53.4%) against 12 (+20 −1, p < 0.0001).",
+    "value": "Envoy as on main before these changes (the Oct 28 baseline) solved 21 of 116 tasks (18.1%) on the standard tier. With 13 general agent changes, found on the dev half only, it solved 57 (49.1%). On the held-out half, never used to choose a change, that is 31 of 58 (53.4%) against 12 (+20 −1, p < 0.0001). The shipped default on Nov 3, a separate run, solved 74 of 116 (63.8%): eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/.",
     "commit": "androidworld branch",
     "final": false,
     "src": "eval/results/final/report.md"

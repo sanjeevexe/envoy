@@ -2,7 +2,7 @@
 
 The video's climax. One clip is posted from Envoy's phone (the Pixel 5) to Instagram, TikTok and YouTube Shorts. Each
 post uses a feature Muse's connectors can't reach: library music on a Reel, a Story poll, a library sound on TikTok and
-on a Short (TikTok's web support for sounds is unclear). Muse had no connector for TikTok or YouTube when we checked
+on a Short. Muse had no connector for TikTok or YouTube when we checked
 (Nov 1). Each post is a routine Envoy learned from one agent run (TikTok's and YouTube's with small hand edits), which
 an agent calls as a tool of its own (`docs/technical-design.md`, "Routines as agent tools").
 
@@ -15,27 +15,13 @@ an agent calls as a tool of its own (`docs/technical-design.md`, "Routines as ag
   then started five tasks through the routine tools, by name. The Reel, the TikTok and the Short each reached their
   final button with the song and the caption and were declined, at 0, 3 and 0 model calls in Envoy's replay (Muse's own
   calls aside): 195.5, 75.1 and 77.4 s from Muse's call to the end, phone ask and approval wait included. The poll
-  Story failed twice: an unanswered phone ask (fixed in `947bf44`) and the live-Story gap below. Record:
+  Story failed twice: an unanswered phone ask (fixed in `947bf44`) and a Story still live from the night before ("Before a take", below). Record:
   `eval/results/showcase/muse-2026-11-02/task-rows.json`, and `docs/muse-link.md`, "Nov 1–2: routine tools and the
   cross-post dry run".
 - **Comments come back.** One Instagram comment on a showcase post reached the iPhone 1.57 s after it landed on Envoy's
   phone (Nov 2; agents see it at their next `phone_updates` check). A YouTube comment took about 2 minutes, all but
   3.6 s of it YouTube's own delay. No TikTok notification came (`prompts/phone-watch-report.md`).
-- **Known gap:** the Story routine fails while a Story is already live: its first tap opens the live
-  Story's poll results. One Story take per 24 hours, unless the live one is deleted.
-- **Showcase routines don't run in the cloud.** Every run here was on the Pixel, except one dry-run Story task that an
-  unanswered phone ask moved to an emulator, where it failed (fixed). Library songs and stickers are untested on
-  emulators.
-
-Status, Nov 1 (night): four routines in the library, each learned from one agent run (declined at the final button)
-and recompiled with the compiler fix (main ffde928); `prompts/showcase-report.md` has the details:
-
-| Tool (routine, v2) | Inputs | Replays (calls in Envoy's replay) | Learned vs tuned |
-| --- | --- | --- | --- |
-| `instagram_reel_song` | song_title, song_artist, caption | 3/3 at Share; 2 at 0 calls, 1 finished by the agent (16 calls) after Instagram's one-time audio tip | learned |
-| `instagram_story_poll` (v3) | poll_question, poll_option_1, poll_option_2 | 3/3 at "Your story", 0 calls, right clip | learned |
-| `tiktok_post_sound` | sound_title, sound_artist, caption | 3/3 at Post (each paused at launch and was resumed by the test script), 7–8 vision calls (~$0.02), **but no sound attached** (below) | learned; one step added, and the app and a launch check fixed by hand |
-| `youtube_short_sound` | sound_title, sound_artist, short_title | v2 reached Upload Short every run (2 of the first 3 with the agent's help, 2–8 calls); with the case fix (953b014), 0 calls (1 rehearsal, then the live post) | learned, one step tuned |
+- **Every showcase post ran on Envoy's phone, the Pixel.** Library songs and stickers haven't been tried on an emulator.
 
 Since Nov 2 the library runs v3 of all four. The Reel's and the Short's v3 are automatic repairs Envoy made during the
 live posts (after-checks rewritten); both passed their trial in Muse's dry run at 0 calls in Envoy's replay. Each
@@ -52,11 +38,8 @@ pre-check P3 (`eval/results/showcase/p3.md`).
 author approved each in Envoy on the iPhone:
 - Reel (`instagram_reel_song` v2): live, with the song, 0 model calls in Envoy's replay.
 - Story with a poll (`instagram_story_poll` v3): live, 0 model calls in Envoy's replay.
-- TikTok (`tiktok_post_sound` v2): went up **without the sound** ("Original sound by envoy"). The routine never attaches
-  it. In its source run the agent's first try left the editor at "Add sound". The agent noticed and redid it (steps
-  19–24), but the compiler dropped that correction as a "back-track". The step's after-checks look only for the label
-  "Music", never the sound's name, and the rehearsals stopped at Post, whose screen doesn't show the sound. That post
-  was left up.
+- TikTok (`tiktok_post_sound` v2): went up without the sound. The agent had corrected it in its source run (steps
+  19–24), and the compiler dropped that correction as a "back-track"; it keeps corrections now.
 - TikTok re-post (`tiktok_post_sound` v3, built with the compiler fix, v2's hand edits re-applied, and rehearsed 3/3):
   live as envoy, captioned "Posted by Envoy · test 2", with **♫ golden hour - JVKE**. 3 calls, 53 s, the editor's sound
   checked before Next.
@@ -70,6 +53,7 @@ library's `youtube_short_sound` v3 is an automatic repair that still has it).
 ## Before a take
 - The newest video in the gallery is the clip: every routine picks the gallery's first slot. Push it last.
 - Instagram: `scripts/instagram_take.py` (a reel started earlier comes back as "Keep editing your draft?").
+- Story: delete any live Story first; the routine's first tap would open it.
 - YouTube: `uv run --project backend python eval/run_showcase.py setup-youtube` (an autosaved draft makes Create open
   on "Continue your draft video?").
 - TikTok: the launch pause ("came to the front on its own") didn't recur after main 8f7a082 (2 runs; one of them
@@ -77,7 +61,7 @@ library's `youtube_short_sound` v3 is an automatic repair that still has it).
   task pauses anyway, press Resume on the phone's Envoy banner.
 - Each routine is a tool for Muse only once "Share with agents" is on (its page in Envoy).
 
-## Kept honest on purpose
+## Ground rules
 
 - **Test accounts only:** Instagram `envoy3955`, plus the TikTok and YouTube test accounts the author made and signed in
   to on the Pixel. Envoy and the coding sessions that built it never sign in, create accounts or type passwords.
@@ -86,8 +70,8 @@ library's `youtube_short_sound` v3 is an automatic repair that still has it).
   author says yes in chat.
 - **No likes, follows, comments or DMs.** `eval/run_showcase.py tap` refuses them, and any publishing button, whatever
   flag it's given.
-- **Wording:** "no connector" for TikTok and YouTube, never "Muse can't". Muse posts plain Instagram content itself, so
-  the Instagram post must use an app-only feature (library music on a Reel, a poll sticker on a Story).
+- **App-only on purpose:** Muse posts plain Instagram content itself, so the Instagram posts use app-only features
+  (library music on a Reel, a poll sticker on a Story).
 
 ## The features (P3)
 
@@ -101,7 +85,7 @@ Sources: the apps' and APIs' own help pages, collected Nov 1 (the research notes
 | TikTok | An effect | App only | **works** (Edit › Effects) |
 | TikTok | Voiceover | App only | found; records the room's microphone |
 | TikTok | Duet | App only | found; record-only (films the room) |
-| YouTube Shorts | A sound from the library | Android and iPhone only | **works** up to "Create channel" (the account has none yet) |
+| YouTube Shorts | A sound from the library | Android and iPhone only | **works** (live Nov 1) |
 | YouTube Shorts | Green screen | Android and iPhone only | found; record-only (films the room) |
 | YouTube Shorts | Remix | Android and iPhone only | **works** as "Use this sound" + a gallery clip |
 

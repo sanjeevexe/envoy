@@ -1027,7 +1027,7 @@ MUSE_DRY_RUN_NOTES = {
     "task-1102-114842-f1dc": ("Its “use Envoy's phone?” ask went unanswered for 15 minutes, so the task moved to an emulator, "
                               "which had no Instagram. Fixed since: an unanswered ask now ends the task."),
     "task-1102-121512-0b47": ("The retry, on Envoy's phone. A Story from the night before was still live, so the routine's first tap "
-                              "opened it instead of a new Story; the agent's fallback ran out of steps and asked the person. Still open."),
+                              "opened it instead of a new Story; the agent's fallback ran out of steps and asked the person."),
 }
 
 
@@ -1109,8 +1109,7 @@ LIVE = REPO / "eval/results/showcase/live-2026-11-02/task-rows.json"  # the real
 # The one real post that wasn't right, in the site's words (from the file's notes). Keyed by task id; the build stops if the id
 # isn't in the file. Every other row with status "done" went live (docs/demo-showcase.md, "The real posts").
 LIVE_NOTES = {
-    "task-1102-014139-7f5e": "published without its song: the routine tapped the sound's row, but the sound never reached the "
-                             "editor; then the run failed its done-check",
+    "task-1102-014139-7f5e": "went up without its song: a compiler bug, since fixed; the re-post below has it",
 }
 
 

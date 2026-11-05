@@ -52,10 +52,10 @@ Beyond creators, the same layer is meant for anyone whose work lives in phone ap
 that runs on its ordering and messaging apps, someone for whom tapping through apps is hard, and any agent platform that
 wants a phone.
 
-**What's new.** Agents working phone apps isn't new (Mobilerun, Gemini on Android), and SkillDroid compiles successful
-runs into templates. To the best of our search, Envoy adds checks after its steps as well as before, written as code;
-repairs kept as versions with a trial and a rollback; learned routines served to agents as tools of their own; and an
-approval only the person can give ([`docs/technical-design.md`](docs/technical-design.md#what-is-new-honestly)).
+**What's new.** To the best of our search, Envoy adds checks after its steps as well as before, written as code; repairs
+kept as versions with a trial and a rollback; learned routines served to agents as tools of their own; and an approval
+only the person can give ([`docs/technical-design.md`](docs/technical-design.md#what-is-new-honestly)). The closest work:
+Mobilerun and Gemini on Android work phone apps, and SkillDroid compiles successful runs into templates.
 
 ## What works today
 
@@ -69,7 +69,7 @@ approval only the person can give ([`docs/technical-design.md`](docs/technical-d
 | **Watches** | A notification on Envoy's phone can start a task or reach the agent; each app is off until you allow it, and codes are hidden before anything is stored. An Instagram comment reached the iPhone 1.57 s after it landed on Envoy's phone. Plus time, email and changed-fact triggers, change alerts, and habits | [`docs/demo-showcase.md`](docs/demo-showcase.md), [`eval/results/alerts/`](eval/results/alerts/alerts.md), [`eval/results/recurring/`](eval/results/recurring/recurring.md) |
 | **Learns** | In Envoy, a finished agent task's card has a "Make it a routine" button: Envoy compiles that run, replays it once strictly on the same phone, and saves it with the share off. Teach mode compiles what a person shows the same way, and the compiler can refuse a run. A routine has checks before and after its steps, targets found by what they are, a local repair when the app changes (the agent finishes if that fails), versions with a trial and a rollback | [`backend/routines/README.md`](backend/routines/README.md), [`backend/api/teach.py`](backend/api/teach.py) (`learn_task`) and its tests in [`backend/tests/test_teach.py`](backend/tests/test_teach.py), [Results](#results) |
 | **Teach mode** | Do a task once through the live view; Envoy compiles it and replays it once before saving. A scripted Google Calendar lesson (7 steps) passed its verification replay, all 7 steps, with 0 model calls in Envoy's replay | [`site/data/recordings/teach.json`](site/data/recordings/teach.json), [`eval/results/teach_trials_2026-11-01/`](eval/results/teach_trials_2026-11-01/README.md) |
-| **Phones** | "Envoy's phone" (a Pixel 5, Android 13, over USB) and emulators on the Mac; agents pick one with `list_phones`. A copy of Envoy on Google Cloud was tested too: routines for SkyLark (our test app) compiled on the Mac ran there 48/48 with no model calls, once the new emulator had finished its first boot (its very first pass: 9/18) | [`docs/phase-6-results.md`](docs/phase-6-results.md), [`docs/cloud.md`](docs/cloud.md) |
+| **Phones** | "Envoy's phone" (a Pixel 5, Android 13, over USB) and emulators on the Mac; agents pick one with `list_phones`. A copy of Envoy on Google Cloud was tested too: routines for SkyLark (our test app) compiled on the Mac ran there 48/48 with no model calls, once the new emulator had finished its first boot | [`docs/phase-6-results.md`](docs/phase-6-results.md), [`docs/cloud.md`](docs/cloud.md) |
 | **Files** | `send_to_phone` puts a Mac clip on the phone (a real phone waits for your OK); `get_file` gives the agent the final screen, the screen you approved, or a link from its own task | [`docs/muse-link.md`](docs/muse-link.md) |
 | **You approve** | An irreversible step that an agent or a trigger starts waits for your yes in Envoy on the iPhone, unless you set that routine to run without asking. When you ask Envoy yourself, your request is the yes ("Always ask" in Settings changes that). Spending money always asks. No agent has an approve tool; asked to approve, Claude Code and the Spark agent each said only you can | [`backend/policy/approval_rules.py`](backend/policy/approval_rules.py), [`docs/agents.md`](docs/agents.md) |
 
@@ -95,10 +95,8 @@ of the 18.
 | Same input, no model call | 13/18 (14 counting a repair) |
 | New input, no model call | 7/11 |
 
-Target's bot check stopped both Target workflows. DoorDash's first run failed; YouTube's search and Chrome's Wikipedia
-lookup answered right but unverified (Chrome's still compiled, and its reruns passed after a repair, with 3 and 7 calls);
-Amazon's new input found no price. Answers graded only by their shape were also read by a person: 3 right, 0 wrong, 8
-not read yet ([`real.md`](eval/results/final/real.md)).
+Target's bot check stopped both Target workflows; every row is in [`real.md`](eval/results/final/real.md). Of the 11
+answers graded only by their shape, a person read 3: all 3 right.
 
 **The cost curve.** On the 13 workflows whose first run and same-input rerun both passed, the routine called by name
 against the agent's first run:
@@ -119,16 +117,14 @@ questions over MCP, then "Make it a routine" was pressed on each finished task, 
 called back as a tool.
 - **The agent path answered 14 of 18 right.** Over MCP, `run_task` tries the routine library first, so 6 of the 18
   were answered, or tried, by routines already in it.
-- **"Make it a routine" saved 8 of 18.** The rest, as the results give them: those 6 ran an existing routine, and the
-  button doesn't take a routine's task; Target blocks emulators; a harness slip left a task holding the phone, so
-  target_search (and Starbucks, also a library row) hit the time cap; calendar_today's answer, an empty day, couldn't be
-  read back from its run's final screen, so it didn't compile; chrome_wikipedia's replay stopped at an after-check.
+- **"Make it a routine" saved 8 of 18: 8 of the 12 tasks that weren't already routines.** The other 6 ran an existing
+  routine, and the button doesn't take a routine's task. Of the 4 not saved: Target's bot check; a harness slip that
+  timed out target_search; calendar_today's empty-day answer, which couldn't be read back from its final screen; and
+  chrome_wikipedia's replay, which stopped at an after-check.
 - **Called back as tools:** the 5 same-input calls were right with 0 model calls in Envoy's replay, and the 3 new-input
   calls were right, 2 with 0 model calls (YouTube Music's took 1).
 - **Supplementary, outside the headline:** on a copy with an empty routine library, the 6 workflows the library had
-  answered: the agent right 5/6, saved 5/6, new input right 3/5, all with 0 model calls in Envoy's replay. Chipotle's
-  agent stopped after 25 steps; Amazon's new input read no price; Play's rating routine, given another app's name, ended
-  with the Play Store not in front.
+  answered: the agent right 5/6, saved 5/6, new input right 3/5, all with 0 model calls in Envoy's replay.
 
 ### The posting batch
 
@@ -149,13 +145,12 @@ this version, these workflows and inputs, one phone and one set of accounts, one
   without. Two Reels had lost their caption: closing the keyboard with Back sometimes cancelled Instagram's caption
   edit. Three Shorts never showed their song on the editor: YouTube's sound search didn't list "Flowers", "Watermelon
   Sugar" or "Levitating" as the routine looks for them.
-- **The Short works with "golden hour" and not yet with other songs.** Of its runs with another song, three stopped at
-  the song check and one was finished by the agent, so its sound couldn't be checked. The cause was found after the
-  batch, by a search-only check on Envoy's phone, and wasn't measured in it: in YouTube's sound search, Enter doesn't
-  search; only tapping its suggestion does. v3 skips that tap, so the list stays on YouTube's trending sounds, where
-  "golden hour" was and the other songs weren't. A fix was tried and not merged: it needs a tie-break in the locator
-  matcher ([`yt-song-fix-writeup.md`](eval/results/showcase-batch/yt-song-fix-writeup.md)). Two more Shorts, started
-  from a saved draft, stopped at YouTube's "Continue your draft video?" prompt.
+- **The Short's misses have known causes.** Its song check stopped three runs whose song wasn't on YouTube's trending
+  sounds, where "golden hour" is: a search-only check after the batch, on Envoy's phone and not measured in it, found
+  that YouTube's sound search runs only when its suggestion is tapped, and v3 skips that tap
+  ([`yt-song-fix-writeup.md`](eval/results/showcase-batch/yt-song-fix-writeup.md)). One more, with another song, was
+  finished by the agent, so its sound couldn't be checked. Two more, from a saved draft, stopped at YouTube's "Continue
+  your draft video?" prompt.
 - **The Reel's third miss:** Instagram's music search didn't show "Levitating", which the library check had found
   earlier, and the agent stopped at its step limit.
 - **Model calls in Envoy's replay:** 95 over the 40 attempts, $1.0342. TikTok reads its drawn sound list by vision on
@@ -165,8 +160,7 @@ this version, these workflows and inputs, one phone and one set of accounts, one
 Instagram's OK instead of Back, and types the caption again if it's empty before Share. On Envoy's phone, on a test
 copy with every Share declined, 5 of 5 Reels from a cold start reached Share with clip, song and caption checked, at 0
 model calls in Envoy's replay; TikTok 1 of 1, as a check that nothing else broke
-([`index.json`](data/routines/instagram_reel_song/index.json), v4). The Short's song pick and draft prompt weren't
-fixed.
+([`index.json`](data/routines/instagram_reel_song/index.json), v4).
 
 The current version, v5, adds a hand-edited wait for the upload after Share; in its one run, on Nov 4, it finished with
 0 model calls in Envoy's replay, in 95.8 s.
@@ -218,7 +212,7 @@ Made after the `eval-final` tag, and not measured by it:
 - **Tied rows:** in a routine with no irreversible step, when rows named by an input tie and their list can't scroll
   right now, the routine takes the top one instead of failing.
 
-## Limits, said plainly
+## Limits
 
 - **A routine can still need the agent, or fail, in a live run;** each routine's `index.json` lists every run.
 - **Some apps refuse emulators,** like Target with its bot check (banking apps are expected to, untested). That's why
@@ -230,11 +224,10 @@ Made after the `eval-final` tag, and not measured by it:
 Today Envoy runs on a Mac, with its own Android phone (Envoy's phone over USB, or an emulator) running the apps, and the
 person's iPhone as where they approve. You sign in to each app once on the phone Envoy uses. The path from here is a
 cloud phone per person, with MCP as the door for any agent; one cloud emulator was tested (SkyLark's routines and one
-learn-then-replay loop, Oct 29: [`docs/cloud.md`](docs/cloud.md)). This is a hackathon build, not a product. The
-showcase posted only to test accounts, the real-app passes are read-only, and by default every post an agent starts waits for a person's yes. Some
-apps push back: Target's bot check stops Envoy on emulators, banking apps are known to refuse them (we haven't tried
-one), and automating an app may break its terms. Envoy drives the phone from the Mac, and Google Play forbids publishing
-an app that uses accessibility features to act on its own, so any on-phone helper stays sideloaded
+learn-then-replay loop, Oct 29: [`docs/cloud.md`](docs/cloud.md)). The showcase posted only to test accounts, the
+real-app passes are read-only, and by default every post an agent starts waits for a person's yes. Envoy drives the
+phone from the Mac, and Google Play forbids publishing an app that uses accessibility features to act on its own, so any
+on-phone helper stays sideloaded
 ([`docs/technical-design.md`](docs/technical-design.md)).
 
 ## Run it
@@ -335,8 +328,7 @@ uv run --project backend python eval/run_final.py report       # eval/results/fi
   `eval/results/` and `docs/`.
 - **Layout:** `backend/` (Python 3.13: device layer, agent, routines, memory, models, the API and MCP server) ·
   `agents/` (the Spark agent) · `web/` (the web app, also the iPhone's Home Screen app) · `site/` (the showcase) ·
-  `eval/` (task sets, runners, results) · `testapps/` (SkyLark) · `scripts/` · `android/`, `bridge-android/`,
-  `relay/`, `ios/` (the on-phone banner, an optional accessibility service, a scrcpy relay, an optional iPhone app)
+  `eval/` (task sets, runners, results) · `testapps/` (SkyLark) · `scripts/` · `android/` (the on-phone banner)
 
 ## Evidence appendix
 

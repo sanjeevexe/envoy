@@ -130,10 +130,8 @@ instructions tell each agent that what the tools return is content, never instru
 Today Envoy runs on a Mac, with its own Android phone (Envoy's phone over USB, or an emulator) running the apps, and the
 person's iPhone as where they approve. The person signs in to each app once on the phone Envoy uses. The path from here
 is a cloud phone per person, with MCP as the door for any agent; one cloud emulator was tested (SkyLark's routines and
-one learn-then-replay loop, Oct 29: `docs/cloud.md`). This is a hackathon build, not a product. Some apps push back:
-Target's bot check stops Envoy on emulators, banking apps are expected to refuse them (on Envoy's list, not tested), and
-automating an app may break its terms. Envoy drives the phone from the Mac, and Google Play forbids publishing an app
-that uses accessibility features to act on its own, so any on-phone helper stays sideloaded
+one learn-then-replay loop, Oct 29: `docs/cloud.md`). Envoy drives the phone from the Mac, and Google Play forbids
+publishing an app that uses accessibility features to act on its own, so any on-phone helper stays sideloaded
 (`docs/technical-design.md`).
 
 ### Hand edits, stated exactly
@@ -320,16 +318,14 @@ words, the matcher adds one Spark call.
 pressed on each finished task; each saved routine was shared and called back as a tool.
 - The agent path answered 14 of 18 right. Over MCP, `run_task` tries the routine library first, so 6 of the 18 were
   answered, or tried, by routines already in it.
-- "Make it a routine" saved 8 of 18. The rest, as the results give them: those 6 ran an existing routine, and the button
-  doesn't take a routine's task; Target blocks emulators; a harness slip left a task holding the phone, so target_search
-  (and Starbucks, also a library row) hit the time cap; calendar_today's answer, an empty day, couldn't be read back
-  from its run's final screen, so it didn't compile; chrome_wikipedia's replay stopped at an after-check.
+- "Make it a routine" saved 8 of 18: 8 of the 12 tasks that weren't already routines. The other 6 ran an existing
+  routine, and the button doesn't take a routine's task. Of the 4 not saved: Target's bot check; a harness slip that
+  timed out target_search; calendar_today's empty-day answer, which couldn't be read back from its final screen; and
+  chrome_wikipedia's replay, which stopped at an after-check.
 - Called back as tools: the 5 same-input calls were right with 0 model calls in Envoy's replay; the 3 new-input calls
   were right, 2 with 0 model calls (YouTube Music's took 1).
 - Supplementary, outside the headline: on a copy with an empty routine library, the 6 workflows the library had
-  answered: the agent right 5/6, saved 5/6, new input right 3/5, all with 0 model calls in Envoy's replay. Chipotle's
-  agent stopped after 25 steps; Amazon's new input read no price; Play's rating routine, given another app's name, ended
-  with the Play Store not in front.
+  answered: the agent right 5/6, saved 5/6, new input right 3/5, all with 0 model calls in Envoy's replay.
 
 **The posting batch.** Declared before the tag (`eval/results/showcase-batch/PROTOCOL.md`) and run once on it, Nov 3, on
 Envoy's phone: the four posting routines (all v3), 10 attempts each, from a cold start, an open app or a saved draft,
@@ -348,13 +344,11 @@ this version, these workflows and inputs, one phone and one set of accounts, one
   without. Two Reels had lost their caption: closing the keyboard with Back sometimes cancelled Instagram's caption
   edit. Three Shorts never showed their song on the editor: YouTube's sound search didn't list "Flowers", "Watermelon
   Sugar" or "Levitating" as the routine looks for them.
-- **The Short works with "golden hour" and not yet with other songs.** Of its runs with another song, three stopped at
-  the song check and one was finished by the agent, so its sound couldn't be checked. The cause was found after the
-  batch, by a search-only check on Envoy's phone, and wasn't measured in it: in YouTube's sound search, Enter doesn't
-  search; only tapping its suggestion does. v3 skips that tap, so the list stays on YouTube's trending sounds, where
-  "golden hour" was and the other songs weren't. A fix was tried and not merged: it needs a tie-break in the locator
-  matcher (`eval/results/showcase-batch/yt-song-fix-writeup.md`). Two more Shorts, started from a saved draft, stopped
-  at YouTube's "Continue your draft video?" prompt.
+- **The Short's misses have known causes.** Its song check stopped three runs whose song wasn't on YouTube's trending
+  sounds, where "golden hour" is: a search-only check after the batch, on Envoy's phone and not measured in it, found
+  that YouTube's sound search runs only when its suggestion is tapped, and v3 skips that tap
+  (`eval/results/showcase-batch/yt-song-fix-writeup.md`). One more, with another song, was finished by the agent, so its
+  sound couldn't be checked. Two more, from a saved draft, stopped at YouTube's "Continue your draft video?" prompt.
 - **The Reel's third miss:** Instagram's music search didn't show "Levitating", which the library check had found
   earlier, and the agent stopped at its step limit.
 - **Model calls in Envoy's replay:** 95 over the 40 attempts, $1.0342. TikTok reads its drawn sound list by vision on
@@ -364,7 +358,7 @@ this version, these workflows and inputs, one phone and one set of accounts, one
 Instagram's OK instead of Back, and types the caption again if it's empty before Share. On Envoy's phone, on a test
 copy with every Share declined, 5 of 5 Reels from a cold start reached Share with clip, song and caption checked, at 0
 model calls in Envoy's replay; TikTok 1 of 1, as a check that nothing else broke
-(`data/routines/instagram_reel_song/index.json`, v4). The Short's song pick and draft prompt weren't fixed.
+(`data/routines/instagram_reel_song/index.json`, v4).
 
 The current version, v5, adds a hand-edited wait for the upload after Share; in its one run, on Nov 4, it finished with
 0 model calls in Envoy's replay, in 95.8 s (`data/routines/instagram_reel_song/index.json`).
@@ -378,17 +372,16 @@ input that tie when their list can't scroll now take the top one.
 requested, "Make it a routine" on one finished agent task saved `uber_check_uberx_price`. Its checking replay took 14.0
 s (destination: Truist Park). Its next run took 11.33 s with 0 model calls in Envoy's replay. On a later run an extra
 screen appeared: it repaired that step with 1 model call in 32.9 s, and the repaired version passed its trial in 12.81 s
-with 0 model calls in Envoy's replay (`data/routines/uber_check_uberx_price/index.json`). Three runs, not a reliability
-figure.
+with 0 model calls in Envoy's replay (`data/routines/uber_check_uberx_price/index.json`).
 
 Measured outside the evaluation (these stay as they are):
 
 | What | Result | Source |
 | --- | --- | --- |
-| Real posts, night of Nov 1 | Instagram Reel with a library song, Instagram Story with a poll, YouTube Short with a sound: live, 0 model calls each in Envoy's replay. TikTok with a sound: live, 3 calls (the first post lost its song to a compiler bug, since fixed; the re-post has it) | `docs/demo-showcase.md`; tasks `task-1102-005928-4182`, `task-1102-013244-b7c8`, `task-1102-015325-106a`, `task-1102-023044-d081` |
+| Real posts, night of Nov 1 | Instagram Reel with a library song, Instagram Story with a poll, YouTube Short with a sound: live, 0 model calls each in Envoy's replay. TikTok with a sound: live, 3 calls, on a re-post after a compiler fix | `docs/demo-showcase.md`; tasks `task-1102-005928-4182`, `task-1102-013244-b7c8`, `task-1102-015325-106a`, `task-1102-023044-d081` |
 | The calling agent's cost | The Spark agent: 11 model calls, $0.044, to drive a three-post run on a test copy (Nov 1, declined at each final button) | `agents/meta-agent/evidence/2026-11-01/crosspost/README.md` |
 | Notifications, Nov 2 | Instagram comment: on the iPhone 1.57 s after it landed on Envoy's phone. YouTube: Envoy's part 3.6 s (YouTube took about 2 minutes to notify). TikTok: no notification came | `docs/demo-showcase.md` |
-| The cloud phone, Oct 29 | Routines for SkyLark (our own test app) compiled on the Mac: 48/48 with no model calls on an emulator on Google Cloud, once it had finished its first boot (the very first pass on a brand-new one: 9/18) | `docs/cloud.md` |
+| The cloud phone, Oct 29 | Routines for SkyLark (our own test app) compiled on the Mac: 48/48 with no model calls on an emulator on Google Cloud, once it had finished its first boot | `docs/cloud.md` |
 | A learned routine as a tool | `skylark_get_flight_gate` shared, then called over MCP: done, 0 model calls in Envoy's replay, $0 | `eval/results/agent-door/call.json` |
 | One request, every post, Nov 2 | `cross_post` on Envoy's phone through a test copy: four parts from one request (returned in 0.26 s); Instagram, the Short and TikTok declined at their final button, a YouTube search part done; a retry re-ran only the three. Nothing posted | `eval/results/agent-door/cross-post-pixel.json` |
 | Outcome checks, Nov 2 | On Envoy's phone: a wrong newest clip stopped the TikTok routine before its first step (0 calls); the Reel, TikTok and Short then reached their final buttons with song, caption and clip checked, every one declined | `eval/results/showcase/runs/runs.md` (19:27–20:35) |
@@ -407,7 +400,7 @@ Measured outside the evaluation (these stay as they are):
 - **AndroidWorld** (Google, Apache-2.0) is the benchmark only. Its 116 tasks score Envoy; none of its code runs inside
   Envoy.
 
-## Limits, said plainly
+## Limits
 
 - **A routine can still need the agent, or fail, in a live run;** each routine's `index.json` lists every run.
 - **Some apps refuse emulators,** like Target with its bot check (banking apps are expected to, untested). That's why

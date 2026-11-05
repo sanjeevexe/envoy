@@ -212,7 +212,7 @@ def chart_real(d: dict[str, Any]) -> str | None:
     ax.set_xlim(0, 115)
     ax.set_xticks([0, 25, 50, 75, 100], ["0%", "25%", "50%", "75%", "100%"])
     ax.grid(axis="y", visible=False)
-    ax.set_title("Real apps: where learning holds and where it breaks")
+    ax.set_title("Real apps, stage by stage")
     return _finish(fig, ax, "real_apps_stages", f"{s['n']} read-only workflows on real Play Store apps (envoy-real); stage 4 counts the workflows that have a second input.")
 
 
@@ -432,7 +432,8 @@ def build() -> None:
     for n, title in titles.items():
         md.append(f"| {title} | {headline(n, data[n]) if n != 'compile' else (str(sum(r.get('status') == 'added' for r in data[n]['rows'])) + ' of ' + str(len(data[n]['rows'])) + ' routines compiled and verified' if data[n] else 'not run yet')} | {_ran_on(data[n])} |")
     aw = androidworld()
-    md.append(f"| 8. AndroidWorld (a separate run) | {aw['headline']} | `androidworld` branch |")
+    md.append(f"| 8. AndroidWorld (a separate run) | {aw['headline']} The shipped default on Nov 3, a separate run, solved 74 of 116 (63.8%): "
+              f"`eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/`. | `androidworld` branch |")
     md += ["", "## The design's success targets", ""] + targets(data) + [""]
     for n, title in titles.items():
         md += [f"## {title}", ""]
@@ -505,6 +506,8 @@ def androidworld() -> dict[str, str]:
         if headline and len(headline) + len(sentence) > 300:
             break
         headline = f"{headline} {sentence}".strip()
-    return {"headline": headline, "section": "From `docs/androidworld-results.md` on the `androidworld` branch (its own setting and caveats apply):\n\n"
-            + "\n".join(text.splitlines()[:60])}
+    # The branch's words predate the merge: say which `main` they mean, so the row doesn't read as today's.
+    said = ("Envoy as on `main` solved", "Envoy as on `main` before these changes (the Oct 28 baseline) solved")
+    return {"headline": headline.replace(*said), "section": "From `docs/androidworld-results.md` on the `androidworld` branch (its own setting and caveats apply):\n\n"
+            + "\n".join(text.splitlines()[:60]).replace(*said)}
 

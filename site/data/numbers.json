@@ -80,7 +80,7 @@
   },
   {
    "what": "8. AndroidWorld (a separate run)",
-   "value": "Envoy as on main solved 21 of 116 tasks (18.1%) on the standard tier. With 13 general agent changes, found on the dev half only, it solved 57 (49.1%). On the held-out half, never used to choose a change, that is 31 of 58 (53.4%) against 12 (+20 −1, p < 0.0001).",
+   "value": "Envoy as on main before these changes (the Oct 28 baseline) solved 21 of 116 tasks (18.1%) on the standard tier. With 13 general agent changes, found on the dev half only, it solved 57 (49.1%). On the held-out half, never used to choose a change, that is 31 of 58 (53.4%) against 12 (+20 −1, p < 0.0001). The shipped default on Nov 3, a separate run, solved 74 of 116 (63.8%): eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/.",
    "commit": "androidworld branch",
    "final": false,
    "src": "eval/results/final/report.md"
