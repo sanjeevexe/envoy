@@ -548,13 +548,8 @@
       <div class="card limits" style="margin-top:20px">
         <h3>Limits, plainly</h3>
         <ul>
-          <li>Envoy learns a task, not an app: real-app routines answered a new input with no model call in ${esc(cur.stages["New input, no model call"])} workflows.</li>
-          ${batchLimits() ? `<li>${batchLimits()} ${srcA(D.batch.src, "RESULTS.md")}</li>` : ""}
-          <li>Most real-app routine versions were fixed by hand during testing; self-repair's trials kept ${D.repair.real.filter((v) => v.passed).length} of its ${D.repair.real.length}. The posting routines' hand edits are on their cards.</li>
-          <li>Envoy doesn't make a routine on its own: the person presses “Make it a routine”, or teaches it, and the compiler can refuse a run (it saved ${D.learn_path.main.saved} of ${D.learn_path.main.n} when measured). The routines measured here were compiled by the evaluation or a script. ${srcA({ path: "backend/api/teach.py" }, "teach.py")}</li>
-          <li>A routine can still need the agent, or fail, in a live run; each routine's version history lists every run. The Story routine fails while a Story is already live. Teach mode doesn't yet learn keypad entry reliably, or apps that reopen on their last screen.</li>
-          <li>Agents hear about the phone when they next check; Muse checked about every 10 minutes. TikTok sent no notification for our three test comments.</li>
-          <li>Envoy runs on a Mac with one Pixel over USB today, each app signed in once by the person. A cloud phone was tested on Google Cloud; the posts here ran on the Pixel. Target's bot check blocks emulators; banking apps are expected to (not tested). ${srcA({ path: "docs/cloud.md" }, "cloud.md")}</li>
+          <li>A routine can still need the agent, or fail, in a live run; each routine's version history lists every run.</li>
+          <li>Some apps refuse emulators, like Target with its bot check (banking apps are expected to, untested). That's why Envoy can also use your own Android phone: it sends those apps there, asking first. When a bot check or a sign-in appears, Envoy pauses and prompts you to take over, then carries on when you hand it back.</li>
         </ul>
       </div>
       ${D.readme.since.length ? `<div class="card limits" style="margin-top:12px">

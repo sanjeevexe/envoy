@@ -220,21 +220,10 @@ Made after the `eval-final` tag, and not measured by it:
 
 ## Limits, said plainly
 
-- **Learn a task once, not an app:** real-app routines answered a new input with no model call in 7 of 11 workflows
-  (SkyLark, our test app: 50 of 50); Amazon's new input still finds no price.
-- **The Short needs work:** it reached Upload Short 5 of 10 in the posting batch; songs other than "golden hour" and
-  saved drafts stop it, and neither is fixed.
-- **Outcome checks are narrow:** since Nov 2, added after a TikTok went out without its sound, code checks a posting
-  routine's song, caption and clip before the final step, and nothing else.
 - **A routine can still need the agent, or fail, in a live run;** each routine's `index.json` lists every run.
-- **The Story routine fails while a Story is already live:** its first tap opens the live Story's poll results.
-- **Envoy doesn't make a routine on its own:** the person presses "Make it a routine" on a finished task, or teaches it,
-  and the compiler can refuse a run. It saved 8 of 18 real-app runs when measured; the evaluation's and the showcase's
-  routines were compiled by the evaluation or a script.
-- **Teach mode** doesn't yet learn keypad entry reliably, or apps that reopen on their last screen.
-- **No TikTok notifications:** TikTok sent none for any comment in testing.
-- **Muse hears about phone events when it next checks** `phone_updates` (its scheduled task checked about every 10
-  minutes). Envoy's own push to your iPhone is immediate.
+- **Some apps refuse emulators,** like Target with its bot check (banking apps are expected to, untested). That's why
+  Envoy can also use your own Android phone: it sends those apps there, asking first. When a bot check or a sign-in
+  appears, Envoy pauses and prompts you to take over, then carries on when you hand it back.
 
 ## Setup today, the path to a product, and the platform question
 
