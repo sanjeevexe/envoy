@@ -547,6 +547,17 @@
         </div>
       </div>
       <div class="card limits" style="margin-top:20px">
+        <h3>Also in Envoy</h3>
+        <ul>
+          <li><b>A cloud phone.</b> Routines compiled on the Mac ran unchanged on an emulator on Google Cloud, 48 of 48 with no model calls (SkyLark, our test app), and the whole learn-then-replay loop ran there too. ${srcA({ path: "docs/cloud.md" }, "cloud.md")}</li>
+          <li><b>Siri and voice.</b> The iPhone's Action Button, “Hey Siri, Ask Envoy” or a Control Center button, through an Apple Shortcut with no app to install. Dictation runs on Muse Voice Transcribe. ${srcA({ path: "docs/siri.md" }, "siri.md")}</li>
+          <li><b>Offers and habits.</b> Envoy can offer before it acts (“Check in for SL 482?”), notices what you repeat, and sets up recurring jobs you ask for, switched off until you say yes. ${srcA({ path: "backend/api/offers.py" }, "offers.py")}</li>
+          <li><b>One question, two apps.</b> One task with a part per app, and one answer. ${srcA({ path: "backend/api/crossapp.py" }, "crossapp.py")}</li>
+          <li><b>Before I start, and saved logins.</b> Envoy says what to expect before a task, and the phone's own password manager can fill a sign-in, so Envoy never sees a password (off by default). ${srcA({ path: "docs/preflight-and-autofill.md" }, "the doc")}</li>
+          <li><b>Real apps.</b> Tasks run in Amazon, Calendar, Chipotle, Chrome, Clock, Contacts, DoorDash, Gmail, Instagram, Lyft, Maps, the Play Store, Settings, Starbucks, TikTok, Uber, YouTube and YouTube Music. Apps that refuse emulators go to your own phone, asking first: Uber won't install on an emulator, so it runs on Envoy's phone, and Envoy adds an app to that list itself when it sees a bot check, as with Target. ${srcA({ path: "backend/api/routing.py" }, "routing.py")}</li>
+        </ul>
+      </div>
+      <div class="card limits" style="margin-top:20px">
         <h3>Limits</h3>
         <ul>
           <li>A routine can still need the agent, or fail, in a live run; each routine's version history lists every run.</li>
