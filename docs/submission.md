@@ -163,7 +163,7 @@ https://github.com/sanjeevexe/envoy
 
 ## Demo video (YouTube, 3 minutes or less)
 
-TBD: the YouTube link, by Nov 4.
+https://www.youtube.com/watch?v=EIVoCPk8BME
 
 ## Use of Meta products
 

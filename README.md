@@ -33,7 +33,7 @@ while the irreversible steps an agent starts wait for the person's yes on their 
 > Envoy hasn't learned yet ([`backend/models/adapter.py`](backend/models/adapter.py)).
 
 - **Showcase site:** https://sanjeevexe.github.io/envoy/ (a guided tour built only from recorded runs and results)
-- **Demo video (3 minutes):** TBD, the YouTube link goes here on Nov 4
+- **Demo video (3 minutes):** [watch on YouTube](https://www.youtube.com/watch?v=EIVoCPk8BME)
 - **The write-up:** [`docs/submission.md`](docs/submission.md)
 
 Built solo for the Meta Global AI Developer Hackathon (indie track; submissions close Nov 4, 2026), from the first
