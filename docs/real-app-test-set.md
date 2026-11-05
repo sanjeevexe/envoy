@@ -2,9 +2,9 @@
 
 Oct 27, 2026. 18 read-only workflows on `envoy-real` across shopping, food, Google's own apps, maps, the Play Store, media and the web. 11 are graded against ground truth (the phone's settings over adb, the Gmail API, published facts such as an address or a year), the rest by the answer's shape (a price, a rating); in the final evaluation (`eval/run_final.py real`) a person also reads each shape-graded answer against the screen it came from, and a right-shaped wrong value doesn't count (`eval/results/final/real_hand_checks.json`). Run with `eval/run_real_apps.py`. After any change to routines, rerun it with `--regression`: no agent runs and cached compile answers, so no model calls unless a repair runs. Full table: `eval/results/real_apps/report.md`.
 
-The point of the set is to show where learning breaks before we try to improve it, so nothing below has been fixed yet.
+This is the Oct 27 baseline: the set's first job was to show where learning breaks. Phase 7 then fixed most of the replay failures: by the Nov 3 final run, same-input replays went from 5/18 to 13/18 and new inputs from 5/11 to 7/11 (`eval/results/final/report.md`; fixes in `docs/phase-7-results.md`).
 
-## Where it stands
+## Where it stood on Oct 27
 
 | Stage | Passed |
 | --- | --- |
@@ -35,13 +35,11 @@ Grouped by the stage where each workflow first failed.
 - **Navigation that doesn't replay (2):** Maps (a scroll step for one place) and Chipotle (the map and bottom-sheet store picker from Phase 2).
 - **Bot check (1):** Target store hours, on every fresh launch.
 
-## What the data suggests, when we come back to optimize
+## What the data suggested
 
 1. **Stop placeholder taps in the agent.** This is the biggest lever on first-run success and cost, and probably a small change.
 2. **Make one-time screens optional when compiling.** Mark onboarding and dismissal steps ("Skip", "Got it", "Not now") as steps that may not appear again.
 3. **Read list rows by structure.** Use the row's own parts (any separator: ·, •, commas) and the row's position, not "the row containing the input".
 4. **Learn answers that are inferred, not shown** (zero contacts, no events), or have the routine report the screen state ("No contacts yet") instead.
-
-Fix the test bed separately: update YouTube and turn on Gmail sync on the emulator.
 
 All of Envoy's first runs used 214 model calls. Compiles reused Phase 2's cached answers for the 7 existing workflows and called Muse Wonder for the 7 new ones that had a verified run.

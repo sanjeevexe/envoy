@@ -485,17 +485,15 @@ Replayed on the loop run's own first screen, `736a6e4`'s prompts, 30 per cell:
   - The record is back in `main`'s loop with the harness commit, and `test_androidworlds_step_budget_is_envoys_max_steps` checks it.
 
 
-## What Envoy should change on `main`, ranked
+## What changed on `main`, ranked
 
 **Approved for `main` (Oct 28, the author: "All 13").** The 13, Phase 7's three SkyLark follow-ups, the answer fix, the contacts planner line and an empty-state check merged on Oct 29 (`105d04e`). The first real-app rerun on the staging tree (`736a6e4`) still found contacts_count worse than `main`; after the planner line and the empty-state check, Phase 7's decisive check came within a bar of at most one more failure than `main` (`eval/results/real_rerun_2026-10-29/`).
 
-**Proposed on Oct 29, after the 13:**
+**Added on Oct 29, after the 13:**
 - **The answer fix,** `b630d3f` + `9a573f8`: answers in the phone's words, and AndroidWorld's answer form moves to its adapter. It's on the same staging branch (`736a6e4`), and the real-app rerun and held-out half above were run on it.
 - **The contacts planner line,** `edfab2b`: replayed offline above. Phase 7's live contacts runs and a SkyLark check came before the merge (Oct 29, `105d04e`).
 
-The 13 agent commits below cherry-pick cleanly onto `main` as it is on Oct 28 (`e0789e1`: Phases 6 and 7, cross-app answers and app routing). On that result `main`'s whole suite passes (251 tests). Main's commits since the branch was measured touch routine repair, the phone, the task history and the API's routing, and none of the agent, model or device code, so the agent is still the one measured here. The only differences are the AndroidWorld tests and a two-line trace change (`73c6fab`). Against branches still waiting to merge:
-- `claude/repair-fixes` and `claude/overnight-integration`: already in `main`.
-- `claude/wonder-appnotes` (model profiles, app notes): 4 small conflicts, in `plan_input`/`step_input` (`backend/models/prompts.py`) and their two calls (`backend/agent/loop.py`). Both sides add keyword arguments (`apps`, `today`, `remembered` here, `app_notes` there), so each is resolved by keeping both. Held-out effects are of the set as a whole (31 against 12 of 58, +20 −1). Each change's own evidence is its mechanism, counted on held-out and on dev. None names an app, a task or AndroidWorld.
+Held-out effects are of the set as a whole (31 against 12 of 58, +20 −1). Each change's own evidence is its mechanism, counted on held-out and on dev. None names an app, a task or AndroidWorld.
 
 | Rank | Change (branch commit) | Why first | Held-out evidence (baseline → final) | Risk on `main` |
 | --- | --- | --- | --- | --- |
@@ -574,55 +572,3 @@ Measured offline, from the runs' own inputs, each fix in its own commit on this 
 - **The three SkyLark follow-ups** passed Phase 7's second SkyLark round live (above). On AndroidWorld they're in the held-out re-run on the staging branch (`736a6e4`).
 - **Routines across seeds are one pass on three seeds, from routines verified on a single instance.** RecipeDeleteMultipleRecipesWithConstraint shows how a degenerate instance can pass verification. The routine-bug fixes waiting on another branch (popup focus, twin fields, row-anchored icons, dates for the matcher) weren't in this run. The 5 PopupWindow routines and the 2 Pro Expense routines they'd recompile weren't among the verified 22 anyway.
 - **Not done:** pass@k or other seeds for the full agent beyond the routines comparison. The AndroidWorld issues are drafted here, not filed. Neither is the android_env behaviour of restarting the adb server on failure, which is worth raising with its maintainers (with the author's OK).
-
-## Proposed text for other documents
-
-These were drafts for other documents; they have since been applied (`docs/technical-design.md`, `docs/meta-feedback.md`, `THIRD_PARTY.md`).
-
-### Proposed for the design doc's Evaluation section
-
-In "Task sets", the AndroidWorld part of the **Stretch** bullet becomes a measured set:
-
-> - **AndroidWorld (measured Oct 27–28, branch `androidworld`):** Google's 116 tasks over 20 apps, run unmodified through AndroidWorld's own runner and scoring on an API 33 emulator, seed 30, pass@1, with Envoy's whole agent as the agent (one subprocess per task; the answer goes to AndroidWorld's answer channel). The tasks were split 58/58 into a dev half for finding and fixing failures and a held-out half that measures the result; the split was committed before any run. Envoy as on `main` scored 21 of 116 (18%). With 13 general agent changes found on the dev half, it scored 57 (49%), and 31 of 58 (53%) on the held-out half against 12, at about $0.04 and 38 s per task (`docs/androidworld-results.md`). Routines compiled from seed-30 runs were replayed on three other seeds; see that report.
-
-And in "How results are reported", one sentence:
-
-> AndroidWorld results are reported by half (dev and held-out) with a paired test per change set, and failures are explained from step-level trace evidence, not from the score alone.
-
-### Proposed for `docs/meta-feedback.md`
-
-A new entry:
-
-> ## Muse Spark as the agent on Google's AndroidWorld benchmark (Oct 27–28; 116 tasks, both tiers, about 8,000 step calls)
->
-> **What worked well**
-> - **The Contributor tier is a real saving, with the same quality.** The same agent scored 21.5 of 116 on Contributor and 21 of 116 on standard. Contributor billed $0.30 for the whole run against $4.49. That made it practical to develop fixes in repeated runs (three runs of 58 tasks for $0.63 billed).
-> - **Structured output never failed.** Not one of about 8,000 step calls across five runs ended in a model error or unusable output, sometimes after a sentence of prose (below).
-> - **The model follows a self-written memory well.** Given a field for "what on this screen you will need later", it kept text word for word (recipes, IDs, values to add up) in 45 of 58 episodes and used it on later screens. In the task that re-read a file most, the agent opened the file's app 10 times instead of 40.
->
-> **What could be better**
-> - **Strict JSON-schema output writes keys in alphabetical order, not the schema's order.** A schema listing `zebra_first, middle, apple_last` came back `apple_last, middle, zebra_first`, 6 times of 6 on both tiers, even when the descriptions said "write this field first". So a model can't be made to reason before it answers by ordering fields, the usual technique. In a discriminated union, a discriminator named `type` sorts after most fields, so an object begun `{"type": …` can only become a variant with no other field. In Envoy's agent that variant was `back`: 42% of all actions in one run, often with reasons like "placeholder" or "schema requires back?". Renaming fields so the alphabet gives the intended order (`1_reason`, `2_expected_result`, `3_action`; `act` for the discriminator) took back from 13% to 8% of actions. Please document the ordering, or keep the schema's property order.
-> - **Prose before structured output, much more often on the standard tier.** 32% of standard-tier step answers (665 of 2,049) came as two message items, against 13% on Contributor (283 of 2,212). The first item was a sentence ("I'll open the app drawer to find the Audio Recorder."), the second the JSON. `output_text` joins them, so a plain `json.loads` fails; we parse the last message item. The sentence often disagreed with the JSON: it said "open the app drawer" while the JSON said back. That is how we found the key-order problem.
-> - **Contributor answered more slowly.** Median model time per task was 37 s on Contributor against 19 s on standard (same agent and tasks, different hours of the same day).
-
-### Proposed for `THIRD_PARTY.md`
-
-A new section after "In use", since none of this ships in Envoy or is imported by it:
-
-> ## Evaluation only: AndroidWorld (Oct 27–29, branch `androidworld`)
->
-> Used to measure Envoy on Google's public benchmark. These tools run in their own Python 3.11 environment (`third_party/aw-venv`, gitignored). Envoy's backend doesn't import them, and they are not distributed with Envoy.
->
-> | Component | Version | License | What we use it for |
-> | --- | --- | --- | --- |
-> | [AndroidWorld](https://github.com/google-research/android_world) | commit `55ddaf5` (Oct 23, 2026) | Apache-2.0 | The benchmark: 116 tasks, their setup, step budgets and scoring, run unmodified through its own `suite_utils.run` |
-> | [AndroidEnv](https://github.com/google-deepmind/android_env) | 1.2.3 | Apache-2.0 | AndroidWorld's emulator controller (adb and gRPC) |
-> | AndroidWorld's dependencies: absl-py, dm_env, grpcio-tools, protobuf, immutabledict, jsonschema, NumPy, pandas, OpenCV, pydub, tenacity, termcolor, requests, matplotlib, google-generativeai | as pinned by AndroidWorld | Apache-2.0, BSD-3-Clause, MIT, PSF | Required by AndroidWorld's code; Envoy uses none of them directly |
-> | [thefuzz](https://github.com/seatgeek/thefuzz), [python-Levenshtein](https://github.com/rapidfuzz/python-Levenshtein) | 0.19.0 / 0.27.5 | GPL-2.0 / GPL-2.0-or-later | AndroidWorld's fuzzy matching of answers when scoring. Run as part of the benchmark only; not linked into or shipped with Envoy |
-> | The apps AndroidWorld installs on its test emulator (Markor, Broccoli, Simple Calendar Pro, OsmAnd, VLC, Retro Music, Joplin, OpenTracks, Pro Expense, and others) | as AndroidWorld pins them | each app's own license (several GPL-3.0) | The benchmark's apps, installed by AndroidWorld's setup on the evaluation emulator only |
->
-> **Android SDK Build-Tools' `aapt2`** (37.0.0; Android SDK License, a tool) is new for Envoy itself, not only the evaluation: `backend/devices/apps.py` runs `aapt2 dump badging` on an app's APK to read the name people know it by, cached per app version. Its last line under "Development tools (not shipped)" would read: "Android SDK command-line tools, platform-tools, build-tools (`aapt2`, which reads app names from APKs) and emulator (Android Software Development Kit License; not open source, used as tools only)".
-
-"What Envoy builds itself" gains a line:
-
-> - **AndroidWorld evaluation** (Oct 27–29; `eval/androidworld/`): the adapter that runs Envoy's whole agent as an AndroidWorld agent through AndroidWorld's own runner and scoring (a subprocess per task, the answer channel, step budgets), the gRPC token interceptor that lets AndroidWorld use a token-protected emulator, the stratified dev/held-out split, the failure taxonomy and its trace digests, per-change effect counts, and the routines-across-seeds experiment. AndroidWorld and AndroidEnv are the benchmark, unmodified.

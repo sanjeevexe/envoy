@@ -1,7 +1,6 @@
 # Per-app phone routing and install on demand
 
-Oct 28, 2026. Branch `app-routing` (in its own worktree), cut from main `a4142d5`. Prompt:
-`prompts/app-routing-onboarding.md` (not in the public repo). Results: `eval/results/app_onboarding/`.
+Oct 28, 2026. In `main` since that day (`e0789e1`). Results: `eval/results/app_onboarding/`.
 
 ## What changed
 
@@ -117,8 +116,8 @@ installed in 8 to 22 s before the agent starts.
 - **Bot checks are tested offline, not on a device.** Target, the app that showed one, is on the starting list, so it
   never reaches the emulator now. No other app showed a bot check on envoy-real. Learning, the plain message and
   moving to the phone are covered with fakes.
-- **Moving a task to the phone isn't run on the Pixel 5.** The Pixel 5 has no Google account and so no Play Store apps;
-  a task moved there for an app it lacks ends with "install it from the Play Store". Trying it needs the author's go.
+- **Moving a task to the phone wasn't run on the Pixel 5 in this pass.** It had no Play Store apps on Oct 28, and has
+  since run Instagram, TikTok, YouTube and Uber.
 - **The banking apps are listed by reputation** (device-integrity checks are common in banking apps), not tested:
   Envoy doesn't sign in, so we can't see their checks. Any of them can be removed from the JSON.
 - **Install by name leans on the Play Store's layout as of Oct 28**: result cards with their own buttons, and a
@@ -137,12 +136,3 @@ $0.36 on the Meta key, all standard tier and real-app scope: 189 calls (183 Muse
 from this worktree's own cost log (`logs/model_costs.jsonl`). The baseline run cost $0.051, the first build's runs
 $0.109, the runs after the fix $0.187; the other $0.011 was finished tasks writing what they saw into the run's own
 throwaway memory. Unit tests make no model calls.
-
-## Merge
-
-The merge steps: in the `app-routing` worktree, `git merge main` (main had moved to `6b90832`, already
-merged), run `uv run --project backend pytest backend/tests -q` and `npm run build` in `web/`,
-then in the main checkout: `git merge --ff-only app-routing`. No push.
-
-Files other branches also touch: `api/runner.py` (the Wonder branch also edits it, in other lines),
-`eval/run_real_apps.py` (`bot_check` keeps its name and behavior; `run_one`'s row is unchanged).

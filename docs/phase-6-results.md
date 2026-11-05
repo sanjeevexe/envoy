@@ -1,5 +1,7 @@
 # Phase 6 results: real Android phone and SAM 3.1
 
+*Written to the author on the day; "you" is the author.*
+
 Oct 27, 2026 (evening); the real phone on Oct 28 (evening, in Phase 7). **The gate passed on a real phone**: a Google Pixel 5 on Android 13 (IPaT loan), through the API, with every decision made on the iPhone. The gate is "a routine learned on the emulator runs on the real phone". The phone also found six bugs the stand-in couldn't; all are fixed, with tests (below, "On the real phone").
 
 Until the phone came, an emulator stood in for it (`ENVOY_TEST_PHONE`): the same code path a real phone uses, with no gRPC (frames, taps and screenshots through Envoy's own scrcpy client), the banner app, the physical-touch watcher, routing and asking first. On it, the check-in routine compiled on `envoy-test` ran end to end through the API, and all 6 SkyLark routines passed 12 of 12 with no model calls. Screens with no accessibility tree now work: on 52 targets, SAM 3.1 then grounding found all 52 (grounding alone 92 to 94%, the step model's own coordinates 37%).
@@ -11,7 +13,7 @@ Plan: `prompts/phase-6-plan.md`. Results: `eval/results/phase6/`.
 - [x] **The gate** on the real phone (Pixel 5, Android 13), four times through the API; portability and all 10 core routines on it.
 - [x] **Phone measurements:** scrcpy, the live view on the Mac and on the iPhone over the tailnet, a takeover, a touch that pauses a run, the banner on stock Android 13.
 - [x] **Answers:** the phone is a Pixel 5 on Android 13 (Android 15's notification limits don't apply to it, and weren't tested); the Envoy bridge is **not needed** (settling and set-text held on the phone).
-- [ ] **Not done (optional):** sign-in codes from the notification shade. The phone has a SIM, but no service sent it a code tonight, and Envoy doesn't sign in for you.
+- [ ] **Not done (optional):** sign-in codes from the notification shade. The phone has a SIM, but no service sent it a code that evening, and Envoy doesn't sign in for you.
 
 ## What was built
 
@@ -110,7 +112,3 @@ For the design doc (applied in both copies):
 4. **Routines handle drawn screens** with visual locators (description + picture), and **smaller screens** with scroll-to-reveal and scrolled outputs.
 5. **The Envoy bridge is not built.** On the real phone, settling and set-text held (the design's condition for building it), and you agreed.
 6. **From the real phone:** frames whose colorspace label can't be converted are converted as BT.601; a tap under the banner steps the banner aside; a field Compose rebuilds while typing is looked up again; a run you took over or paused teaches the routine nothing, and pauses and takeovers are kept in the task's history; a request for an emulator that isn't running says so and names your phone.
-
-## Next
-
-- **Phase 7:** the final evaluation on the frozen commit (Nov 2) includes all 10 core routines on the phone again if it is still on loan (`run_final.sh` runs `sizes --device phone` when a phone is connected).

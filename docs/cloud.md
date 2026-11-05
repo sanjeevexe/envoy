@@ -109,7 +109,7 @@ The learned routine lives only in the VM's copy (`eval/results/final/library/com
 
 ## Stage 3: Envoy in the cloud, as a second option
 
-At the author's request (Oct 29), the cloud copy is a full **alternative** to the Mac setup, not a replacement. Before the Nov 3 recording the author picks whichever works better. Nothing on the Mac changes when the cloud is chosen.
+At the author's request (Oct 29), the cloud copy is a full **alternative** to the Mac setup, not a replacement. Nothing on the Mac changes when the cloud is chosen.
 
 ### What the cloud copy is
 
@@ -293,7 +293,6 @@ No product code changed. Everything was handled from outside:
 
 - One project, created on Oct 29 under an organization, with billing on the trial account. The organization's policies don't block nested virtualization (`compute.disableNestedVirtualization` not enforced) or external IPs.
 - **CPUs: 12 across all regions** (`CPUS_ALL_REGIONS`), so one `n2-standard-8` fits, and not two. In us-east1: 200 N2 vCPUs, 250 GB SSD, 2,048 GB disk, 8 in-use addresses, 24 instances. **GPUs: 0.**
-- Turning on the Compute Engine API also made Google's `default` network with its default rules (SSH and RDP open to the internet). Envoy's VM isn't on it; it was left as Google made it.
 
 ## The clip
 
@@ -306,7 +305,7 @@ No product code changed. Everything was handled from outside:
 - One VM, one region, one afternoon for stages 1–3. The cloud runs were k=3 like the Mac's, and they're as small a sample.
 - The cloud copy and the Mac share nothing: routines, memory and paired devices stay where they were made.
 
-## For the write-up
+## In short
 
 > SkyLark routines compiled on a Mac ran unchanged on an Android emulator on a Google Cloud N2 server: once the new emulator had finished its first-boot setup, 48 of 48 runs on bookings they had never seen passed, with no model calls, at a median of 5.5 s (3.1 s on the Mac).
 

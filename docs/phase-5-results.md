@@ -1,5 +1,7 @@
 # Phase 5 results: iPhone companion and voice
 
+*Written to the author on the day; "you" is the author.*
+
 Oct 27, 2026. **Gate passed on your iPhone.** The gate was "approve from the iPhone; a boarding-pass screenshot becomes a fact".
 
 On your iPhone, Envoy runs as a Home Screen app over a private HTTPS address on your tailnet. You asked it to check you in from the iPhone's chat. The approval arrived as a push. You opened it and approved on the iPhone 170 s later, and the check-in finished with memory updated; a "Done" push followed. A SkyLark boarding-pass screenshot in the iPhone's Photos, shared with **Send to Envoy** from the Share Sheet, became facts on the existing SL 482 flight, with the source "your screenshot (shared with Send to Envoy)". The image was deleted from the Mac 4 s after it arrived. A scripted version of both halves passes 8/8 (`eval/run_phase5.py`).
@@ -61,7 +63,7 @@ About 1,350 lines of Python, Swift and shell (`backend/api/auth.py`, `push.py`, 
 
 - **The tailnet is the network.** The iPhone was on the same campus network (Tailscale connected directly); over cellular, frame latency will be higher. Fewer, smaller frames are one setting away (`fps`, `width`, `quality`).
 - **Web Push on iOS needs the Home Screen app**, and notifications have no action buttons: tapping opens the approval page.
-- **A quick tunnel's address changes every run**, so the Muse connector is added again each time (about a minute: the URL, the key, three "Allow once"). A stable address (a named Cloudflare tunnel, or Tailscale Funnel) needs your account and your OK; worth it for the demo video.
+- **A quick tunnel's address changed every run**, so the Muse connector was re-added each time. A permanent Tailscale Funnel address replaced it on Nov 1.
 - **The code test used a message you sent yourself** (iMessage to your own Apple ID). A real one-time code from a service should behave the same, but that wasn't tried.
 - **Photos are read by Muse Spark on Meta's servers** (with redacted regions blacked out first); only the text check is on-device.
 - **Cookies are per host, not per port**, so your browser also sends Envoy's cookie to the other app on the same `ts.net` name (port 443). Both run on your Mac; noted for when either moves.
@@ -76,8 +78,3 @@ For the design doc (applied in both copies):
 4. **Voice is dictation into the message box**: tap the mic, tap ■, check the words, send. One Transcribe session per dictation (its push-to-talk mode), with silence padding to real time; final text 70 to 300 ms after stopping.
 5. **Photos: text is read on the Mac (Vision, with a tiled second pass)**; redacted lines are blacked out before the image goes to Spark; values must match the image's text up to OCR glyph confusions in codes; the image is deleted.
 6. **Sign-in codes (answered):** a Shortcuts message automation does forward codes while the phone is locked, after one manual run grants its network permission.
-
-## Next
-
-- **You:** if you want the code-test automation gone, swipe left on it in Shortcuts → Automation (it's set to Don't Run). The Muse connector now points at a stopped tunnel with a rotated token; remove it in Muse whenever you like.
-- **Phase 6 (real Android phone):** turn on Developer options and Wireless debugging on the phone; for USB, a cable to the Mac; for wireless, the Mac and phone on the same Wi-Fi (campus Wi-Fi often isolates devices, so a hotspot from the phone may be needed). Tell me its Android version (15+ hides codes from notification readers).

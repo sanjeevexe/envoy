@@ -103,7 +103,7 @@ export function ApprovalBody({ id, device, onClose, standalone }: { id: string; 
       ) : (
         <p className="mt-2 rounded-block bg-well px-4 py-5 text-meta text-ink-2">No picture: the screen was a secure one (a sign-in or a payment), and those aren&rsquo;t kept.</p>
       )}
-      <p className="mt-2 text-meta-2 text-muted">{a.screenshot ? `Screenshot ${device ? `from your ${device}` : `in ${appName(a.app)}`} · ` : ""}{ago(a.created_at)}</p>
+      <p className="mt-2 text-meta-2 text-muted">{a.screenshot ? `Screenshot ${device ? `from ${device}` : `in ${appName(a.app)}`} · ` : ""}{ago(a.created_at)}</p>
 
       {a.reasons.length > 0 && (
         <div className="mt-3.5 rounded-block border border-line bg-surface px-4">

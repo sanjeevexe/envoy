@@ -19,7 +19,7 @@ const APPS: Record<string, string> = {
   "com.chipotle.ordering": "Chipotle", "com.dd.doordash": "DoorDash", "com.google.android.gm": "Gmail", "com.google.android.apps.maps": "Google Maps",
   "com.google.android.apps.youtube.music": "YouTube Music", "com.google.android.youtube": "YouTube", "com.android.vending": "Play Store",
   "com.android.chrome": "Chrome", "com.android.settings": "Settings", "com.google.android.calendar": "Calendar", "com.google.android.contacts": "Contacts",
-  "com.instagram.android": "Instagram",
+  "com.instagram.android": "Instagram", "com.zhiliaoapp.musically": "TikTok", "com.ss.android.ugc.trill": "TikTok", "com.ubercab": "Uber", "me.lyft.android": "Lyft", "com.google.android.deskclock": "Clock",
 };
 export const appName = (pkg?: string | null) => (pkg ? APPS[pkg] ?? pkg.split(".").pop() ?? pkg : "an app");
 

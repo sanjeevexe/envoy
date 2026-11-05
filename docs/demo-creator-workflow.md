@@ -1,10 +1,10 @@
 # Demo: the creator workflow (Mac → phone → Instagram)
 
-The headline scene of the video. A clip finished on the Mac goes to the Android phone, Envoy offers to post it, the person
+A clip finished on the Mac goes to the Android phone, Envoy offers to post it, the person
 approves the Share, and the next time it runs from the routine Envoy learned. Instagram is Meta's app and Muse is Meta's
 assistant: Envoy gives Muse the one surface it can't reach.
 
-Kept honest on purpose: a **test account**, **every post approved by the person on Instagram's own Share screen**, low
+Ground rules: a **test account**, **every post approved by the person on Instagram's own Share screen**, low
 volume, and **no likes, follows or DMs**.
 
 Status: measured Oct 29 on the Pixel 5 (Instagram 453, test account envoy3955): two real posts approved by the author and
@@ -56,7 +56,7 @@ Plain ASCII on purpose: the caption is typed through the ADB keyboard (checked i
 | No sidecar at all | The offer is "Put pier.mp4 on Envoy's phone?" (push only). Say yes, then ask Envoy "Post the newest video in my phone's gallery to Instagram as a reel with this caption: …" (Share still asks). |
 | Instagram shows a pop-up (seen in stage 0: a "Brand survey" on opening, "Others can now download and share your reels" on the last screen, an "Add to your story" tip) | The agent handles pop-ups; if it stalls, the creator takes over in the live view, closes it, and hands back. Open Instagram once before recording so the survey is gone. |
 | The run stops at a step it can't do | Take over in the live view, finish up to Share, hand back; the Share approval still comes. |
-| The post fails, or Instagram is down | Cut to the pre-recorded take of the first real post. |
+| The post fails, or Instagram is down | Wait and re-record the take. |
 | The routine fails on take 2 | It falls back to repair and then the agent by itself; the take still ends at the Share approval (just slower). Re-record take 2. |
 | Instagram's Create opens "Keep editing your draft?" or the camera instead of the gallery | Run `scripts/instagram_take.py` again before the take. Any visit to the reel editor (a rehearsal, a stopped run) leaves a half-made reel that comes back after Instagram restarts, and every run restarts it; the script clears it with "Start new video" (it becomes a private draft) and checks Create twice after a restart. During a run, the routine repairs it with ~2 model calls. |
 | An approval you didn't expect, before Share ("tap Unselected Video thumbnail …" or "tap Gallery") | v2's repair on hybrid (Muse Wonder) sometimes labels the gallery taps irreversible: 1 of 5 Oct 30 runs asked you (another was covered by the request). Approve it; Share still asks. The v3 candidate (below) makes no repair there. |
@@ -139,11 +139,9 @@ person never picks a route:
   does now; on the cloud Envoy that call waits while the clip is still coming through the door (up to 50 s), and a few
   seconds for one not there yet while the forwarder is in touch. `list_phones` tells Muse each phone's kind (`cloud`,
   `emulator` on the Mac, or `real`), whether it is online, and its apps, so it can say "post it from the cloud phone".
-- **Not wired yet: posting to Instagram from a cloud phone.** Instagram's handoff asks for the user's real phone, which the
-  cloud copy doesn't have, so a clip for Instagram reaches the cloud outbox and waits there: the door says "Envoy has
-  pier.mp4 but can't offer it: Your Android phone isn't connected …". And `send_to_phone` to an emulator only puts the
-  file in its gallery; it starts no post. The cloud Instagram test needs one of the two
-  changed first, and that is the author's call. Not changed as of Nov 2.
+- **No offer from a cloud phone.** Instagram's handoff asks for a real phone, so a clip for Instagram waits in the
+  cloud outbox. The Nov 1 cloud run went round it: `send_to_phone` put the clip on the emulator and `run_task` took it
+  to Share (`docs/cloud.md`).
 
 ## Setting up a take (one command)
 

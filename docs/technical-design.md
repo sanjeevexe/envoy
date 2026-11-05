@@ -58,7 +58,7 @@ Added Nov 1, when Envoy became the phone layer agents call (all built by Nov 2):
 - Solving CAPTCHAs or bypassing app security checks. The agent hands control to the user instead.
 - Billing, accounts, or a public launch.
 
-**Success targets** (initial targets, to revise after the first measurements)
+**Success targets** (set at the start; all 7 were met in the Nov 3 final run, the task and routine targets on SkyLark: `eval/results/final/report.md`)
 
 | Measure | Target | How it's measured |
 | --- | --- | --- |
@@ -123,7 +123,7 @@ class Device(Protocol):
 
 `ScreenState` holds the foreground app and screen, the accessibility tree as normalized JSON, a screen signature (a hash of the stable parts of the tree), an optional screenshot, and a timestamp.
 
-### Envoy bridge (planned, not built)
+### Envoy bridge (measured, not needed)
 
 Built only if Phase 1 shows that waiting for the screen to settle, or setting text, is unreliable on real apps. Phase 0 measured a uiautomator2 tree read at 31 ms and a full observation at about 70 ms, so read speed is no longer a reason to build it; and on a real phone (Phase 6, a Pixel 5 on Android 13) settling and set-text both held, so it is not built. If built, it is a small Kotlin accessibility service that:
 
@@ -144,7 +144,7 @@ On emulators, the agent's screenshots come from the emulator's own gRPC screensh
 - **Launch:** headless (`-no-window -no-audio -no-boot-anim -memory 4096 -grpc <port>`), 4 GB of guest RAM but about 7 GB of Mac memory each (measured), at most two at once on the 24 GB laptop, with the browser and other heavy apps closed. Always add -grpc-use-token: plain -grpc listens on every network interface with no auth. Also add -feature -WiFiPacketStream: netsim Wi-Fi crashed emulator 37.2.12 on snapshot load. On a new emulator, update Chrome and Android System WebView from the Play Store, because the image ships 2024 versions that break web sign-ins.
 - **Snapshots for test apps:** test apps and evaluation restore a known snapshot before each task, which makes runs and routine verification repeatable. A restore takes about 1.8 s including reconnecting (Phase 0), and each snapshot is about 3.8 GB on disk, so old ones are pruned. After a restore, the backend re-establishes adb forwarding, the automation server and the video session.
 - **No rollback for real apps:** real apps run on a long-lived emulator that is never restored to an old snapshot. Restoring an old signed-in session can replay expired sign-in tokens, which can get the session revoked or the account flagged. It always cold-boots with snapshots off and is shut down cleanly, because a hard kill can lose recent writes.
-- **Pool:** a task leases a device for its duration; other tasks queue (see Leases and failures). Price comparisons would lease two emulators at once (stretch).
+- **Pool:** a task leases a device for its duration; other tasks queue (see Leases and failures). A question across apps runs one task per part, each on the phone routing picks (see Several phones at once).
 - **In the cloud (tested Oct 29 and Nov 1):** the same stack on a Google Cloud `n2-standard-8` with nested virtualization, about $0.39 an hour. SkyLark routines compiled on the Mac ran there unchanged, 48 of 48 with no model calls. A full copy of Envoy (API, web app, MCP, two emulators) then ran there as an alternative to the Mac (`docs/cloud.md`). Envoy runs on the Mac by default; the cloud server is stopped between uses.
 
 ### Backend 2: a real Android phone
@@ -595,7 +595,6 @@ What Muse's client does, as measured:
 - In testing mode, sign-in tokens expire every 7 days, so the user reconnects once a week (`scripts/connect_gmail.py`).
 - New mail is read into memory by `scripts/ingest_mail.py`, which carries on from Gmail's last history ID. The API doesn't poll Gmail by itself, and Gmail push (Pub/Sub) is a later upgrade.
 - Confirmation emails (flights, orders, reservations) go through extraction into memory.
-- **Calendar wasn't built.** Reading events to link trips, and writing them, stayed a plan.
 
 ### Scheduled and event-triggered tasks
 
@@ -872,7 +871,7 @@ SkyLark Air comes first and is time-boxed to about one day; the shop app is a st
 
 ## Build phases
 
-The build ran in eight phases with no fixed dates; each ended at a gate that had to pass before the next phase started. Phases 0–6 passed their gates by Oct 28. After them came a wave of final features (Oct 29–Nov 1: offers, Before I start, Siri, files from the Mac, teach mode), and then the phone-layer wave (Nov 1–2: routines as tools, agent keys, notification triggers, files back, phone choice, the Spark agent, the showcase). There was no feature cut. The final evaluation runs Nov 3, 17:00–22:00 ET, on the `eval-final` tag, and the submission is due Nov 4, 9 PM ET.
+The build ran in eight phases with no fixed dates; each ended at a gate that had to pass before the next phase started. Phases 0–6 passed their gates by Oct 28. After them came a wave of final features (Oct 29–Nov 1: offers, Before I start, Siri, files from the Mac, teach mode), and then the phone-layer wave (Nov 1–2: routines as tools, agent keys, notification triggers, files back, phone choice, the Spark agent, the showcase). There was no feature cut. The final evaluation ran Nov 3 on the `eval-final` tag (`eval/results/final/report.md`).
 
 ![Build phases: 8 phases, each with an exit gate](diagrams/build-phases.png)
 
@@ -891,9 +890,8 @@ Envoy is measured against two baselines on its own task set and an AndroidWorld 
 ### Task sets
 
 - **Core set:** 10 SkyLark Air tasks (check in, change seat, find gate, add a traveler number, and others) × 3 systems × 4 layouts (the original plus a moved button, a renamed label and an extra confirmation screen) = 120 runs, roughly 2 to 6 hours on one emulator, run once near the end of the build. Each task has a programmatic success check.
-- **Real apps (5 to 10 tasks):** shopping and food apps chosen once they are confirmed to run on the emulator. Irreversible steps stop at the approval prompt, so no orders are placed.
+- **Real apps:** 18 read-only workflows (`docs/real-app-test-set.md`). Irreversible steps stop at the approval prompt, so no orders are placed.
 - **AndroidWorld (measured Oct 27–28, branch `androidworld`):** Google's 116 tasks over 20 apps, run unmodified through AndroidWorld's own runner and scoring on an API 33 emulator, seed 30, pass@1, with Envoy's whole agent as the agent. The tasks were split 58/58 into a dev half for finding and fixing failures and a held-out half that measures the result; the split was committed before any run. Envoy before the changes scored 21 of 116 (18%); with 13 general agent changes found on the dev half, 57 (49%), and 31 of 58 (53%) on the held-out half against 12, at about $0.04 and 38 s per task on the Spark profile (`docs/androidworld-results.md`). Routines compiled from seed-30 runs were replayed on three other seeds. The 13 merged into `main` on Oct 29 (`105d04e`); re-measured on a staging tree with them and three SkyLark follow-ups, the held-out half scored 30.5 of 58.
-- **Stretch:** the shop test app, and MAS-Bench, which tests shortcuts that agents generate for themselves.
 
 ### Metrics
 
@@ -923,15 +921,15 @@ The biggest risk is reliability: phone agents are flaky, and "whether it works" 
 | Learned routines break often on app updates | Medium | Medium | Element-based targeting, step checks, local repair, and versioned routines with rollback |
 | Memory fills with wrong or duplicate facts | Medium | Medium | Facts record source, time and confidence; entity matching before insert; newer facts replace older ones; the user can correct facts in the graph view |
 | Laptop resources (24 GB RAM) limit running two emulators plus everything else | Medium | Medium | One emulator during development, a second only for comparison tasks; headless mode; snapshots instead of cold boots |
-| Automating real apps breaks their terms of service | Medium | Low (for the hackathon) | Our own test apps for most testing; real apps only on the user's own accounts; noted in the submission |
+| Automating real apps breaks their terms of service | Medium | Low (for the hackathon) | Our own test apps for most testing; real apps only on the user's own accounts; noted here |
 | Muse custom connectors are not open to hackathon developers | Medium | Low | Envoy's own web app and MCP server work without it; the connector is an add-on |
 | Scope grows beyond what one person can finish | High | High | Strict build phases with exit criteria; nothing from a later phase starts until the current phase passes |
 
-**How these turned out (Nov 2):**
+**How these turned out (Nov 3):**
 - **Muse custom connectors:** open, and working. Muse leads the demo; any MCP agent connects the same way.
 - **An Android phone:** one was available. A Pixel 5 has been Envoy's phone since Oct 28.
 - **Apps refusing the emulator:** still true for Target (a bot check on most fresh launches) and banking apps. They run on Envoy's phone instead.
-- **Reliability on real apps:** a learned task replays well, but new inputs on real apps are the weak spot: 4 of 11 (Oct 28) and 6 of 11 (Oct 31). See `docs/README.md` for the numbers and their sources.
+- **Reliability on real apps:** a learned task replays well (13 of 18 right with no model call in the Nov 3 final run); new inputs are harder: 4 of 11 on Oct 28, 6 of 11 on Oct 31, 7 of 11 in the final run. See the README's Results.
 
 ## Phase 0 results
 
