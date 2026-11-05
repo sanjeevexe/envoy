@@ -6,9 +6,6 @@ Envoy gives a machine a new capability: it lets AI agents like Meta's Muse work 
 at one tap on its task's card, into a checked routine they then call by name, and tells them what happens on the phone,
 while the irreversible steps an agent starts wait for the person's yes on their iPhone.
 
-<!-- SLOT hero GIF (from the takes: Muse on the Mac asks → Envoy's phone works the app → the iPhone yes). Add it here as
-![Muse asks on the Mac, Envoy's phone posts, the person approves on the iPhone](docs/media/hero.gif) -->
-
 ![Agents call Envoy over MCP; Envoy runs every phone through one device interface; the person approves on the iPhone](docs/diagrams/architecture.png)
 
 **From the final evaluation** (Nov 3, the `eval-final` tag, `hybrid` profile, standard tier;
@@ -99,7 +96,7 @@ of the 18.
 | New input, no model call | 7/11 |
 
 Target's bot check stopped both Target workflows. DoorDash's first run failed; YouTube's search and Chrome's Wikipedia
-lookup answered right but unverified (Chrome's still compiled, and its reruns passed after a repair, with 3 calls);
+lookup answered right but unverified (Chrome's still compiled, and its reruns passed after a repair, with 3 and 7 calls);
 Amazon's new input found no price. Answers graded only by their shape were also read by a person: 3 right, 0 wrong, 8
 not read yet ([`real.md`](eval/results/final/real.md)).
 
@@ -185,7 +182,7 @@ targets in the drawn-buttons row.
 | Against simpler approaches | 10 tasks on 4 layouts, 3 seeds each (120 per system). Envoy's routines 120/120 on the first try, 1 call, 7.6 s (6.9–8.9 s by layout). The agent every time 119/120 on the first try (120/120 within 3), 5 calls, 17.9 s (17.1–19.2 s by layout). A fixed replay of the same taps 38/120 | [`systems.md`](eval/results/final/systems.md) |
 | Asking again | Request 1 (the agent, then the compile): 6.0 calls, 44.5 s, $0.0869. Requests 2–10: 90/90 right at 1 call (the matcher), 7.6 s, $0.0022; each request's median 6.7–8.9 s. 84% fewer calls (1.0 against 6.4 per request) | [`repeats.md`](eval/results/final/repeats.md) |
 | When the app changes | We changed SkyLark's layout on purpose, 50 times, over 5 kinds of change: recovered 50/50 (27 needed no fix, 17 a relaxed match or scroll, 2 a local repair, 4 the agent; 27 model calls in all), then 46/50 ran alone with no model call. 50 new inputs: 50/50 with no model call | [`change.md`](eval/results/final/change.md) |
-| Drawn buttons | On screens that are only pixels, SAM's boxes plus a Spark pick, with grounding where SAM's boxes missed, found 52 of 52 targets (16 canvas seats on SkyLark, 36 on real apps' saved screens) in each of two samples | [`docs/phase-6-results.md`](docs/phase-6-results.md) |
+| Drawn buttons | On Oct 27 (Phase 6, before the final evaluation), on screens that are only pixels, SAM's boxes plus a Spark pick, with grounding where SAM's boxes missed, found 52 of 52 targets (16 canvas seats on SkyLark, 36 on real apps' saved screens) in each of two samples | [`docs/phase-6-results.md`](docs/phase-6-results.md) |
 | Screen sizes and Envoy's phone | SkyLark's 10 core routines on 3 new bookings each, on three emulator sizes and the Pixel 5: 30/30 on each, with no model call | [`sizes.md`](eval/results/final/sizes.md) |
 | Safety | Irreversible controls on 20 saved screens (6 SkyLark, 14 real-app): 20 caught, all 20 by code rules alone; reversible controls flagged by code 0/22. 7 live runs declined at the approval: 7 held. Instructions planted on screens: the agent right in 20 of 20 runs and tried to follow them in 0; the routines 10 of 10, never. Irreversible changes without approval: 0 | [`safety.md`](eval/results/final/safety.md), [`injection.md`](eval/results/final/injection.md) |
 
@@ -245,7 +242,7 @@ Today Envoy runs on a Mac, with its own Android phone (Envoy's phone over USB, o
 person's iPhone as where they approve. You sign in to each app once on the phone Envoy uses. The path from here is a
 cloud phone per person, with MCP as the door for any agent; one cloud emulator was tested (SkyLark's routines and one
 learn-then-replay loop, Oct 29: [`docs/cloud.md`](docs/cloud.md)). This is a hackathon build, not a product. The
-showcase posted only to test accounts, the real-app passes are read-only, and every post waits for a person's yes. Some
+showcase posted only to test accounts, the real-app passes are read-only, and by default every post an agent starts waits for a person's yes. Some
 apps push back: Target's bot check stops Envoy on emulators, banking apps are known to refuse them (we haven't tried
 one), and automating an app may break its terms. Envoy drives the phone from the Mac, and Google Play forbids publishing
 an app that uses accessibility features to act on its own, so any on-phone helper stays sideloaded
@@ -376,6 +373,7 @@ and compile on Muse Wonder 1.0 and the rest on Muse Spark 1.3; the Spark profile
 | The posting batch | 40 attempts, the four posting routines at v3, 10 each, cold / open / draft, Envoy's phone, Nov 3 12:27–14:55 ET, every final button declined; declared before the tag | `eval-final` = `cf78fa0` (the API copy); driver commits in each record | [`RESULTS.md`](eval/results/showcase-batch/RESULTS.md), `attempts.md`, `attempts/` |
 | `instagram_reel_song` v4, after the batch | 5 cold Reels to Share and 1 TikTok, a test copy at the fix, every final button declined, Nov 3 14:57–15:10 ET | merged in `0d28e5a` | `data/routines/instagram_reel_song/index.json` (v4's `verification`), [`test_reel_caption_fix.py`](backend/tests/test_reel_caption_fix.py) |
 | The Reel's v5, and Muse's `cross_post` take | single live runs, Nov 4, Envoy's phone; each row gives its version, status, model calls and seconds | the runs' task ids in each file | `runs` and `versions` in `data/routines/instagram_reel_song/index.json`, `tiktok_post_sound/index.json`, `youtube_short_sound/index.json` |
+| Drawn buttons, 52 of 52 | two samples, Oct 27, Phase 6: 16 canvas seats on SkyLark, 36 real-app targets on saved screens; not a suite of the final evaluation | — | [`docs/phase-6-results.md`](docs/phase-6-results.md) |
 | Changes since the evaluation | code only, not in any measured run above | `2a8e029` (`wait_for_task`), `7a0520b` (Lyft), `bbf1e0f` (tied rows) | the commits, and their tests |
 
 Earlier development passes stay in `eval/results/` (for real apps: `real_pass_2026-10-28/`, `real_rerun_2026-10-29/`,

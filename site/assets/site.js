@@ -97,7 +97,7 @@
       ${video.trim() ? `<a class="btn primary video" href="${esc(video.trim())}" target="_blank" rel="noopener">▶ Watch the 3-minute demo</a>` : ""}
       <a class="btn" href="${esc(wholeRepo)}">The code</a>
       <a class="btn" href="${esc(repoBase + RD.run_it.path)}">Run it</a>
-      <span class="small run-needs">Running it needs a Mac on Apple silicon, the Android command-line tools and a Meta Model API key.</span>`;
+      <span class="small run-needs">Running it needs a Mac on Apple silicon and the Android command-line tools; chat and memory also need a Meta Model API key.</span>`;
     const tile = (label, big, text, href, chip = "") => `<a class="card pillar" href="${href}"><div class="row-between"><span class="lbl">${label}</span>${chip}</div><div class="big">${big}</div><p>${text}</p></a>`;
     const skyChip = '<span class="chip apricot">Our test app</span>';
     $("#pillars").innerHTML = `
@@ -222,7 +222,7 @@
           <p class="small" style="margin:6px 0 0">A failed check climbs a ladder: wait and retry, a relaxed match, a known pop-up, then a local repair by a model (Muse Wonder by default${RP.skylark.profile !== "hybrid" ? `; the SkyLark suite ran on the ${RP.skylark.profile} profile` : ""}). A repair becomes a new version on trial, kept only if a clean replay passes.</p>
           <ul class="plain" style="margin-top:8px">
             <li class="small"><b>On real apps:</b> self-repair proposed ${RP.real.length} versions and the trials kept ${kept.length}. ${repaired.length ? `Among them, the ${repaired.map((c) => c.app === "Instagram" ? "Reel's" : "Short's").join(" and the ")} checks, rewritten after their live posts on Nov 2; both passed their trial in Muse's dry run with 0 model calls in Envoy's replay.` : ""}</li>
-            <li class="small"><b>On SkyLark, the stress test:</b> 50 injected layout changes, ${esc(RP.layouts.length)} kinds; all recovered, then ran alone with no model call. ${testApp}</li>
+            <li class="small"><b>On SkyLark, the stress test:</b> 50 injected layout changes, ${esc(RP.layouts.length)} kinds; all recovered, then 46 of 50 ran alone with no model call. ${testApp}</li>
           </ul>
           <div class="label-rec">${srcA(RP.real_src, "routine versions")} ${ev("repairs", "all 50 changes")}</div>
         </div>
@@ -237,7 +237,7 @@
       </div>
       ${learnCard()}
       <div class="block who-does" style="margin-top:16px">
-        <b>Meta's models, by job.</b> Muse Wonder turns task experience into routines: it plans and decides a first run's steps, compiles the run, and repairs a broken step. Muse Spark handles matching and extraction: which routine a request means, the answer on screen, facts for memory. SAM 3.1 helps find drawn controls when the accessibility tree is missing: with SAM first and Spark's grounding second, Envoy found ${sg[0]} of ${sg[1]} targets on saved screens (16 of them drawn seats in our test app, the rest real-app controls); grounding alone, ${sg[2]}. ${srcA(M.phase6_src, "results")} ${ev("models", "SAM on a drawn screen")}
+        <b>Meta's models, by job.</b> Muse Wonder turns task experience into routines: it plans and decides a first run's steps, compiles the run, and repairs a broken step. Muse Spark handles matching and extraction: which routine a request means, the answer on screen, facts for memory. SAM 3.1 helps find drawn controls when the accessibility tree is missing: with SAM first and Spark's grounding second, Envoy found ${sg[0]} of ${sg[1]} targets on saved screens (16 of them drawn seats in our test app, the rest real-app controls); grounding alone, ${sg[2]} (the second of two samples). ${srcA(M.phase6_src, "results")} ${ev("models", "SAM on a drawn screen")}
       </div>`;
 
     let i = 0, timer = null;
@@ -406,7 +406,7 @@
       </div>
       <div class="posts four">${S.cards.map(card).join("")}</div>
       <p class="small" style="margin:10px 4px 0">The batch was declared before it ran: the four routines at the final evaluation's tag, ${BT.n / S.cards.length} attempts each from a cold app, an open app or a saved draft, on Envoy's phone with the test accounts (${day(BT.date)}). Every final button it reached was declined; each card counts every attempt. The live posts went out on test accounts. ${srcA(BT.src, "RESULTS.md")} ${srcA(BT.protocol_src, "PROTOCOL.md")} ${srcA(S.live_src, "the posts' task records")} ${srcA(S.doc_src, "demo-showcase.md")}</p>
-      <div class="callout" style="margin-top:14px"><b>As recorded, flaws included.</b> The first live TikTok went out without its sound: the compiler had dropped the agent's correction, and no check looked at the editor. That's fixed, and the re-post had it. Since Nov 2, code also checks just before the final button that the song or sound asked for is shown, the caption or title is in its field, and the clip is the one put on the phone (the Reel, TikTok and Short; not yet the Story); a planted wrong clip stopped TikTok before it started. The Story routine still fails while a Story is already live.</div>
+      <div class="callout" style="margin-top:14px"><b>As recorded, flaws included.</b> The first live TikTok went out without its sound: the compiler had dropped the agent's correction, and no check looked at the editor. That's fixed, and the re-post had it. Since Nov 2, code also checks just before the final button that the song or sound asked for is shown, the caption or title is in its field, and the clip is the one put on the phone (the Reel, TikTok and Short; on the Story the clip, since its poll isn't text on the final screen); a planted wrong clip stopped TikTok before it started. The Story routine still fails while a Story is already live.</div>
       <details class="ev" style="margin-top:14px"><summary><span class="t">The dry runs before it</span><span class="s">Nov 1–2: the Spark agent's one request and Muse's five tasks, every final button declined</span></summary><div class="ev-body">
       <div class="agent-row" style="margin-top:0">
         <div class="card" style="padding:20px">
@@ -460,7 +460,7 @@
         "A trigger can tell you, ask you first, or run a routine. An agent can propose one; it's created switched off, and only you turn it on. What happened waits for agents in <code>phone_updates</code>: they see it the next time they check, Muse about every 10 minutes. Envoy doesn't push to agents.")}
       <div class="card" style="padding:20px;margin-top:24px">
         <h3>Real comments on the live posts, Nov 2</h3>
-        <p class="small" style="margin:6px 0 0">The trigger “Instagram, TikTok or YouTube: comment”, set to tell. One comment per row; times run from the notification landing on Envoy's phone.</p>
+        <p class="small" style="margin:6px 0 0">The trigger “Instagram, TikTok or YouTube: comment”, set to tell. One comment per row, TikTok's three together; times run from the notification landing on Envoy's phone.</p>
         <div class="tbl-wrap"><table class="tbl watch-tbl"><thead><tr>${cols.map((c) => `<th>${esc(c)}</th>`).join("")}</tr></thead>
           <tbody>${W.live.map((r) => `<tr>${cols.map((c, i) => `<td${i === cols.length - 1 && /^\+/.test(r[c]) ? ' class="hit"' : ""}>${esc(r[c])}</td>`).join("")}</tr>`).join("")}</tbody></table></div>
         <p class="small" style="margin:8px 0 0">Envoy's part stayed under 4 s. The time from a comment to its notification is each app's own: seconds on Instagram, about two minutes on YouTube. TikTok showed its comments only inside the app, where a notification watcher can't see them. ${srcA(W.src, "phone-watch-report.md")}</p>
@@ -527,7 +527,7 @@
           <thead><tr><th>Pass</th>${stage.map((s) => `<th class="r">${esc(s)}</th>`).join("")}</tr></thead>
           <tbody>${passes.filter((p) => !p.final).map(passRow).join("")}</tbody></table></div></div></details>` : ""}
       </div>
-      <p class="small" style="margin:10px 4px 0">Each workflow is in the ${ev("real", "evidence")}. On Envoy's phone, the posting batch on the final tag: ${BR.reduce((x, b) => x + b.reached, 0)} of ${D.batch.n} declined attempts reached their final button (${S.cards.map((c) => `${POST[c.name]} ${D.batch.routines[c.name].reached}`).join(", ")}; ${sec("acts")}).</p>
+      <p class="small" style="margin:10px 4px 0">Each workflow is in the ${ev("real", "evidence")}. On Envoy's phone, the posting batch on the final tag: ${BR.reduce((x, b) => x + b.reached, 0)} of ${D.batch.n} attempts reached their final button, every one declined there (${S.cards.map((c) => `${POST[c.name]} ${D.batch.routines[c.name].reached}`).join(", ")}; ${sec("acts")}).</p>
       <h3 class="sub-h" style="margin-top:28px">SkyLark, our test app: the stress test</h3>
       <p class="small" style="margin:4px 0 0">Our own airline app, where the evaluation can change the layout on purpose and check the app's real state. Memory also uses test inboxes, and the safety suites also use captured screens from real apps. ${skyProfiles}.</p>
       <div class="tbl-wrap card" style="margin-top:10px"><table class="tbl suites">
@@ -707,7 +707,7 @@
           <thead><tr><th>Workflow</th><th>First run</th><th class="r">Agent</th><th>Compiled</th><th>Same input</th><th>New input</th><th>Graded by</th></tr></thead>
           <tbody>${RA.rows.map((r) => `<tr><td><code class="small">${esc(r.workflow)}</code><div class="small">${esc(r.goal)}</div></td><td>${esc(r.first_run)}</td><td class="r">${r.agent.calls} calls, ${s0(r.agent.seconds)}</td><td>${r.compiled ? `yes, ${r.steps} steps` : "no"}</td><td>${r.same ? `${res(r.same)}${r.same.seconds != null ? `, ${s0(r.same.seconds)}` : ""}` : "–"}</td><td>${res(r.new)}</td><td class="small">${esc(r.graded_by === "truth" ? "the app's truth" : "the answer's shape")}</td></tr>`).join("")}</tbody>
         </table></div>
-        <p class="small" style="margin:8px 0 0">“Graded by shape” answers (a price, a title) are also read by a person; the pass's real.md says how many were. ${srcA(RA.curve.pass.md_src, "real.md")} ${srcA(RA.curve.pass.src, "real.json")}</p>`)}
+        <p class="small" style="margin:8px 0 0">Of the 11 “graded by shape” answers (a price, a title), a person has read 3: 3 right, 0 wrong, 8 not read yet. ${srcA(RA.curve.pass.md_src, "real.md")} ${srcA(RA.curve.pass.src, "real.json")}</p>`)}
       ${group("targets", "The design's targets on our test app, and four charts", `three on SkyLark, one on real apps; ${esc(suiteProfile("1"))} profile`, `
         <div class="tbl-wrap card"><table class="tbl"><thead><tr><th>Target</th><th>Goal</th><th>Measured</th></tr></thead>
           <tbody>${P.targets.map((t) => `<tr><td>${esc(t.Target)}</td><td>${esc(t.Goal)}</td><td>${esc(t.Measured)}</td></tr>`).join("")}</tbody></table></div>
@@ -717,7 +717,7 @@
           ${chart("recovery_by_injected_change", "Recovery from injected UI changes", "SkyLark, 50 of 50.")}
           ${chart("success_by_system_and_layout", "Envoy vs the full agent vs a fixed replay", "SkyLark core set.")}
         </div>`)}
-      ${group("batch", "The posting batch, attempt by attempt", `${D.batch.n} declined attempts on the final tag, ${day(D.batch.date)}`, batchTable())}
+      ${group("batch", "The posting batch, attempt by attempt", `${D.batch.n} attempts on the final tag, every final button declined, ${day(D.batch.date)}`, batchTable())}
       ${group("tools", "One share switch, one new tool", "the tool list before and after, as agents see it", "<div id='tools-x'></div>")}
       ${group("models", "SAM 3.1 on a screen that's only pixels", "Meta's models", "<div id='models-x'></div>")}
       ${group("safety", "Safety tests: an approval, and planted text", "", "<div id='safety-x'></div>")}
@@ -829,7 +829,7 @@
             <div class="block stat"><div class="big">${S.agent[0]}/${S.agent[1]}</div><div class="lbl">agent runs still right with planted text; tried to follow it: <b>${S.agent[2]}</b>. Routines ${S.routines[0]}/${S.routines[1]}.</div>${notFinal(S.injection_run.commit)}</div>
             <div class="block stat"><div class="big">${S.inbox[0]}</div><div class="lbl">values from 4 planted emails stored in memory (instructions stored as facts: ${S.inbox[1]})</div>${srcA(S.injection_src, "injection.md")}</div>
           </div>
-          <div class="label-rec"><span>${esc(S.injection_run.date)}, <code>${esc(PL.run)}</code></span>${srcA(S.planted_src, "planted.json")}</div>
+          <div class="label-rec"><span>Recorded Oct 28, an earlier pass (the counts above are Nov 3's), <code>${esc(PL.run)}</code></span>${srcA(S.planted_src, "planted.json")}</div>
         </div>
       </div>`;
 

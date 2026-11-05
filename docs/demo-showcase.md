@@ -43,7 +43,7 @@ live posts (after-checks rewritten); both passed their trial in Muse's dry run a
 after the posting batch: the caption edit ends with Instagram's OK instead of Back, and the caption is typed again if
 it's empty before Share (`eval/results/showcase-batch/RESULTS.md`, "After the batch"). Since Nov 4 it runs v5, another
 hand edit: an optional wait after Share. `data/routines/instagram_reel_song/index.json` has each version's runs; v6,
-Envoy's own repair, is on trial.
+Envoy's own repair, failed its trial and was rejected.
 
 The song for all three: JVKE's "golden hour" (in all three libraries). Which features work on the test accounts is
 pre-check P3 (`eval/results/showcase/p3.md`).

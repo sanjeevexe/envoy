@@ -1,7 +1,7 @@
 # Envoy: the submission
 
-A draft answer for each field of the hackathon's submission form (the fields are listed in `docs/phase-0-findings.md` ›
-B3). Every claim points at a file in the repo.
+An answer for each field of the hackathon's submission form (the fields are listed in `docs/phase-0-findings.md` ›
+B3). Claims point at a file in the repo; the few that can't say so.
 
 **The numbers come from the final evaluation.** All 10 suites ran on the `eval-final` tag (`cf78fa0`) on Nov 3, on the
 default `hybrid` profile and the standard tier, for $11.68 at standard prices (`eval/results/final/report.md`). The
@@ -58,8 +58,9 @@ have (`docs/agents.md`). Envoy's Home Screen web app on the person's iPhone is w
   `learn_task`; `backend/tests/test_teach.py`). Teach mode compiles what a person shows the same way, and the compiler
   can refuse a run. Muse Wonder writes a small program with inputs, checks before and after its steps, and targets found
   by what they are rather than where they were. When the app changes, the routine repairs the broken step (the agent
-  finishes if that fails) and keeps the fix as a new version, on trial until it passes. In the live posts (one each),
-  the Reel, the Story and the Short replayed with 0 model calls in Envoy's replay and the TikTok with 3; the agent that
+  finishes if that fails) and keeps the fix as a new version, on trial until it passes. In the first live posts, on the
+  night of Nov 1, the Reel, the Story and the Short replayed with 0 model calls in Envoy's replay and the TikTok's re-post
+  with 3 (each routine's `index.json` lists every later take); the agent that
   calls Envoy pays for its own turns (in a declined dry run on a test copy, Nov 1, the Spark agent used 11 model calls,
   $0.044, to drive three posts: `agents/meta-agent/evidence/2026-11-01/crosspost/README.md`). On the 13 of 18 read-only
   real-app workflows whose first run and same-input rerun both passed in the final evaluation, Envoy's replay used 0
@@ -142,7 +143,7 @@ or by Envoy, are listed in `data/routines/<name>/index.json`.
 
 | Routine (active version) | By hand | Since |
 | --- | --- | --- |
-| `instagram_reel_song` (v5) | v4 (Nov 3, after the posting batch): the caption edit ends with Instagram's OK instead of Back, and the caption is typed again if it's empty before Share. v5 (Nov 4): an optional wait after Share, because the done-check ended before Instagram finished sharing. No hand edits before v4 | recompiled once after a compiler fix, from the same run; after the live post, Envoy repaired two after-checks on its own (v3), and that version passed its trial in Muse's dry run (0 model calls in Envoy's replay, declined at Share). v4 and v5 are the hand edits; v6, Envoy's own repair from a Nov 4 run, is on trial |
+| `instagram_reel_song` (v5) | v4 (Nov 3, after the posting batch): the caption edit ends with Instagram's OK instead of Back, and the caption is typed again if it's empty before Share. v5 (Nov 4): an optional wait after Share, because the done-check ended before Instagram finished sharing. No hand edits to any step before v4 | recompiled once after a compiler fix, from the same run; after the live post, Envoy repaired two after-checks on its own (v3), and that version passed its trial in Muse's dry run (0 model calls in Envoy's replay, declined at Share). v4 and v5 are the hand edits; v6, Envoy's own repair from a Nov 4 run, failed its trial and was rejected, so v5 stays active |
 | `instagram_story_poll` (v3) | none | recompiled twice after compiler fixes, from the same run |
 | `tiktok_post_sound` (v3) | a 3 s wait before tapping TikTok's drawn sound list; the app's name corrected (the source run predates TikTok in Envoy's app list); the launch step's before-checks dropped | recompiled after compiler fixes, from the same run, with those edits re-applied: it now checks that the editor names the sound |
 | `youtube_short_sound` (v3) | one before-check dropped (a "Captions unavailable" label from a video playing when the run was recorded) | recompiled once after a compiler fix, from the same run; after the live post, Envoy repaired one after-check on its own, and that version passed its trial in Muse's dry run (0 model calls in Envoy's replay, declined at Upload Short) |
@@ -267,6 +268,9 @@ Not entered.
 
 Yes. The repo, the site and the video show test accounts and test data: SkyLark (our own test app) and its Maya Patel
 persona, a test Google account, and the Instagram, TikTok and YouTube test accounts the showcase posted to. The
+exceptions are the author's own accounts in a few real apps, such as Uber and Lyft: fare checks with no ride requested
+and a Kroger cart with no order placed. The video also shows the author's name, Instagram handle and a pickup address,
+by the author's choice. The
 real-app passes are read-only (nothing ordered, posted or changed) and keep no personal details.
 
 Before the repo went public, a sweep of the files and the full git history (Oct 31) found no keys, tokens or passwords.
