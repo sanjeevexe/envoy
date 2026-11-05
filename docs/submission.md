@@ -98,7 +98,7 @@ seen, so it can answer from memory and notice when something changed (`backend/m
 - **Offers and habits:** Envoy can offer before it acts, notices what you repeat, and sets up recurring jobs you ask for, switched off until you say yes (`backend/api/offers.py`).
 - **One question, two apps:** one task with a part per app, and one answer (`backend/api/crossapp.py`).
 - **Before I start and saved logins:** Envoy says what to expect before a task, and the phone's own password manager can fill a sign-in, so Envoy never sees a password; off by default (`docs/preflight-and-autofill.md`).
-- **Real apps:** Envoy has run tasks in Amazon, Calendar, Chipotle, Chrome, Clock, Contacts, DoorDash, Gmail, Instagram, Lyft, Maps, the Play Store, Settings, Starbucks, TikTok, Uber, YouTube and YouTube Music. Apps that refuse emulators go to the person's own phone, asking first: Uber won't install on an emulator, so it runs on Envoy's phone, and Envoy adds an app to that list itself when it sees a bot check, as with Target, or the Play Store refuses it (`backend/api/routing.py`).
+- **Real apps:** Envoy has run tasks in Amazon, Calendar, Chipotle, Chrome, Clock, Contacts, DoorDash, Gmail, Instagram, Lyft, Maps, the Play Store, Settings, Starbucks, TikTok, Uber, YouTube and YouTube Music. Apps that refuse emulators go to the person's own phone, asking first: Uber won't install on an emulator, so it runs on Envoy's phone, and Target, whose bot check we saw, starts on that list; Envoy adds an app itself when it sees a bot check or the Play Store refuses it (`backend/api/routing.py`).
 
 ### Who it's for
 

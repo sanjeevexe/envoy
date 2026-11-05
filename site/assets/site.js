@@ -97,7 +97,7 @@
       ${video.trim() ? `<a class="btn primary video" href="${esc(video.trim())}" target="_blank" rel="noopener">▶ Watch the 3-minute demo</a>` : ""}
       <a class="btn" href="${esc(wholeRepo)}">The code</a>
       <a class="btn" href="${esc(repoBase + RD.run_it.path)}">Run it</a>
-      <span class="small run-needs">Runs on a Mac with Apple silicon and the Android command-line tools; with those in place, a fresh clone reached a checked-in flight in about 5 minutes in our test. Saved routines replay with no API key; chat and memory use one.</span>`;
+      <span class="small run-needs">Runs on a Mac with Apple silicon; with the README's prerequisites in place (the Android command-line tools, a JDK, uv, Node), a fresh clone reached a checked-in flight in about 5 minutes in our test. Saved routines replay with no API key; chat and memory use one.</span>`;
     const tile = (label, big, text, href, chip = "") => `<a class="card pillar" href="${href}"><div class="row-between"><span class="lbl">${label}</span>${chip}</div><div class="big">${big}</div><p>${text}</p></a>`;
     const skyChip = '<span class="chip apricot">Our test app</span>';
     $("#pillars").innerHTML = `
@@ -554,7 +554,7 @@
           <li><b>Offers and habits.</b> Envoy can offer before it acts (“Check in for SL 482?”), notices what you repeat, and sets up recurring jobs you ask for, switched off until you say yes. ${srcA({ path: "backend/api/offers.py" }, "offers.py")}</li>
           <li><b>One question, two apps.</b> One task with a part per app, and one answer. ${srcA({ path: "backend/api/crossapp.py" }, "crossapp.py")}</li>
           <li><b>Before I start, and saved logins.</b> Envoy says what to expect before a task, and the phone's own password manager can fill a sign-in, so Envoy never sees a password (off by default). ${srcA({ path: "docs/preflight-and-autofill.md" }, "the doc")}</li>
-          <li><b>Real apps.</b> Tasks run in Amazon, Calendar, Chipotle, Chrome, Clock, Contacts, DoorDash, Gmail, Instagram, Lyft, Maps, the Play Store, Settings, Starbucks, TikTok, Uber, YouTube and YouTube Music. Apps that refuse emulators go to your own phone, asking first: Uber won't install on an emulator, so it runs on Envoy's phone, and Envoy adds an app to that list itself when it sees a bot check, as with Target. ${srcA({ path: "backend/api/routing.py" }, "routing.py")}</li>
+          <li><b>Real apps.</b> Tasks run in Amazon, Calendar, Chipotle, Chrome, Clock, Contacts, DoorDash, Gmail, Instagram, Lyft, Maps, the Play Store, Settings, Starbucks, TikTok, Uber, YouTube and YouTube Music. Apps that refuse emulators go to your own phone, asking first: Uber won't install on an emulator, so it runs on Envoy's phone, and Target, whose bot check we saw, starts on that list. Envoy adds an app itself when it sees a bot check. ${srcA({ path: "backend/api/routing.py" }, "routing.py")}</li>
         </ul>
       </div>
       <div class="card limits" style="margin-top:20px">
