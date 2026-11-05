@@ -5,6 +5,7 @@ outcome check before Share is unchanged."""
 from __future__ import annotations
 
 import asyncio
+import json
 from pathlib import Path
 
 from devices.types import ActionResult
@@ -21,8 +22,9 @@ CAPTION = "Envoy batch R03 · test"
 FAST = ExecConfig(pre_timeout_s=0.3, post_timeout_s=0.3, stable_s=0.1, poll_s=0.01, patch_screenshots=False)
 
 
-def _routine(version: int = 4):  # the version these tests are about, whichever one is active now
-    return load_yaml((ROUTINES / f"v{version}.yaml").read_text())
+def _routine(version: int | None = None):
+    v = version or json.loads((ROUTINES / "index.json").read_text())["active"]
+    return load_yaml((ROUTINES / f"v{v}.yaml").read_text())
 
 
 def _screen(name: str, els: list[dict]) -> object:
@@ -88,7 +90,7 @@ def _run(phone: _Phone, version: int | None = None):
 
 
 def test_v4_ends_the_caption_with_instagrams_ok_and_has_no_back_between_the_caption_and_share():
-    steps = _routine().steps
+    steps = _routine(4).steps  # v5 only adds a wait after Share
     ids = [s.id for s in steps]
     tail = ids[ids.index("type_caption"):]
     assert tail == ["type_caption", "tap_caption_ok", "retype_caption_if_cleared", "tap_caption_ok_after_retype", "tap_post"]
