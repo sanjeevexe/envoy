@@ -34,8 +34,10 @@ TikTok with a sound and a YouTube Short, each started by our Spark agent over MC
 - **The posting batch** (declared in advance, Nov 3, Envoy's phone, every final button declined): of 40 attempts,
   31 reached the final button with every check yes, TikTok and the Story 10/10 each, and the outcome checks stopped 5 more
   before a flawed post could go out ([all four workflows](#the-posting-batch)).
-- **Google's AndroidWorld benchmark:** the shipped default solved 74 of 116 tasks (63.8%) on Nov 3, a paired +20 −3 over
-  our Oct 28 run (p = 0.0005; not a model-only comparison) ([details](#androidworld-separate-runs)).
+- **Google's AndroidWorld benchmark:** from 21 to 57 to 74 of 116 tasks (18% to 63.8%) in under a week, through general
+  agent changes and Muse Wonder on the agent's steps. That's over twice the benchmark paper's best agent (30.6%) and above
+  every tree-only entry on the public, self-reported leaderboard (best 59.5%). We keep running the loop
+  ([details](#androidworld-separate-runs)).
 
 > **Meta models: who does what.** Wonder turns task experience into reusable routines; Spark handles matching and
 > extraction; SAM helps locate drawn controls when the accessibility tree is missing. Muse leads our demo, and it's one
@@ -199,9 +201,17 @@ targets in the drawn-buttons row, and the test inboxes in the memory row.
 
 ### AndroidWorld (separate runs)
 
-On Google's AndroidWorld benchmark (116 tasks in 20 open-source apps; seed 30, pass@1, standard tier), the shipped
-default solved **74 of 116 tasks (63.8%)** on Nov 3, a paired gain of +20 −3 over the Oct 28 run (p = 0.0005). It isn't
-a model-only comparison: `main` also has other agent changes since Oct 28, and a higher per-task cost cap.
+On Google's AndroidWorld benchmark (116 tasks in 20 open-source apps; seed 30, pass@1, standard tier), Envoy went from
+**21 to 57 to 74 of 116 tasks (18.1% to 63.8%)** between Oct 28 and Nov 3, solving 82% of the easy tasks in the last run.
+The last step is a paired +20 −3 (p = 0.0005). It isn't a model-only comparison: `main` also has other agent changes since
+Oct 28, and a higher per-task cost cap. 63.8% is over twice the benchmark paper's best agent (GPT-4 Turbo, 30.6%) and above
+every tree-only entry on the public, self-reported leaderboard (best 59.5%); Envoy reads the tree and adds a screenshot on
+about 11% of steps. It's not like for like, and the board's top entries use frontier models with screenshots
+([the comparison](docs/androidworld-results.md#against-the-leaderboard)).
+
+**It keeps improving, by a repeatable loop:** study the failures, ship general fixes rather than app-specific ones, and
+check them on held-out tasks and on Envoy's own suites before they ship. We'll keep running it as Envoy grows, and each task
+Envoy learns can then replay as a routine at a fraction of the cost (below).
 
 | Run | All 116 | Held-out half (58) | Mean cost per task |
 | --- | --- | --- | --- |

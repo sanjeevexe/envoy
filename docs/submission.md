@@ -289,8 +289,10 @@ first request ($0.0869, the agent's run and the compile included); injected layo
 irreversible controls caught 20/20 by code rules alone, on saved screens, and the agent right 20/20 with instructions
 planted on SkyLark's screens, following them in none. The posting batch: of 40 attempts, 31 reached the final button with
 every check yes, TikTok and the Story 10/10 each, and the outcome checks stopped 5 more before a flawed post could go
-out; all four workflows below. AndroidWorld: the shipped default solved 74 of 116 (63.8%), +20 −3 over the Oct 28 run
-(p = 0.0005; not a model-only comparison).
+out; all four workflows below. AndroidWorld: from 21 to 57 to 74 of 116 (18% to 63.8%) in under a week, the last step +20 −3
+(p = 0.0005; not a model-only comparison), over twice the benchmark paper's best agent (30.6%) and above every tree-only
+leaderboard entry (best 59.5%, self-reported). The loop that got it there keeps running: study the failures, ship general
+fixes, check them on held-out tasks.
 
 From the final evaluation: all 10 suites on the `eval-final` tag (`cf78fa0`), Nov 3, on the default `hybrid` profile
 (Muse Wonder plans, steps, repairs and compiles; Muse Spark does the rest) and the standard tier, $11.68 at standard
