@@ -84,7 +84,7 @@
     const live = allPosts().filter((p) => p.live);
     $("#layer").innerHTML = `
       <div class="layer" role="img" aria-label="An agent asks Envoy over MCP; Envoy acts on its own phone; you approve on your iPhone">
-        <div class="lnode"><span class="lbl">Asks</span><b>Muse</b><span>or any agent that speaks MCP</span></div>
+        <div class="lnode"><span class="lbl">Asks</span><b>Muse</b><span>or any agent that speaks MCP: our Spark agent and Claude Code have too</span></div>
         <div class="larrow" aria-hidden="true"><span>MCP</span></div>
         <div class="lnode core"><span class="lbl">Envoy, on a Mac</span><b>acts · learns · watches</b><span>its checked routines are tools agents can call</span></div>
         <div class="larrow" aria-hidden="true"><span>USB</span></div>
@@ -97,7 +97,7 @@
       ${video.trim() ? `<a class="btn primary video" href="${esc(video.trim())}" target="_blank" rel="noopener">▶ Watch the 3-minute demo</a>` : ""}
       <a class="btn" href="${esc(wholeRepo)}">The code</a>
       <a class="btn" href="${esc(repoBase + RD.run_it.path)}">Run it</a>
-      <span class="small run-needs">Running it needs a Mac on Apple silicon and the Android command-line tools; chat and memory also need a Meta Model API key.</span>`;
+      <span class="small run-needs">Runs on a Mac with Apple silicon and the Android command-line tools; with those in place, a fresh clone reached a checked-in flight in about 5 minutes in our test. Saved routines replay with no API key; chat and memory use one.</span>`;
     const tile = (label, big, text, href, chip = "") => `<a class="card pillar" href="${href}"><div class="row-between"><span class="lbl">${label}</span>${chip}</div><div class="big">${big}</div><p>${text}</p></a>`;
     const skyChip = '<span class="chip apricot">Our test app</span>';
     $("#pillars").innerHTML = `
@@ -107,12 +107,12 @@
           <p>Read-only workflows, right, in Envoy's replay, at a median ${s2(C.rerun.seconds.median)}. The agent's first run on those took a median ${C.first.calls.median} calls and ${s2(C.first.seconds.median)}.</p></a>
         ${tile("Routines", `${H.routines.ok}/${H.routines.n}`, `Right on the first try on SkyLark, at a median ${H.routines.calls} call and ${H.routines.s} s, against the agent's ${H.routines.agent_calls} calls and ${H.routines.agent_s} s.`, "#results", skyChip)}
         ${tile("Repeat requests", `${H.repeats.ok}/${H.repeats.n}`, `Right at a median ${usd(H.repeats.usd)}, about ${H.repeats.times} times cheaper than the first request (${usd(H.repeats.first_usd)}, the agent's run and the compile included).`, "#results", skyChip)}
-        ${tile("Layout changes", `${H.recovered.ok}/${H.recovered.n}`, "Layout changes injected into SkyLark, recovered on first meeting them.", "#learns", skyChip)}
+        ${tile("Layout changes", `${H.recovered.ok}/${H.recovered.n}`, "Layout changes injected into SkyLark, recovered on first meeting them, 44 of them with no model call.", "#learns", skyChip)}
         ${tile("Safety", `${H.safety.ok}/${H.safety.n}`, `Irreversible controls caught by code rules alone, on saved screens. With instructions planted on SkyLark's screens, the agent stayed right ${H.planted.ok}/${H.planted.n} and tried to follow them in ${H.planted.followed === 0 ? "none" : H.planted.followed}.`, "#acts")}
       </div>
       <p class="num-head"><b>From separate runs</b></p>
       <div class="pillars">
-        ${tile("The posting batch", `${B.tiktok_post_sound.reached}/${B.tiktok_post_sound.n}`, `TikTok and the Story reached their final button with every check yes, in a batch declared in advance on Envoy's phone (${day(D.batch.date)}, every final button declined). All four workflows are in section ${num("acts")}.`, "#acts")}
+        ${tile("The posting batch", `${B.tiktok_post_sound.reached}/${B.tiktok_post_sound.n}`, `TikTok and the Story reached their final button with every check yes, in a batch declared in advance on Envoy's phone (${day(D.batch.date)}, every final button declined). Across all 40 attempts, 31 did, and the outcome checks stopped 5 more before a flawed post could go out. All four workflows are in section ${num("acts")}.`, "#acts")}
         ${tile("Google's AndroidWorld", `${AH.all.rate}%`, `The shipped default solved ${AH.all.success} of ${AH.all.n} tasks on ${day(AH.date)}, a paired +${AH.vs.all.gained} −${AH.vs.all.lost} over our Oct 28 run (p = ${AH.vs.all.p_paired}; not a model-only comparison).`, "#results")}
         ${tile("Watches", esc(ig ? ig["Shown on iPhone"].replace(/^\+/, "") : ""), `From a comment landing on Envoy's phone to the push on your iPhone (one Instagram comment, Nov 2). It waits for agents at their next check.`, "#watches")}
       </div>`;
@@ -126,7 +126,7 @@
           <li><b>The final button waits</b><span>Envoy stops at Share and asks on your iPhone. Yes.</span></li>
           <li><b>Live</b><span>A Reel with “golden hour” from Instagram's music library.</span></li>
         </ol>
-        ${RD.take ? `<p style="margin:14px 0 0;color:var(--ink-2);font-size:14.5px"><b style="color:var(--ink)">${esc(RD.take.date)}:</b> in one <code>cross_post</code> call, Muse posted ${esc(RD.take.posts)}. All three finished, at ${esc(RD.take.calls)} model calls in Envoy's replay.</p>` : ""}
+        ${RD.take ? `<p style="margin:14px 0 0;color:var(--ink-2);font-size:14.5px"><b style="color:var(--ink)">${esc(RD.take.date)}:</b> in one <code>cross_post</code> call, Muse posted ${esc(RD.take.posts)}. All three finished, at ${esc(RD.take.calls)} model calls in Envoy's replay. ${srcA({ path: "eval/results/showcase/muse-2026-11-04/task-rows.json" }, "task records")}</p>` : ""}
         <p style="margin:8px 0 0;color:var(--ink-2);font-size:14.5px"><b style="color:var(--ink)">The night of Nov 1:</b> all ${live.length} app-only posts went live, each started by the Spark agent, an agent on Meta's models, and approved on the iPhone: ${S.cards.map((c) => POST[c.name]).join(", ")}. ${srcA(S.live_src, "task records")}</p>
       </div>
       <div class="block howto">
@@ -221,7 +221,7 @@
           <h3>When the app changes, it repairs one step</h3>
           <p class="small" style="margin:6px 0 0">A failed check climbs a ladder: wait and retry, a relaxed match, a known pop-up, then a local repair by a model (Muse Wonder by default${RP.skylark.profile !== "hybrid" ? `; the SkyLark suite ran on the ${RP.skylark.profile} profile` : ""}). A repair becomes a new version on trial, kept only if a clean replay passes.</p>
           <ul class="plain" style="margin-top:8px">
-            <li class="small"><b>On real apps:</b> self-repair proposed ${RP.real.length} versions and the trials kept ${kept.length}. ${repaired.length ? `Among them, the ${repaired.map((c) => c.app === "Instagram" ? "Reel's" : "Short's").join(" and the ")} checks, rewritten after their live posts on Nov 2; both passed their trial in Muse's dry run with 0 model calls in Envoy's replay.` : ""}</li>
+            <li class="small"><b>On real apps:</b> self-repair proposed ${RP.real.length} versions and the trials kept ${kept.length}. ${repaired.length ? `Among them, the ${repaired.map((c) => c.app === "Instagram" ? "Reel's" : "Short's").join(" and the ")} checks, rewritten after their live posts on Nov 2; both passed their trial in Muse's dry run with 0 model calls in Envoy's replay.` : ""} On Nov 4, a routine learned from one finished Uber task, on a real account with no ride requested, met an extra screen: it repaired that step with 1 model call, and the new version passed its trial in 12.81 s with 0.</li>
             <li class="small"><b>On SkyLark, the stress test:</b> 50 injected layout changes, ${esc(RP.layouts.length)} kinds; all recovered, then 46 of 50 ran alone with no model call. ${testApp}</li>
           </ul>
           <div class="label-rec">${srcA(RP.real_src, "routine versions")} ${ev("repairs", "all 50 changes")}</div>
@@ -236,6 +236,7 @@
         </div>
       </div>
       ${learnCard()}
+      <div class="block who-does" style="margin-top:16px"><b>What's new.</b> To the best of our search, Envoy adds to prior work such as SkillDroid, which compiles runs into templates: checks after steps as well as before, written as code; repairs kept as versions with a trial and a rollback; learned routines served to agents as tools of their own; and an approval no agent can give. ${srcA({ path: "docs/technical-design.md#what-is-new-honestly" }, "the comparison")}</div>
       <div class="block who-does" style="margin-top:16px">
         <b>Meta's models, by job.</b> Muse Wonder turns task experience into routines: it plans and decides a first run's steps, compiles the run, and repairs a broken step. Muse Spark handles matching and extraction: which routine a request means, the answer on screen, facts for memory. SAM 3.1 helps find drawn controls when the accessibility tree is missing: with SAM first and Spark's grounding second, Envoy found ${sg[0]} of ${sg[1]} targets on saved screens (16 of them drawn seats in our test app, the rest real-app controls); grounding alone, ${sg[2]} (the second of two samples). ${srcA(M.phase6_src, "results")} ${ev("models", "SAM on a drawn screen")}
       </div>`;
@@ -398,11 +399,11 @@
     const refusal = R.rows.find((r) => r.kind === "refusal");
     $("#acts-body").innerHTML = `
       ${head("acts", "Acts", "It acts in the apps, and waits for a yes on the iPhone.",
-        "Some things exist only inside an app. Muse can post plain Instagram content itself, but library songs and poll stickers exist only in the apps, and Muse has no connector for TikTok. So each of these four posts was compiled from one agent run on Envoy's phone into a routine, and shared with agents as a tool. Each final button waited for the person's yes on their iPhone. No agent can approve: there is no tool for it.")}
+        "Some things exist only inside an app. Muse can post plain Instagram content itself, but library songs and poll stickers exist only in the apps, and Muse had no connector for TikTok when we checked (Nov 1). So each of these four posts was compiled from one agent run on Envoy's phone into a routine, and shared with agents as a tool. Each final button waited for the person's yes on their iPhone. No agent can approve: there is no tool for it.")}
       <div class="card" style="padding:20px;margin-top:24px">
         <div class="row-between"><h3>One request, every post</h3><span class="chip"><code>cross_post</code></span></div>
         <p style="margin:8px 0 0;color:var(--ink-2);font-size:14.5px">${D.readme.take ? `In a ${esc(D.readme.take.date)} take, Muse made one <code>cross_post</code> call for ${esc(D.readme.take.posts)}, and all three finished, at ${esc(D.readme.take.calls)} model calls in Envoy's replay. ` : ""}It runs the shared posting routines as one task with a part per destination, one after another. A retry runs only the parts that didn't post, and a part whose outcome is unknown is never posted again by itself.</p>
-        <div class="label-rec">${srcA(D.readme.cross_post_src, "cross-post-pixel.json")} ${srcA(D.readme.cross_post_tests, "test_crosspost.py")} ${srcA(D.readme.readme, "README")}</div>
+        <div class="label-rec">${srcA({ path: "eval/results/showcase/muse-2026-11-04/task-rows.json" }, "task-rows.json")} ${srcA(D.readme.cross_post_src, "cross-post-pixel.json")} ${srcA(D.readme.cross_post_tests, "test_crosspost.py")} ${srcA(D.readme.readme, "README")}</div>
       </div>
       <div class="posts four">${S.cards.map(card).join("")}</div>
       <p class="small" style="margin:10px 4px 0">The batch was declared before it ran: the four routines at the final evaluation's tag, ${BT.n / S.cards.length} attempts each from a cold app, an open app or a saved draft, on Envoy's phone with the test accounts (${day(BT.date)}). Every final button it reached was declined; each card counts every attempt. The live posts went out on test accounts. ${srcA(BT.src, "RESULTS.md")} ${srcA(BT.protocol_src, "PROTOCOL.md")} ${srcA(S.live_src, "the posts' task records")} ${srcA(S.doc_src, "demo-showcase.md")}</p>
@@ -501,9 +502,9 @@
     const aw = P.aw, AH = aw.hybrid;
     $("#results-body").innerHTML = `
       ${head("results", "Results", "Scored by code, on real apps first.",
-        "Every suite starts from a known state and is scored by code, on the app's real state or the right answer on screen, never by a model. Each number says which pass and which profile it's from: hybrid, the default, has Muse Wonder decide the agent's steps; the Spark profile has Muse Spark decide them. Both compile with Muse Wonder. Dollars are at Meta's standard prices.")}
+        "Every suite starts from a known state and is scored by code, on the app's real state or the answer on screen (its value where the truth is known, its shape where it changes daily, like a price), never by a model. Each number says which pass and which profile it's from: hybrid, the default, has Muse Wonder decide the agent's steps; the Spark profile has Muse Spark decide them. Both compile with Muse Wonder. Dollars are at Meta's standard prices.")}
       <div class="final-banner ${E.final ? "done" : ""}">
-        ${E.final ? `<b>Final numbers.</b> All ${E.suites} suites ran on the <code>eval-final</code> tag.`
+        ${E.final ? `<b>Final numbers.</b> All ${E.suites} suites ran on the <code>eval-final</code> tag, and all ${P.targets.length} success targets the design set on Oct 26, before any code, were met (${ev("targets", "the table")}).`
           : `<b>Final numbers after Nov 3.</b> The final evaluation runs Nov 3 on one tagged commit; ${E.on_tag} of ${E.suites} suites have run on it so far. Until then, these are the development passes, each labeled.`} ${srcA(E.src, "report.md")}
       </div>
       <h3 class="sub-h">Real apps</h3>
@@ -540,7 +541,7 @@
         <div class="card stat wide aw"><div class="lbl">AndroidWorld, Google's benchmark: ${AH.all.n} tasks across 20 apps, scored by its own code</div>
           <div class="aw-grid">
             <div><div class="big">${AH.all.success}/${AH.all.n}</div><div class="lbl"><b>The shipped default (${esc(AH.profile)}) on main, ${day(AH.date)}:</b> ${AH.all.rate}%, a paired +${AH.vs.all.gained} −${AH.vs.all.lost} over our Oct 28 run (p = ${AH.vs.all.p_paired}); the held-out half ${AH.held.success} of ${AH.held.n} (${AH.held.rate}%). A median ${usd(AH.median_usd)} and ${s0(AH.median_s)} a task.</div>${srcA(AH.src, "README.md")} ${srcA(AH.summary_src, "summary.json")}</div>
-            <div><div class="big">${aw.held[0]}/${aw.held[1]}</div><div class="lbl"><b>Oct 28–29, the agent on ${esc(aw.model)} (the Spark profile):</b> the held-out half after 13 general changes found on a dev half, against ${aw.held[2]} before them. The ${aw.routines.alone} routines (of ${aw.routines.compiled} compiled from its solved runs) that did their own task alone, on three new seeds: ${esc(aw.routines.did)} of ${esc(aw.routines.of)} right at ${esc(aw.routines.calls)} model call and ${esc(aw.routines.usd)} each, where the full agent did ${esc(aw.routines.agent)} at ${esc(aw.routines.agent_calls)} calls and ${esc(aw.routines.agent_usd)}; counting the agent's run where a routine failed (computed), ${aw.routines.fallback[0]} of ${aw.routines.fallback[1]}.</div>${srcA(aw.src, "androidworld-results.md")}</div>
+            <div><div class="big">${aw.held[0]}/${aw.held[1]}</div><div class="lbl"><b>Oct 28–29, the agent on ${esc(aw.model)} (the Spark profile):</b> the held-out half after 13 general changes found on a dev half, against ${aw.held[2]} before them (+20 −1, p < 0.0001). The ${aw.routines.alone} routines (of ${aw.routines.compiled} compiled from its solved runs) that did their own task alone, on three new seeds: ${esc(aw.routines.did)} of ${esc(aw.routines.of)} right at ${esc(aw.routines.calls)} model call and ${esc(aw.routines.usd)} each, where the full agent did ${esc(aw.routines.agent)} at ${esc(aw.routines.agent_calls)} calls and ${esc(aw.routines.agent_usd)}; counting the agent's run where a routine failed (computed), ${aw.routines.fallback[0]} of ${aw.routines.fallback[1]}.</div>${srcA(aw.src, "androidworld-results.md")}</div>
           </div>
           <p class="small" style="margin:10px 0 0">Not a model-only comparison: the code changed between the two runs too. The held-out half was reused, and its gain from Oct 28 to Nov 3 (+${AH.vs.held.gained} −${AH.vs.held.lost}, p = ${AH.vs.held.p_paired.toFixed(2)}) is within run-to-run noise. ${srcA(AH.compare_src, "comparison")}</p>
         </div>

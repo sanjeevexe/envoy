@@ -8,7 +8,7 @@ Oct 27, 2026. Updated Nov 2, 2026 for the phone-layer frame (main `947bf44`): th
 
 An agent such as Muse (Meta's assistant) already has the web, its connectors and, in Muse for Mac, the computer. Much of a person's life still runs through phone apps, and some features exist only there: a Reel set to a song from Instagram's library, a poll sticker on a Story, a sound on a TikTok or a YouTube Short. Muse's connector catalog also had none for TikTok, YouTube, Uber or DoorDash when we checked (Nov 1). Asked whether it can use the person's phone apps, Muse said: "On its own, Muse can't open and tap around in apps on your phone." Envoy is that missing layer, reached the way agents reach everything else: over MCP.
 
-**Envoy is not a rival assistant.** Muse, or any MCP agent, is the front door. The person asks there; the agent calls Envoy's tools; Envoy runs the task on an Android phone. Envoy's own app, on the person's iPhone, is where they approve anything irreversible and watch the phone work.
+**Envoy is not a rival assistant.** It's an MCP server: Muse, or any MCP agent, is a way in. The person asks there; the agent calls Envoy's tools; Envoy runs the task on an Android phone. Envoy's own app, on the person's iPhone, is where they approve anything irreversible and watch the phone work.
 
 | Pillar | What Envoy does | Built in |
 | --- | --- | --- |
@@ -579,7 +579,7 @@ Envoy was built to plug into the real Muse app without depending on it. Three ro
 | Route | What it takes | Status (Nov 2) |
 | --- | --- | --- |
 | 1. Envoy's own assistant, built on Muse Spark | Nothing beyond the Meta API | Works. It is the chat in Envoy's web app, and the fallback |
-| 2. Muse custom connector | A public HTTPS address that serves only `/mcp`, and a key the person pastes into Muse's secure credentials field | **Works, and it's the front door.** Muse in its iPhone app and Muse for Mac reach Envoy through a Tailscale Funnel address that serves `/mcp` and nothing else. Muse has run check-ins, `send_to_phone`, `create_trigger` and `phone_updates` (Oct 27–29, `docs/muse-link.md`), and called shared routine tools by name (Nov 2) |
+| 2. Muse custom connector | A public HTTPS address that serves only `/mcp`, and a key the person pastes into Muse's secure credentials field | **Works, and it's how the agent in our demo connects.** Muse in its iPhone app and Muse for Mac reach Envoy through a Tailscale Funnel address that serves `/mcp` and nothing else. Muse has run check-ins, `send_to_phone`, `create_trigger` and `phone_updates` (Oct 27–29, `docs/muse-link.md`), and called shared routine tools by name (Nov 2) |
 | 3. Listed connector or Meta AI Connectors preview | The Muse Connector Platform's review, or the preview's waitlist | Not submitted |
 
 What Muse's client does, as measured:
@@ -928,7 +928,7 @@ The biggest risk is reliability: phone agents are flaky, and "whether it works" 
 | Scope grows beyond what one person can finish | High | High | Strict build phases with exit criteria; nothing from a later phase starts until the current phase passes |
 
 **How these turned out (Nov 2):**
-- **Muse custom connectors:** open, and working. Muse is Envoy's front door.
+- **Muse custom connectors:** open, and working. Muse leads the demo; any MCP agent connects the same way.
 - **An Android phone:** one was available. A Pixel 5 has been Envoy's phone since Oct 28.
 - **Apps refusing the emulator:** still true for Target (a bot check on most fresh launches) and banking apps. They run on Envoy's phone instead.
 - **Reliability on real apps:** a learned task replays well, but new inputs on real apps are the weak spot: 4 of 11 (Oct 28) and 6 of 11 (Oct 31). See `docs/README.md` for the numbers and their sources.

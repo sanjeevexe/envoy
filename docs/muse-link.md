@@ -7,7 +7,7 @@
 - **One connector for both.** The Muse app on the iPhone and Muse for Mac share the account, so one connector serves both.
 - **The Oct 29 tests.** The Muse sittings (below) ran against a test copy of the API behind a Cloudflare quick tunnel (`scripts/start_muse_test.sh`), whose address changes every run; the push checks on envoy-test and the Pixel 5 were local calls to that copy, not through Muse.
 
-Muse is Envoy's front door: the person asks Muse, and Muse calls Envoy's tools. Other agents connect the same way, each with its own key (`docs/agents.md`).
+Muse leads Envoy's demo, and it's one way in: the person asks Muse, and Muse calls Envoy's tools. Other agents connect the same way, each with its own key (`docs/agents.md`).
 
 ## What this is
 

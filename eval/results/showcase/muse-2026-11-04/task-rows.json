@@ -1,0 +1,68 @@
+{
+ "source": "sqlite3 -readonly data/api/envoy.db (the live :8700 API), read Nov 4, 2026; the cross_post task Muse started in the Nov 4 take, and its three parts",
+ "what": "One cross_post call from Muse in the Nov 4 take, for a Reel, a Short and a TikTok. Envoy ran it as one task with a part per destination, one after another, and every part ended done.",
+ "notes": [
+  "Before the call, at 12:55:46, the clip envoy-reel-purple.mp4 went to Envoy's phone through send_to_phone (handoff-1104-125546-e88f, origin mcp, status sent); the person accepted its offer on the iPhone at 12:55:51. That row records the MCP origin, not the agent's name.",
+  "task-1104-125621-f88d is the cross_post task (kind crossapp, no parent). The other three are its parts (kind routine, parent = that id).",
+  "model_calls are Envoy's own. The cross_post task's 3 calls and $0.0071 are the TikTok part's: its routine reads TikTok's drawn sound list with vision.",
+  "seconds runs from a row's created time to its updated time, so it includes any wait on the person. Each routine's data/routines/<name>/index.json lists its part as <id>-r1, with the routine's own duration_s."
+ ],
+ "tasks": [
+  {
+   "id": "task-1104-125621-f88d",
+   "status": "done",
+   "source": "mcp",
+   "agent": "Muse",
+   "goal": "Post to Instagram, YouTube and TikTok",
+   "routine": null,
+   "created": "2026-11-04 12:56:21",
+   "updated": "2026-11-04 13:00:29",
+   "seconds": 248.7,
+   "detail": null,
+   "model_calls": 3,
+   "cost_usd": 0.0071
+  },
+  {
+   "id": "task-1104-125621-58f5",
+   "status": "done",
+   "source": "mcp",
+   "agent": "Muse",
+   "goal": "Post a gallery video to Instagram as a reel",
+   "routine": "instagram_reel_song",
+   "created": "2026-11-04 12:56:21",
+   "updated": "2026-11-04 12:58:11",
+   "seconds": 110.4,
+   "detail": "all steps and checks passed",
+   "model_calls": 0,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "task-1104-125809-7f5e",
+   "status": "done",
+   "source": "mcp",
+   "agent": "Muse",
+   "goal": "Post the newest gallery video as a YouTube Short with a chosen sound and title",
+   "routine": "youtube_short_sound",
+   "created": "2026-11-04 12:58:09",
+   "updated": "2026-11-04 12:59:15",
+   "seconds": 65.9,
+   "detail": "all steps and checks passed",
+   "model_calls": 0,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "task-1104-125911-4675",
+   "status": "done",
+   "source": "mcp",
+   "agent": "Muse",
+   "goal": "Post the newest gallery video to TikTok with a chosen sound and caption",
+   "routine": "tiktok_post_sound",
+   "created": "2026-11-04 12:59:11",
+   "updated": "2026-11-04 13:00:33",
+   "seconds": 82.1,
+   "detail": "all steps and checks passed",
+   "model_calls": 3,
+   "cost_usd": 0.0071
+  }
+ ]
+}

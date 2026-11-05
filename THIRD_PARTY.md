@@ -87,17 +87,11 @@ Envoy uses open source as plumbing (talking to phones, streaming video, serving 
 
 - **The evaluation and what it changed** (Phase 7, Oct 27–Nov 2; `eval/run_final.py` and `eval/final_*.py`, `backend/routines/lifecycle.py`): one command per suite with its commit, tier and cost recorded; the core set as seeded worlds where any side effect fails a run; the product's own routine path measured against the full agent and fixed replay; the patch lifecycle (trial on the next run, then active or rolled back) shared by the API and the evaluation; a safety suite of captured real-app and SkyLark screens with the classifier as Phase 6 left it beside the new one; planted instructions on screens and in email; and the fixes the suites found (policy rules for points, prices, calls and destructive confirmations; a step schema without `tap_point` where it can only be a guess; checks that look past the edge of the screen; outputs read from an element's whole text; the first search result chosen by its place; inferred answers reported as their screen text). matplotlib only draws the charts.
 
-## Planned (later phases)
-
-| Component | License | What we will use it for |
-| --- | --- | --- |
-| [sqlite-vec](https://github.com/asg017/sqlite-vec) | MIT or Apache-2.0 | Similarity search, only if needed |
-
 ## Considered and not used
 
 | Component | License | Why not |
 | --- | --- | --- |
-| Mobilerun Portal | AGPL-3.0 | Copyleft; Envoy uses uiautomator2 (and possibly its own bridge) instead |
+| Mobilerun Portal | AGPL-3.0 | Copyleft; Envoy uses uiautomator2 instead |
 | Android emulator WebRTC (`android-emulator-webrtc`) | Apache-2.0 | Emulator-only, container scripts are Linux x86 only; scrcpy is used everywhere |
 | [Tango](https://github.com/yume-chan/ya-webadb) `@yume-chan/adb-scrcpy`, `@yume-chan/scrcpy-decoder-webcodecs` | MIT | The design's plan for the real-phone live view (a Node relay, H.264 decoded in the browser). Phase 6 decodes on the Mac instead (PyAV), which reuses the live view's JPEG protocol and gives the agent screenshots from the same frames |
 | `meta-sam-parser` (PyPI) / `@meta-sam/parser` (npm), from Meta | Not checked | SAM 3.1's box tokens are parsed by Envoy's own few lines (`backend/agent/vision.py`); masks aren't used |

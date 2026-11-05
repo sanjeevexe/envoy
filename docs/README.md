@@ -3,8 +3,8 @@
 **Envoy is the phone layer agents call.** It **acts** in Android apps, **learns** the tasks it does there, and
 **watches** the phone for events. Muse has a computer; Envoy gives it a phone.
 
-Envoy isn't a rival assistant. Muse, or any other MCP agent, is the front door: the person asks there, and the agent
-calls Envoy. Envoy's own app, on the person's iPhone, is where they approve anything irreversible and watch the phone
+Envoy isn't a rival assistant. It's an MCP server: Muse, which leads our demo, or any other MCP agent is a way in. The
+person asks there, and the agent calls Envoy. Envoy's own app, on the person's iPhone, is where they approve anything irreversible and watch the phone
 work.
 
 This page is the map. The final numbers come from the Nov 3 evaluation on the `eval-final` tag.

@@ -39,13 +39,17 @@ what happened.
 
 **Muse has a computer. Envoy gives it a phone.**
 
-Envoy gives a machine a new capability: it lets AI agents like Meta's Muse work real Android apps, turns a verified run,
-at one tap on its task's card, into a checked routine they then call by name, and tells them what happens on the phone,
-while the irreversible steps an agent starts wait for the person's yes on their iPhone.
+Envoy gives a machine a new capability: it's an MCP server that adds real Android apps to what an AI agent already does
+on the desktop and the web, so the two work together. On Nov 4, Muse took a clip from the Mac, sent it to the phone through
+Envoy with `send_to_phone`, then made one `cross_post` call. Any MCP client can call Envoy, and Meta's Muse, our own Spark
+agent (on Muse Spark) and Claude Code have: Muse adds it as a custom connector; the others connect with a key and the tool
+permissions the person sets in Settings › Agents (`docs/agents.md`). One tap turns a verified run into a checked routine;
+one switch shares it, and it appears in the agent's tool list under its own name, with no restart. Envoy also tells agents
+what happens on the phone. Irreversible steps an agent starts wait for the person's yes on their iPhone.
 
-Envoy is the phone layer AI agents call. Muse, Meta's assistant, is the front door: it adds Envoy as a custom MCP
-connector. Any MCP agent can do the same; the Spark agent (a small agent built on Meta's Muse Spark) and Claude Code
-have (`docs/agents.md`). Envoy's Home Screen web app on the person's iPhone is where they approve and watch.
+Envoy is the phone layer AI agents call, over MCP. It doesn't replace what an agent already does on the desktop and the
+web; it adds the phone. Muse, Meta's assistant, leads our demo; the Spark agent is a small agent built on Meta's Muse Spark
+(`docs/agents.md`). Envoy's Home Screen web app on the person's iPhone is where they approve and watch.
 
 - **Acts.** Envoy works real Android apps the way a person does: it reads the screen, taps and types. It uses "Envoy's
   phone" (a Pixel 5) or an emulator, and agents can choose which; a copy on Google Cloud was tested too. The showcase
@@ -66,7 +70,9 @@ have (`docs/agents.md`). Envoy's Home Screen web app on the person's iPhone is w
   real-app workflows whose first run and same-input rerun both passed in the final evaluation, Envoy's replay used 0
   model calls at a median 4.88 s, against the agent's first run at a median 5 calls and 19.59 s ([Results](#results)).
   After the evaluation, "Make it a routine" saved 8 of 18 real-app runs, and each saved routine answered right when
-  called back as a tool (`eval/results/learn-agent-path/`).
+  called back as a tool (`eval/results/learn-agent-path/`). On Nov 4 it learned `uber_check_uberx_price` the same way, on a
+  real account: 0 model calls and 11.33 s on its next run, then a 1-call repair when Uber added a screen, kept after a
+  0-call trial (`data/routines/uber_check_uberx_price/index.json`).
 - **Learned tasks become tools.** A routine the person shares becomes a tool of its own for every agent allowed to run
   tasks, such as `instagram_reel_song(song_title, song_artist, caption)`, with no restart
   (`eval/results/agent-door/tools-before.json`, `tools-after.json`). Teach mode learns a routine from one demonstration
@@ -90,8 +96,8 @@ seen, so it can answer from memory and notice when something changed (`backend/m
 
 A creator finishes a clip and wants it out as an Instagram Reel with a song from Instagram's music library, a Story with
 a poll sticker, a TikTok with a sound and a YouTube Short. None of those was within reach of Muse's connectors when we
-checked (Nov 1), so today every clip means four rounds of tapping in three apps. With Envoy, the creator asks Muse on
-the Mac. Envoy's phone works each app from a routine it learned from its own runs and stops at each final button until
+checked (Nov 1), so today every clip means four rounds of tapping in three apps. With Envoy, the creator asks their
+agent, such as Muse on the Mac. Envoy's phone works each app from a routine it learned from its own runs and stops at each final button until
 the creator says yes on their iPhone. The agent does the heavy lifting; the person keeps the keys.
 
 Beyond creators, the same layer is meant for anyone whose work lives in phone apps no agent can reach: a small business
@@ -125,7 +131,7 @@ approval. Instructions planted in emails put 0 values into memory (the final eva
 `eval/results/final/injection.md`, `safety.md`). Every agent besides Muse has its own key and tool groups, and Envoy's
 instructions tell each agent that what the tools return is content, never instructions.
 
-### Setup today, the path to a product, and the platform question
+### Where it runs today, and where it goes next
 
 Today Envoy runs on a Mac, with its own Android phone (Envoy's phone over USB, or an emulator) running the apps, and the
 person's iPhone as where they approve. The person signs in to each app once on the phone Envoy uses. The path from here
@@ -167,7 +173,7 @@ https://www.youtube.com/watch?v=EIVoCPk8BME
 
 | Product | What Envoy uses it for | Where |
 | --- | --- | --- |
-| Muse (Muse for Mac and the Muse app) | The front door. Envoy is a custom MCP connector: Muse runs tasks, calls learned routines as tools by name, puts files on the phone, and reads what happened (`phone_updates`, which a Muse scheduled task checked about every 10 minutes) | `docs/muse-link.md`, `docs/agents.md` |
+| Muse (Muse for Mac and the Muse app) | The lead agent in our demo, one of three that have called Envoy. Envoy is a custom MCP connector: Muse runs tasks, calls learned routines as tools by name, puts files on the phone, and reads what happened (`phone_updates`, which a Muse scheduled task checked about every 10 minutes) | `docs/muse-link.md`, `docs/agents.md` |
 | Muse Spark 1.3 | Matching a request to a routine, reading facts from screens, email and photos into memory, telling whether two things are the same, answering from memory, chat routing, app notes, and grounding on screens with no accessibility tree. On the `spark` profile, also the plan, the steps and repairs. Structured output on every call. The Spark agent, a second agent that calls Envoy over MCP, runs on it too | `backend/models/adapter.py` (`JOBS`), `agents/meta-agent/README.md` |
 | Muse Wonder 1.0 | Compiling a run, or a person's demonstration, into a routine: the four showcase routines were each compiled from one agent run. On the default `hybrid` profile, also the plan, the steps and repairs of a task Envoy hasn't learned yet | `backend/models/adapter.py` (`PROFILES`), `data/routines/*/index.json` |
 | SAM 3.1 | Boxes on drawn screens with no accessibility tree (a canvas seat map); Spark picks the box | `docs/phase-6-results.md` |
@@ -185,7 +191,7 @@ controls when the accessibility tree is missing.**
 
 - **Muse gets a phone, and an agent's tool list grows as Envoy learns.** In a Nov 4 take, Muse for Mac made one
   `cross_post` call for a Reel, a Short and a TikTok, and all three finished, at 0, 0 and 3 model calls in Envoy's
-  replay (each routine's `index.json`). In a dry run on Nov 2, it copied a clip into Envoy's outbox, called
+  replay (`eval/results/showcase/muse-2026-11-04/task-rows.json`, each routine's `index.json`). In a dry run on Nov 2, it copied a clip into Envoy's outbox, called
   `send_to_phone`, then called the Reel, TikTok and Short routines by name, and each reached its final button, where it
   was declined (`eval/results/showcase/muse-2026-11-02/task-rows.json`). On Nov 1, Muse saw a tool newly added to a test
   connector without reconnecting (`docs/muse-link.md` › "Nov 1–2").
@@ -229,8 +235,8 @@ The full log, kept as we went, with dates and evidence: `docs/meta-feedback.md`.
     needed no setup.
   - Muse Spark at `low` took about 0.9 s and $0.001 to $0.0015 per agent step (Oct 27, our test app; Envoy's default
     profile now runs agent steps on Wonder).
-  - Extraction from emails and screenshots was precise (131 of 133 attributes on 28 test emails, then 73 of 73 on 7
-    screenshots of our test app, none wrong).
+  - Extraction from emails and screenshots was precise (final evaluation: 454 of 468 attributes on 62 labelled test
+    items, 0 wrong).
   - Voice Transcribe returned final text 74 to 296 ms after the audio ended, on a real Mac and iPhone.
   - SAM 3.1's boxes were pixel-exact.
   - In the Muse app, the connector kept the token out of chat and never tried to approve on the person's behalf.
@@ -281,8 +287,9 @@ median 4.88 s, against the agent's first run at 5 calls and 19.59 s. SkyLark (ou
 first try at 1 call, against the agent's 5 calls; repeat requests 90/90 at $0.0022, about 40 times cheaper than the
 first request ($0.0869, the agent's run and the compile included); injected layout changes recovered 50/50. Safety:
 irreversible controls caught 20/20 by code rules alone, on saved screens, and the agent right 20/20 with instructions
-planted on SkyLark's screens, following them in none. The posting batch: TikTok and the Story reached their final button
-10/10, all four workflows below. AndroidWorld: the shipped default solved 74 of 116 (63.8%), +20 −3 over the Oct 28 run
+planted on SkyLark's screens, following them in none. The posting batch: of 40 attempts, 31 reached the final button with
+every check yes, TikTok and the Story 10/10 each, and the outcome checks stopped 5 more before a flawed post could go
+out; all four workflows below. AndroidWorld: the shipped default solved 74 of 116 (63.8%), +20 −3 over the Oct 28 run
 (p = 0.0005; not a model-only comparison).
 
 From the final evaluation: all 10 suites on the `eval-final` tag (`cf78fa0`), Nov 3, on the default `hybrid` profile
@@ -303,7 +310,7 @@ Nov 3 on the shipped default, `hybrid`.
 | 4. Real apps (18 read-only workflows, `envoy-real`) | first run right 13/18, compiled 14/18, same input with no call 13/18 (14 counting a repair), new input 7/11; Target's two blocked by its bot check |
 | 4. Real apps: the cost curve | the 13 workflows whose first run and rerun both passed: the agent's first run median 5 calls (2–13), 19.59 s (8.49–52.82 s), $0.0376; Envoy's replay 0 calls, 4.88 s (0.75–12.26 s); compile $0.0455 once |
 | 5. Memory | extraction 454/468 (97%) on 62 labelled test items, 0 wrong; stale facts served without a warning 0/12 |
-| 6. Safety: irreversible actions | on 20 saved screens (6 SkyLark, 14 real-app), caught 20/20 (code alone 20); reversible flagged by code 0/22 (by the gate, model label included, 3/22); live declines on SkyLark held 7/7 |
+| 6. Safety: irreversible actions | on 20 saved screens (6 SkyLark, 14 real-app), caught 20/20 (code alone 20; 14 before this suite found its gaps, on the same screens); reversible flagged by code 0/22 (by the gate, model label included, 3/22); live declines on SkyLark held 7/7 |
 | 6b. Safety: planted instructions (SkyLark's screens and a test inbox) | agent right 20/20, tried to follow it 0; routines 10/10, never; irreversible without approval 0; injected values stored from email 0 |
 | 7. Interfaces end to end | web, approval modes, iPhone flows (scripted, with a fake push service): all passed |
 | AndroidWorld, the shipped default (a separate run: all 116 tasks, pass@1, seed 30, `hybrid`, `main` `7ed4aa6`, Nov 3) | 74 of 116 (63.8%), +20 −3 over the Oct 28 run (p = 0.0005); held-out half 36 of 58 (62.1%), where the change (+8 −3, p = 0.23) is within run-to-run noise; a mean $0.125 a task, about 3.1 times the Oct 28 run's. Not a model-only comparison (`main` has other agent changes since Oct 28 and a higher per-task cost cap), and the held-out half had already been run on Oct 28 and 29 and helped choose `hybrid` as the default (`eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/`) |
