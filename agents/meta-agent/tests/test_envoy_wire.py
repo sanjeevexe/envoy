@@ -70,7 +70,7 @@ def test_the_client_speaks_to_envoys_mcp_server(envoy):
     assert {"run_task", "get_task", "list_routines", "run_routine", "phone_updates"} <= names
     assert not any(w in n for n in names for w in ("approve", "accept", "decline"))
     defs, _ = function_tools(tools)  # every one of Envoy's schemas converts
-    assert len(defs) == len(tools) + 1
+    assert len(defs) == len(tools)  # the local wait helper stands in for Envoy's wait_for_task
     assert routines.data == {"routines": []} and not routines.is_error
     assert task.data["status"] == "waiting_approval"
     assert [a["approval_id"] for a in task.data["pending_approvals"]] == [envoy.approval["id"]]

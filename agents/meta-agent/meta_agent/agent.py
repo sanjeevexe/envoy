@@ -147,7 +147,7 @@ def function_tools(tools: list[Tool]) -> tuple[list[dict[str, Any]], dict[str, s
     return [*defs, WAIT_DEF], names
 
 
-BUILTIN = {"run_task", "get_task", "list_routines", "run_routine", "memory_search", "memory_get", "memory_note", "send_to_phone",
+BUILTIN = {"run_task", "get_task", "wait_for_task", "cross_post", "list_routines", "run_routine", "memory_search", "memory_get", "memory_note", "send_to_phone",
            "create_trigger", "list_phones", "phone_updates", "get_file"}
 
 
