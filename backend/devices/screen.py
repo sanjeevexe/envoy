@@ -263,7 +263,35 @@ def number_elements(elements: list[Element], width: int, height: int) -> list[El
     # Parents come before children in document order, so absorbed children are already skipped.
     for i, e in enumerate(numbered, start=1):
         e.number = i
+    # An unlabeled control in a list row (an overflow menu, a delete icon) says which row it is in. On AndroidWorld's Retro
+    # Music the model tapped "[19] Button (id: menu)" by its place in the list and lost track of which song it was for.
+    shown = {e.index: e for e in numbered}
+    for e in numbered:
+        if not e.label and e.in_list and e.kind not in ("List", "EditText"):
+            e.row = _row_text(e, elements, children, shown)
     return numbered
+
+
+def _row_text(e: Element, elements: list[Element], children: dict[int, list[int]], shown: dict[int, Element]) -> str:
+    """The first label shown inside the list row that holds `e` (the row: the ancestor that is a direct child of the
+    list). Never looks past that row, so it can't take another row's text."""
+    p = e.parent
+    while p is not None and not elements[p].scrollable:
+        if p in shown and shown[p].label:
+            return shown[p].label
+        stack = list(reversed(children.get(p, [])))
+        while stack:  # the row's other elements, in document order
+            c = stack.pop()
+            ce = shown.get(c)
+            if c != e.index and ce is not None and ce.label and ce.kind != "List":
+                return ce.label
+            if c != e.index:
+                stack.extend(reversed(children.get(c, [])))
+        parent = elements[p].parent
+        if parent is None or elements[parent].scrollable:
+            return ""  # p was the row itself
+        p = parent
+    return ""
 
 
 def format_line(e: Element) -> str:
@@ -272,6 +300,8 @@ def format_line(e: Element) -> str:
         parts.append(f'"{e.label}"')
     if _short_id(e.resource_id):
         parts.append(f"(id: {_short_id(e.resource_id)})")
+    if e.row:
+        parts.append(f'(in row "{_clip(e.row, 60)}")')
     flags = []
     if e.editable:
         if e.password:

@@ -115,7 +115,7 @@ def screen_from_tree(tree: dict) -> ScreenState:
             checked=d.get("checked", False), enabled=d.get("enabled", True), focused=d.get("focused", False),
             selected=d.get("selected", False), password=d.get("password", False), visible=True,
             in_list=d.get("in_list", False), status_bar=d.get("status_bar", False), number=d.get("number"),
-            label=d.get("label", ""), kind=d.get("kind", ""), full_label=d.get("full_label", ""),
+            label=d.get("label", ""), kind=d.get("kind", ""), full_label=d.get("full_label", ""), row=d.get("row", ""),
         )
         els.append(e)
     numbered = sorted((e for e in els if e.number), key=lambda e: e.number or 0)
