@@ -26,8 +26,8 @@ import uiautomator2 as u2
 from PIL import Image
 
 from devices.apps import AppIndex, looks_like_package
-from devices.screen import build_state, content_hash, has_app_content, parse_hierarchy
-from devices.types import Action, ActionResult, Capabilities, ScreenState, StreamHandle
+from devices.screen import build_state, content_hash, has_app_content, parse_hierarchy, text_page_step
+from devices.types import SCROLL_FRACTION, Action, ActionResult, Capabilities, Element, ScreenState, StreamHandle
 
 _FOCUS = re.compile(r"mCurrentFocus=Window\{(\S+) \S+ ([^/\s}]+)/?([^\s}]*)\}")
 _FOCUSED_APP = re.compile(r"mFocusedApp=ActivityRecord\{\S+ \S+ ([^/\s}]+)/([^\s}]+)")
@@ -63,6 +63,7 @@ class AndroidDevice:
         self.stream: Any = None  # frames and input for the live view (set by subclasses)
         self._launchers: dict[str, str] = {}  # package or app name → its launcher activity
         self._apps: AppIndex | None = None
+        self._text_offsets: dict[str, int] = {}  # long text shown in parts → where the part shown starts (screen.text_key)
 
     # ---- connection -------------------------------------------------------------------------
 
@@ -164,7 +165,11 @@ class AndroidDevice:
             settle_ms=settle_ms,
             read_ms=read_ms,
             secure=secure,
+            text_offsets=self._text_offsets,
         )
+        if self._text_offsets:  # a text no longer on screen starts from its beginning when it comes back
+            shown = {e.text_key for e in state.numbered if e.text_key}
+            self._text_offsets = {k: v for k, v in self._text_offsets.items() if k in shown}
         if screenshot and not (secure and self.capabilities.real_phone):  # a phone shows secure screens black anyway
             state.screenshot_png = self._screenshot_sync()
         self._last = state
@@ -311,9 +316,11 @@ class AndroidDevice:
                     # (seen in Phase 0), replacing the keyboard the user sees during a takeover.
                     self.u2.press("enter")
             elif a.kind == "scroll":
+                if a.element is not None and a.direction in ("up", "down"):
+                    self._page_text(el, a.direction)
                 x1, y1, x2, y2 = el.bounds if a.element is not None else (0, 0, self.capabilities.width, self.capabilities.height)
                 cx, cy = (x1 + x2) // 2, (y1 + y2) // 2
-                dx, dy = int((x2 - x1) * 0.3), int((y2 - y1) * 0.3)
+                dx, dy = int((x2 - x1) * SCROLL_FRACTION), int((y2 - y1) * SCROLL_FRACTION)
                 # "scroll down" = reveal content further down = finger moves up.
                 start, end = {
                     "down": ((cx, cy + dy), (cx, cy - dy)),
@@ -323,6 +330,12 @@ class AndroidDevice:
                 }[a.direction or "down"]
                 self.u2.swipe(*start, *end, duration=0.25)
             elif a.kind == "swipe":
+                dx, dy = (a.x2 or 0) - (a.x or 0), (a.y2 or 0) - (a.y or 0)
+                if abs(dy) > 2 * abs(dx) and dy and self._last is not None:  # a vertical swipe over a long text pages it too
+                    at = [e for e in self._last.numbered if e.text_key and e.bounds[0] <= (a.x or 0) <= e.bounds[2]
+                          and e.bounds[1] <= (a.y or 0) <= e.bounds[3]]
+                    if at:
+                        self._page_text(at[0], "down" if dy < 0 else "up")
                 self._swipe(a.x or 0, a.y or 0, a.x2 or 0, a.y2 or 0, 0.3)
             elif a.kind == "back":
                 self.u2.press("back")
@@ -338,6 +351,26 @@ class AndroidDevice:
             return ActionResult(ok=True, duration_ms=(time.perf_counter() - t0) * 1000, target=target)
         except Exception as e:  # reported to the runtime, which decides whether to retry
             return ActionResult(ok=False, error=f"{type(e).__name__}: {e}", duration_ms=(time.perf_counter() - t0) * 1000, target=target)
+
+    def _page_text(self, el: Element, direction: str) -> None:
+        """A scroll over a long text shown in parts moves the part shown (devices/screen.py, TEXT_PAGE_OVERLAP): the text
+        itself, or one inside the list scrolled. The phone scrolls as well, as asked."""
+        last = self._last
+        if last is None:
+            return
+        def inside(e: Element) -> bool:
+            p: int | None = e.index
+            while p is not None:
+                if p == el.index:
+                    return True
+                p = last.elements[p].parent if 0 <= p < len(last.elements) else None
+            return False
+        for e in last.numbered:
+            if e.text_key and inside(e):
+                step = text_page_step() * (1 if direction == "down" else -1)
+                total = len(e.full_label)
+                self._text_offsets[e.text_key] = max(0, min(self._text_offsets.get(e.text_key, 0) + step,
+                                                            max(0, total - text_page_step())))
 
     async def act(self, action: Action) -> ActionResult:
         async with self._lock:

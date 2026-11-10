@@ -12,6 +12,7 @@ import io
 import re
 import time
 import uuid
+from collections import Counter
 from dataclasses import dataclass, field
 from typing import Any, Literal
 
@@ -21,7 +22,7 @@ from agent.checks import CheckResult, evaluate
 from agent.popups import match_popup
 from agent.trace import TraceWriter, element_record, screen_record
 from agent.vision import Vision, crop
-from devices.types import Action, Device, InvalidElement, ScreenState
+from devices.types import SCROLL_FRACTION, Action, Device, Element, InvalidElement, ScreenState
 from models.adapter import DataScope, ModelAdapter, image_part, step_cost_scale
 from models.prompts import PLAN_INSTRUCTIONS, STEP_INSTRUCTIONS, plan_input, step_input
 from models.schemas import Plan, StepOutput, StepOutputListed
@@ -40,6 +41,9 @@ REPLAN_HISTORY = 20  # history lines a replan sees: what the agent did before th
 _PLACEHOLDER = re.compile(r"placeholder|schema requires|(required by|comply with|satisfy) (the )?schema|incorrect but|"
                           r"wrong action|this is wrong|\bmistake\b|^\W*\w?\W*$|^one short sentence", re.I)
 MAX_REMEMBERED = 6000  # characters of what the model kept from earlier screens (the oldest go first)
+# A scroll that moves the list less than this share of its drag has reached the list's end. Measured on the Nov 3 run's
+# 167 list scrolls: full scrolls moved 0.8-1.2 times the drag (61 of 65 at 1.0-1.2), scrolls into an end 0.6 or less.
+SCROLL_END_SHARE = 0.75
 PROGRESS_STEPS = 3  # changed screens in a row after which earlier stuck recoveries no longer count
 TASK_CAP_USD = 0.30  # per task when the agent's steps run on Spark (the user's cap, Oct 29)
 # Per task when they run on Muse Wonder (hybrid, wonder): the user's call on Oct 30, between the $0.30 and the $0.96 that
@@ -108,6 +112,62 @@ def _where(s: ScreenState) -> str:
     title = next((e.label for e in s.numbered if e.resource_id.endswith("title") and e.label), None)
     title = title or next((e.label for e in s.numbered if e.kind == "Text" and e.label), "")
     return f"{s.activity.rsplit('.', 1)[-1] or s.package} · {title[:60]!r}"
+
+
+def _scroll_direction(action: Action) -> str | None:
+    """Which way the content moved for a scroll, or a mostly vertical swipe (a finger moving up reveals what is below)."""
+    if action.kind == "scroll":
+        return action.direction or "down"
+    if action.kind == "swipe" and None not in (action.x, action.y, action.x2, action.y2):
+        dx, dy = action.x2 - action.x, action.y2 - action.y  # type: ignore[operator]
+        if abs(dy) > 2 * abs(dx) and dy:
+            return "down" if dy < 0 else "up"
+    return None
+
+
+def _scroll_note(before: ScreenState, after: ScreenState, action: Action, changed: bool) -> str | None:
+    """What a scroll did to the list, for HISTORY: how many new items came into view, and whether the list has reached its
+    end. On AndroidWorld 88 of 297 scrolls on the dev half moved nothing (the list was already at its end), and question
+    tasks scrolled up and down a list they had read, because SCREEN always says there is more. A scroll that moves the
+    content less than the drag reached the end; one that moves nothing was already there. None when it isn't a list scroll
+    on the same screen (then the usual history line applies)."""
+    direction = _scroll_direction(action)
+    if direction is None or after.signature != before.signature:
+        return None
+    end = {"down": "the end of the list", "up": "the top of the list"}.get(direction, "the end of the list in that direction")
+    paged = {e.text_key: e.label for e in before.numbered if e.text_key}
+    for e in after.numbered:  # a long text shown in parts moved to another part (devices/screen.py)
+        if e.text_key in paged and paged[e.text_key] != e.label and (m := re.search(r"\[(characters [^\]]*)\]$", e.label)):
+            return f"the long text [{e.number}] now shows {m.group(1)}"
+    if not changed:
+        return f"the list did not move: it is already at {end}"
+
+    def rows(s: ScreenState) -> list[Element]:
+        return [e for e in s.numbered if e.in_list and e.kind != "List" and e.label]
+
+    def key(e: Element) -> tuple[str, str, str]:
+        return e.kind, e.label, e.resource_id
+
+    a, b = rows(before), rows(after)
+    new = sum((Counter(map(key, b)) - Counter(map(key, a))).values())
+    if direction not in ("up", "down"):
+        return f"{new} new item{'s' if new != 1 else ''} came into view"
+    # How far the content moved: elements seen once on both screens, by their center's height.
+    once_a = {k: e for k, e in ((key(e), e) for e in a) if Counter(map(key, a))[k] == 1}
+    once_b = {k: e for k, e in ((key(e), e) for e in b) if Counter(map(key, b))[k] == 1}
+    shifts = sorted(once_a[k].center[1] - once_b[k].center[1] for k in once_a.keys() & once_b.keys())
+    if action.kind == "scroll":
+        x1, y1, x2, y2 = (before.numbered[action.element - 1].bounds if action.element else (0, 0, before.width, before.height))
+        drag = 2 * int((y2 - y1) * SCROLL_FRACTION)
+    else:
+        drag = abs((action.y2 or 0) - (action.y or 0))
+    items = f"{new} new item{'s' if new != 1 else ''} came into view"
+    if not shifts:
+        return f"{items}; the list moved by a whole screen or more"
+    moved = shifts[len(shifts) // 2] * (1 if direction == "down" else -1)
+    if drag and moved < SCROLL_END_SHARE * drag:
+        return f"{items}; this is {end} (the list moved less than a full scroll)"
+    return f"{items}; there may be more"
 
 
 def _describe(a: StepOutput, screen: ScreenState) -> str:
@@ -479,17 +539,20 @@ class AgentRunner:
                 progress_streak = progress_streak + 1 if changed else 0
                 if progress_streak >= PROGRESS_STEPS:  # moving again: a later stuck spell starts its recoveries afresh
                     stuck_recoveries = 0
+                note = _scroll_note(screen, after, action, changed) if result_.ok else None
                 record.update({
                     "device_action": action.model_dump(), "result": result_.model_dump(),
                     "target": element_record(screen.numbered[action.element - 1], screen) if action.element else None,
                     "screen_after": screen_record(after), "tree_after": trace.save_tree(step, "after", after),
-                    "changed": changed,
+                    "changed": changed, **({"scroll": note} if note else {}),
                 })
                 record["timings_ms"].update({"act": round(act_ms), "settle": round(after.settle_ms or 0)})
                 trace.step(record)
 
                 if not result_.ok:
                     history.append(f"step {step}: {desc} → FAILED: {result_.error}")
+                elif note is not None:  # a list scroll: what came into view, and whether the list is at its end (no screenshot)
+                    history.append(f"step {step}: {desc} → {note}")
                 elif changed:  # what happened, not the model's own words: echoed prose was copied into later steps
                     history.append(f"step {step}: {desc} → screen changed, now {_where(after)}")
                 else:

@@ -50,6 +50,7 @@ class Element:
     kind: str = ""  # Button, Text, EditText, Image, Switch, CheckBox, List, ...
     full_label: str = ""  # the label before clipping, when it was clipped: routines read outputs from it
     row: str = ""  # for an unlabeled control in a list row (a menu, a delete icon): the row's text, shown to the model only
+    text_key: str = ""  # set when the element's text is shown in parts (devices/screen.py, TEXT_PAGE_OVERLAP)
 
     @property
     def center(self) -> tuple[int, int]:
@@ -125,6 +126,11 @@ class ScreenState:
             "secure": self.secure,
             "elements": [e.to_json() for e in self.elements],
         }
+
+
+# A scroll drags from SCROLL_FRACTION of the list's height below its center to as far above it (the other way for "up"):
+# 60% of the list per scroll. The agent loop uses it to tell a full scroll from one that hit the list's end.
+SCROLL_FRACTION = 0.3
 
 
 class InvalidElement(ValueError):

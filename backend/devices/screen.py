@@ -26,6 +26,19 @@ MAX_LABEL = 120  # long enough for most answers (a flight status line); the mode
 MAX_TEXT = 4000
 MAX_TEXT_SCREEN = 8000
 MAX_MERGED_PARTS = 3
+# Text longer than its cap is shown in parts. Scrolling over it doesn't change the tree (an EditText holds its whole text
+# however it is scrolled), so the device moves the part shown instead (AndroidWorld: a 12,101-character recipes file of
+# which the model could only ever read the first 4,000 characters, then failed as stuck). Parts overlap a little.
+TEXT_PAGE_OVERLAP = 200
+
+
+def text_key(e: Element, whole: str) -> str:
+    """Names a long text across reads of the same screen: its element and its first words."""
+    return f"{e.resource_id}|{e.cls}|{len(whole)}|{whole[:80]}"
+
+
+def text_page_step(cap: int = MAX_TEXT) -> int:
+    return max(1, cap - TEXT_PAGE_OVERLAP)
 
 
 def _bool(node: ET.Element, key: str) -> bool:
@@ -160,8 +173,26 @@ def _set_label(e: Element, text: str, cap: int = MAX_LABEL) -> None:
     e.full_label = whole if whole != e.label else ""
 
 
-def number_elements(elements: list[Element], width: int, height: int) -> list[Element]:
-    """Pick and number the elements that matter, merging child text into interactive parents."""
+def _show_long(e: Element, text: str, cap: int, offsets: dict[str, int] | None) -> None:
+    """Label an element whose own text may run past `cap`: the part from its offset (0 unless the model scrolled it), and
+    where that part sits in the whole text."""
+    whole = " ".join(text.split())
+    if cap <= MAX_LABEL or len(whole) <= cap:
+        _set_label(e, text, cap)
+        return
+    key = text_key(e, whole)
+    start = max(0, min((offsets or {}).get(key, 0), len(whole) - 1))
+    end = min(len(whole), start + cap)
+    more = "; scroll down on it for the next part" if end < len(whole) else "; this is the end of it"
+    e.label = (("…" if start else "") + whole[start:end] + ("…" if end < len(whole) else "")
+               + f" [characters {start + 1:,}-{end:,} of {len(whole):,}{more}]")
+    e.full_label = whole
+    e.text_key = key
+
+
+def number_elements(elements: list[Element], width: int, height: int, text_offsets: dict[str, int] | None = None) -> list[Element]:
+    """Pick and number the elements that matter, merging child text into interactive parents. `text_offsets`: where each
+    long text that was scrolled starts (devices/android.py keeps them; see TEXT_PAGE_OVERLAP)."""
     children: dict[int, list[int]] = {}
     for e in elements:
         if e.parent is not None:
@@ -246,11 +277,14 @@ def number_elements(elements: list[Element], width: int, height: int) -> list[El
                 parts = []
                 descendant_text(e.index, parts)
                 label = " · ".join(dict.fromkeys(parts))  # drop repeats such as "Order · Order"
-            _set_label(e, label, text_cap(label) if e.editable and e.text else MAX_LABEL)
+            if e.editable and e.text:
+                _show_long(e, label, text_cap(label), text_offsets)
+            else:
+                _set_label(e, label, MAX_LABEL)
             if e.label or e.resource_id or e.editable or e.scrollable or e.checkable:
                 numbered.append(e)
         elif (e.text or e.desc) and e.index not in absorbed and not repeats_ancestor(e):
-            _set_label(e, e.text or e.desc, text_cap(e.text or e.desc))
+            _show_long(e, e.text or e.desc, text_cap(e.text or e.desc), text_offsets)
             numbered.append(e)
         elif _short_id(e.resource_id) and e.index not in absorbed and children.get(e.index) and text_only_group(e.index):
             # A merged row with an ID but no text of its own ("Date" + "Fri, Oct 30"): one line, with its ID.
@@ -393,11 +427,12 @@ def build_state(
     settle_ms: float | None = None,
     read_ms: float | None = None,
     secure: bool = False,
+    text_offsets: dict[str, int] | None = None,
 ) -> ScreenState:
     xml = mask_passwords(xml)
     elements = parse_hierarchy(xml, height)
     package = package or next((e.package for e in elements if e.package), "")
-    numbered = number_elements(elements, width, height)
+    numbered = number_elements(elements, width, height, text_offsets)
     return ScreenState(
         package=package,
         activity=activity,
