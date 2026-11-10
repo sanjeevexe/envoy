@@ -70,6 +70,12 @@ def test_an_unlabeled_control_in_a_list_row_says_which_row():
     # outside a list, nothing changes
     s3 = _screen(_node(rid="settings", cls="android.widget.ImageButton", bounds="[0,200][100,300]", clickable=True))
     assert "in row" not in s3.compact
+    # a "list" whose rows are whole pages (the home screen's pager) has no rows to speak of
+    page = _node(cls="android.widget.FrameLayout", bounds="[0,200][1080,2200]", children=(
+        _node(rid="search_card", cls="android.widget.ImageButton", bounds="[0,300][1080,500]", clickable=True)
+        + _node("Gmail", bounds="[0,900][270,1100]", clickable=True)))
+    s4 = _screen(_node(rid="workspace", cls="android.widget.ScrollView", bounds="[0,200][1080,2200]", scrollable=True, children=page))
+    assert "(id: search_card)" in s4.compact and "in row" not in s4.compact
 
 
 def test_a_scroll_says_how_many_new_items_came_into_view_and_when_the_list_ends():
@@ -91,6 +97,12 @@ def test_a_scroll_says_how_many_new_items_came_into_view_and_when_the_list_ends(
     assert _scroll_note(a, b, Action(kind="tap", element=3), True) is None
     other = _screen(_node("Settings", rid="other_title", bounds="[0,200][1080,300]"))
     assert _scroll_note(a, other, down, True) is None
+    # items already seen earlier in the task are not new: back up to the top of a list read once
+    from collections import Counter
+    from agent.loop import _row_key, _rows
+    seen = Counter(map(_row_key, _rows(a))) | Counter(map(_row_key, _rows(b)))
+    assert _scroll_note(b, a, up, True, seen) == "0 new items came into view (10 you had already seen); there may be more"
+    assert _scroll_note(a, b, down, True, Counter(map(_row_key, _rows(a)))) == "6 new items came into view (4 you had already seen); there may be more"
     # a view outside the list that comes and goes as it scrolls (a collapsing header) changes the signature, not the list
     b.signature = "another"
     assert _scroll_note(a, b, down, True) == "6 new items came into view; there may be more"
@@ -98,7 +110,8 @@ def test_a_scroll_says_how_many_new_items_came_into_view_and_when_the_list_ends(
 
 def test_the_step_prompt_explains_the_budget_and_the_last_step():
     assert "- STEPS LEFT: shown once the task is near its step limit" in STEP_INSTRUCTIONS
-    assert "On the last step, if the goal is done, or SCREEN or REMEMBERED holds the whole answer, say done now" in STEP_INSTRUCTIONS
+    assert "On the last step, say done if SCREEN or REMEMBERED shows the goal is done, or shows the complete answer" in STEP_INSTRUCTIONS
+    assert "Never guess: if part of the goal or the answer is still unchecked, use fail and say what you found" in STEP_INSTRUCTIONS
     assert "STEPS LEFT" not in step_input("g", "s", step=5, max_steps=10)  # 6 left: not yet
     assert "STEPS LEFT: 5 of 10\n" in step_input("g", "s", step=6, max_steps=10)
     assert "STEPS LEFT: 1 of 10 (this is the last step)\n" in step_input("g", "s", step=10, max_steps=10)
@@ -166,8 +179,8 @@ def test_each_step_carries_the_budget_and_a_scroll_reports_the_lists_end(tmp_pat
     res = asyncio.run(AgentRunner(Songs(), model, ScriptedApprover(True), RunConfig(max_steps=6, data_scope="test_app"))
                       .run("How many songs are there?", task_id="songs", memory=""))
     assert "STEPS LEFT" not in model.prompts[0] and "STEPS LEFT: 3 of 6\n" in model.prompts[3]
-    assert "6 new items came into view; there may be more" in model.prompts[1]
-    assert "4 new items came into view; this is the end of the list" in model.prompts[2]
+    assert "6 new items came into view (4 you had already seen); there may be more" in model.prompts[1]
+    assert "4 new items came into view (6 you had already seen); this is the end of the list" in model.prompts[2]
     assert "the list did not move: it is already at the end of the list" in model.prompts[3]
     assert res.status in ("done", "done_unverified")
 

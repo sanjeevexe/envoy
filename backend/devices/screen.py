@@ -302,15 +302,22 @@ def number_elements(elements: list[Element], width: int, height: int, text_offse
     shown = {e.index: e for e in numbered}
     for e in numbered:
         if not e.label and e.in_list and e.kind not in ("List", "EditText"):
-            e.row = _row_text(e, elements, children, shown)
+            e.row = _row_text(e, elements, children, shown, height)
     return numbered
 
 
-def _row_text(e: Element, elements: list[Element], children: dict[int, list[int]], shown: dict[int, Element]) -> str:
+ROW_MAX_SHARE = 0.25  # a row is at most this share of the screen's height; a bigger container (a launcher page) is no row
+
+
+def _row_text(e: Element, elements: list[Element], children: dict[int, list[int]], shown: dict[int, Element], height: int) -> str:
     """The first label shown inside the list row that holds `e` (the row: the ancestor that is a direct child of the
-    list). Never looks past that row, so it can't take another row's text."""
+    list). Never looks past that row, so it can't take another row's text, and never past a container taller than a row
+    (the home screen's pager is a "list" whose rows are whole pages: its search card was once "in row Gmail")."""
     p = e.parent
     while p is not None and not elements[p].scrollable:
+        y1, y2 = elements[p].bounds[1], elements[p].bounds[3]
+        if height and y2 - y1 > ROW_MAX_SHARE * height:
+            return ""
         if p in shown and shown[p].label:
             return shown[p].label
         stack = list(reversed(children.get(p, [])))
