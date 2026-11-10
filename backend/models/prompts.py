@@ -13,6 +13,7 @@ You are Envoy's phone agent. You operate an Android phone for the user, one acti
 ## What you receive each step
 - GOAL: what the user wants done.
 - TODAY: the phone's own date and time when the task started. Words like today, tomorrow or this Thursday mean dates from it.
+- STEPS LEFT: shown once the task is near its step limit: how many steps remain, this one included. Every action, look or wait uses one. Spend them on the goal itself, not on checking finished work again.
 - PLAN: the steps written at the start of the task. Follow it loosely; the screen is the truth.
 - VISITED: the screens you have already been on in this task, with how many times. Do not keep returning to a screen that did not have what you need; try another part of the app (other tabs, menus, profile or settings).
 - HISTORY: your recent actions and what happened after each (did the screen change, and to what).
@@ -57,6 +58,7 @@ The other fields:
 - Do only what the goal asks. Never pay, buy, cancel or delete anything the goal does not ask for.
 - If an action had no effect, do not repeat it unchanged; try another element, scroll, or go back.
 - If the same screen keeps coming back, change approach.
+- On the last step, if the goal is done, or SCREEN or REMEMBERED holds the whole answer, say done now: there is no later step to say it in.
 - Dismiss pop-ups that block the goal (ratings, promos), but never accept terms, permissions or purchases on the user's behalf unless the goal says so.
 - If the user declined an approval, stop: use fail with the reason.
 - Stay inside the apps the task is about.
@@ -83,12 +85,28 @@ GROUNDING_PROMPT = (
 )
 
 
+STEPS_LEFT_SHOWN = 5  # the budget appears in a step once this many steps or fewer remain
+
+
+def step_line(step: int, max_steps: int) -> str:
+    """How many steps remain, this one included, once few do (else ""). Shown from the first step, "STEP: 1 of 25" made
+    the step model label Amazon's Buy Now irreversible less often in the safety probe (9/20 against 17/20 without it), so it
+    appears only near the end, where it matters: AndroidWorld's 10-step tasks ran out verifying finished work."""
+    left = max_steps - step + 1
+    if left > STEPS_LEFT_SHOWN:
+        return ""
+    return f"STEPS LEFT: {left} of {max_steps}" + (" (this is the last step)" if left <= 1 else "")
+
+
 def step_input(goal: str, screen_compact: str, *, plan: str = "", subgoal: str = "", history: str = "", memory: str = "",
-               feedback: str = "", visited: str = "", today: str = "", remembered: str = "", app_notes: str = "") -> str:
-    """The variable part of a step, after the cached instructions. APP NOTES appear only when the app has some."""
+               feedback: str = "", visited: str = "", today: str = "", remembered: str = "", app_notes: str = "",
+               step: int = 0, max_steps: int = 0) -> str:
+    """The variable part of a step, after the cached instructions. APP NOTES appear only when the app has some; STEPS
+    LEFT only near the end of a budget the loop gives."""
     parts = [
         f"GOAL: {goal}",
         *([f"TODAY: {today}"] if today else []),
+        *([line] if step and max_steps and (line := step_line(step, max_steps)) else []),
         f"PLAN:\n{plan or '(none)'}",
         f"VISITED:\n{visited or '(just started)'}",
         f"HISTORY:\n{history or '(first step)'}",

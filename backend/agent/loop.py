@@ -314,7 +314,7 @@ class AgentRunner:
                                                                       history="\n".join(history[-HISTORY_STEPS:]),
                                                                       memory=memory, feedback=feedback, visited=visited_text(),
                                                                       today=today, remembered="\n".join(f"- {r}" for r in remembered),
-                                                                      app_notes=notes_text)}]
+                                                                      app_notes=notes_text, step=step, max_steps=self.config.max_steps)}]
                 if png:
                     content.append(image_part(png))
                 t_model = time.perf_counter()
@@ -385,7 +385,9 @@ class AgentRunner:
                     if chk.passed or not chk.evaluable:
                         return finish("done" if chk.passed else "done_unverified", result, chk)
                     rejections += 1
-                    if rejections > self.config.max_done_rejections:
+                    if rejections > self.config.max_done_rejections or step >= self.config.max_steps:
+                        # On the last step a rejected done would end the run as a step limit, though the model saw the goal
+                        # done (AndroidWorld: the plan's check expected "name.md" where the app showed "name").
                         return finish("done_unverified", result, chk)
                     feedback = (f"Your done was not confirmed: the plan's check found that {chk.detail}. That check was written before "
                                 f"seeing this app, so it may expect words the app doesn't use. If this screen shows the goal is "
