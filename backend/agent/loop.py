@@ -34,6 +34,7 @@ Status = Literal["done", "done_unverified", "failed", "handoff", "needs_user", "
 
 SCREENSHOT_WIDTH = 540  # a full 1080x2400 frame costs ~3,200 input tokens (Phase 0); half width costs ~4x less
 HISTORY_STEPS = 5
+REPLAN_HISTORY = 20  # history lines a replan sees: what the agent did before the plan was rewritten
 # The model's own words for an action it doesn't mean ("Placeholder to comply with schema", "Mistake: should swipe up"). On
 # AndroidWorld such a back left the app or threw away a form: it is asked again instead of carried out.
 _PLACEHOLDER = re.compile(r"placeholder|schema requires|(required by|comply with|satisfy) (the )?schema|incorrect but|"
@@ -223,8 +224,13 @@ class AgentRunner:
             async def make_plan(current: ScreenState, tried: str = "", step_no: int = 0) -> Plan | None:
                 t0 = time.perf_counter()
                 notes_text, note_ids = self._notes_for(current.package)
+                # A replan sees what was done and kept: without it, the new plan started the task over (copied a file
+                # again, re-added songs already in a playlist).
+                done_so_far = "\n".join(history[-REPLAN_HISTORY:]) if tried else ""
+                kept = "\n".join(f"- {r}" for r in remembered) if tried else ""
                 res = await asyncio.to_thread(self._call, "plan", [{"type": "input_text", "text": plan_input(goal, current.compact, memory, tried, apps, today,
-                                                                                                               app_notes=notes_text)}],
+                                                                                                               app_notes=notes_text, done_so_far=done_so_far,
+                                                                                                               remembered=kept)}],
                                               PLAN_INSTRUCTIONS, self.config.plan_effort, task_id)
                 account(res)
                 new_plan: Plan | None = res.parsed  # type: ignore[assignment]
@@ -300,7 +306,8 @@ class AgentRunner:
                         plan = new_plan
                         plan_text = "\n".join(f"{i}. {x}" for i, x in enumerate(plan.subgoals, 1))
                         out.plan = plan.model_dump()
-                    feedback = "You were going in circles, so the plan was rewritten. Follow the new PLAN and avoid screens that did not help."
+                    feedback = ("You were going in circles, so the plan was rewritten from what you have done so far. Follow the new "
+                                "PLAN, don't redo finished work, and avoid screens that did not help.")
                     history.append(f"(runtime) going in circles ({names[sig]} visited {visits[sig]} times): replanned")
                 prev_sig = sig
 
