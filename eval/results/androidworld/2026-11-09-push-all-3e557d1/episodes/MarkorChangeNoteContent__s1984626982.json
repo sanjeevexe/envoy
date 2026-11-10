@@ -1,0 +1,106 @@
+{
+ "task": "MarkorChangeNoteContent",
+ "seed": 1984626982,
+ "goal": "Update the content of strong_jacket_h1hZ.txt to \"inNqu8UNNtyXBHCZpYp7\" in Markor and change its name to lively_fox_2023_03_22.md.",
+ "score": 1.0,
+ "aw_run_time_s": 52.6,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 22:16:09.302968",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-all-3e557d1-1109-221517-0554",
+  "goal": "Update the content of strong_jacket_h1hZ.txt to \"inNqu8UNNtyXBHCZpYp7\" in Markor and change its name to lively_fox_2023_03_22.md.",
+  "max_steps": 12,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Updated content of strong_jacket_h1hZ.txt to \"inNqu8UNNtyXBHCZpYp7\" and renamed it to lively_fox_2023_03_22.md in Markor.",
+  "done": true,
+  "answer": "Updated content of strong_jacket_h1hZ.txt to \"inNqu8UNNtyXBHCZpYp7\" and renamed it to lively_fox_2023_03_22.md in Markor.",
+  "steps_device": 10,
+  "iterations": 11,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 4,
+   "type": 2,
+   "back": 2,
+   "long_press": 1,
+   "done": 1
+  },
+  "model_calls": 12,
+  "input_tokens": 29009,
+  "cached_tokens": 19824,
+  "output_tokens": 1939,
+  "reasoning_tokens": 711,
+  "cost_usd": 0.079485,
+  "cost_at_standard_usd": 0.079485,
+  "duration_s": 46.85,
+  "model_s": 32.97,
+  "device_s": 13.88,
+  "connect_s": 0.88,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Markor",
+   "subgoals": [
+    "Open Markor",
+    "Open the file strong_jacket_h1hZ.txt",
+    "Replace its entire content with inNqu8UNNtyXBHCZpYp7 and save",
+    "Rename the file to lively_fox_2023_03_22.md"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "lively_fox_2023_03_22.md",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'lively_fox_2023_03_22.md' is visible"
+  },
+  "trace_dir": "data/runs/aw-2026-11-09-push-all-3e557d1-1109-221517-0554",
+  "envoy_commit": "3e557d1c7c51335df35a449886077200abd2a357",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-all-3e557d1/traces/MarkorChangeNoteContent__s1984626982.jsonl.gz",
+  "wall_s": 49.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.1
+  }
+ }
+}

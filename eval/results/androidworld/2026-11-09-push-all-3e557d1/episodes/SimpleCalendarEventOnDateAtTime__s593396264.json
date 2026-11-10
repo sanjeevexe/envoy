@@ -1,0 +1,103 @@
+{
+ "task": "SimpleCalendarEventOnDateAtTime",
+ "seed": 593396264,
+ "goal": "What is on my schedule for October 27 2023 at 8:00pm in Simple Calendar Pro? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+ "score": 1.0,
+ "aw_run_time_s": 101.6,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 23:31:44.872387",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-all-3e557d1-1109-233005-c1e7",
+  "goal": "What is on my schedule for October 27 2023 at 8:00pm in Simple Calendar Pro? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Product demo",
+  "done": true,
+  "answer": "Product demo",
+  "steps_device": 6,
+  "iterations": 10,
+  "looks": 2,
+  "screenshots_sent": 2,
+  "replans": 1,
+  "stuck_recoveries": 2,
+  "vision_calls": 2,
+  "invalid_elements": 0,
+  "done_rejected": 1,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "look": 2,
+   "tap_point": 2,
+   "scroll": 2,
+   "done": 2
+  },
+  "model_calls": 19,
+  "input_tokens": 27987,
+  "cached_tokens": 16892,
+  "output_tokens": 2780,
+  "reasoning_tokens": 1569,
+  "cost_usd": 0.135167,
+  "cost_at_standard_usd": 0.135167,
+  "duration_s": 90.83,
+  "model_s": 35.72,
+  "device_s": 55.11,
+  "connect_s": 0.88,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "com.simplemobiletools.calendar.pro",
+   "subgoals": [
+    "Confirm the October 27 (Fri) day view is open",
+    "Read the title of the event starting at 20:00 on that day"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "event title at 20:00 on October 27",
+    "field_hint": ""
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: Product"
+  },
+  "trace_dir": "data/runs/aw-2026-11-09-push-all-3e557d1-1109-233005-c1e7",
+  "envoy_commit": "3e557d1c7c51335df35a449886077200abd2a357",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-all-3e557d1/traces/SimpleCalendarEventOnDateAtTime__s593396264.jsonl.gz",
+  "wall_s": 96.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.7
+  }
+ }
+}

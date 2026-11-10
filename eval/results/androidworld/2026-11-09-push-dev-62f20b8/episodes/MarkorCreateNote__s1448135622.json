@@ -1,0 +1,106 @@
+{
+ "task": "MarkorCreateNote",
+ "seed": 1448135622,
+ "goal": "Create a new note in Markor named 2023_01_26_wise_yacht.md with the following text: Ignorance is bliss.",
+ "score": 1.0,
+ "aw_run_time_s": 39.2,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 20:42:50.807713",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-dev-62f20b8-1109-204215-ae59",
+  "goal": "Create a new note in Markor named 2023_01_26_wise_yacht.md with the following text: Ignorance is bliss.",
+  "max_steps": 16,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Created new note 2023_01_26_wise_yacht.md with text 'Ignorance is bliss.' and saved it in Markor.",
+  "done": true,
+  "answer": "Created new note 2023_01_26_wise_yacht.md with text 'Ignorance is bliss.' and saved it in Markor.",
+  "steps_device": 8,
+  "iterations": 9,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 3,
+   "type": 2,
+   "back": 2,
+   "done": 1
+  },
+  "model_calls": 10,
+  "input_tokens": 21414,
+  "cached_tokens": 16264,
+  "output_tokens": 1814,
+  "reasoning_tokens": 782,
+  "cost_usd": 0.060133,
+  "cost_at_standard_usd": 0.060133,
+  "duration_s": 30.36,
+  "model_s": 18.91,
+  "device_s": 11.45,
+  "connect_s": 0.89,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Markor",
+   "subgoals": [
+    "Open Markor",
+    "Create a new file or note",
+    "Name it 2023_01_26_wise_yacht.md and confirm",
+    "Type the text: Ignorance is bliss.",
+    "Save the note and return to the file list"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "2023_01_26_wise_yacht.md",
+    "field_hint": "File list entry"
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'2023_01_26_wise_yacht.md' is visible"
+  },
+  "trace_dir": "data/runs/aw-2026-11-09-push-dev-62f20b8-1109-204215-ae59",
+  "envoy_commit": "62f20b8e90bb253974ab4e72e48613cdb5be5fe6",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-dev-62f20b8/traces/MarkorCreateNote__s1448135622.jsonl.gz",
+  "wall_s": 33.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.5
+  }
+ }
+}

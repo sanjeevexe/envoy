@@ -1,0 +1,169 @@
+{
+ "task": "ExpenseDeleteMultiple",
+ "seed": 1218531356,
+ "goal": "Delete the following expenses from pro expense: Ride-Sharing, Flight Tickets, Taxi Fare.",
+ "score": 1.0,
+ "aw_run_time_s": 89.4,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 22:09:26.857408",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-all-3e557d1-1109-220800-3961",
+  "goal": "Delete the following expenses from pro expense: Ride-Sharing, Flight Tickets, Taxi Fare.",
+  "max_steps": 20,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Deleted Ride-Sharing, Flight Tickets, and Taxi Fare from Pro Expense. Expense Logs now shows 'NO EXPENSE LOGS', confirming none of the three remain.",
+  "done": true,
+  "answer": "Deleted Ride-Sharing, Flight Tickets, and Taxi Fare from Pro Expense. Expense Logs now shows 'NO EXPENSE LOGS', confirming none of the three remain.",
+  "steps_device": 17,
+  "iterations": 20,
+  "looks": 2,
+  "screenshots_sent": 4,
+  "replans": 1,
+  "stuck_recoveries": 1,
+  "vision_calls": 2,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 13,
+   "look": 2,
+   "tap_point": 2,
+   "back": 1,
+   "done": 1
+  },
+  "model_calls": 28,
+  "input_tokens": 51834,
+  "cached_tokens": 36472,
+  "output_tokens": 4531,
+  "reasoning_tokens": 2165,
+  "cost_usd": 0.175195,
+  "cost_at_standard_usd": 0.175195,
+  "duration_s": 81.13,
+  "model_s": 50.19,
+  "device_s": 30.94,
+  "connect_s": 0.88,
+  "approvals": [
+   {
+    "step": 3,
+    "description": "tap \"\" in com.arduia.expense",
+    "reasons": [
+     "rule: target id 'com.arduia.expense:id/btn_delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 4,
+    "description": "tap \"CONFIRM\" in com.arduia.expense",
+    "reasons": [
+     "rule: target says 'CONFIRM'",
+     "screen: confirming something that can't be taken back",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 6,
+    "description": "tap \"\" in com.arduia.expense",
+    "reasons": [
+     "rule: target id 'com.arduia.expense:id/btn_delete'"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 7,
+    "description": "tap \"CONFIRM\" in com.arduia.expense",
+    "reasons": [
+     "rule: target says 'CONFIRM'",
+     "screen: confirming something that can't be taken back",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 9,
+    "description": "tap \"\" in com.arduia.expense",
+    "reasons": [
+     "rule: target id 'com.arduia.expense:id/btn_delete'"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 10,
+    "description": "tap \"CONFIRM\" in com.arduia.expense",
+    "reasons": [
+     "rule: target says 'CONFIRM'",
+     "screen: confirming something that can't be taken back",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Pro Expense",
+   "subgoals": [
+    "Open Expense Logs from the navigation menu, not the Totals or this-week view",
+    "Scroll through the full Expense Logs list looking for Ride-Sharing, Flight Tickets, or Taxi Fare",
+    "If any of those three remain, open that entry, tap delete, and confirm deletion",
+    "Repeat from Expense Logs until none of the three named expenses remain",
+    "Stay on Expense Logs to confirm the three names are absent"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "Ride-Sharing, Flight Tickets, and Taxi Fare are absent from the Expense Logs list",
+    "field_hint": "Expense Logs"
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: Expense, Expense, Logs, EXPENSE"
+  },
+  "trace_dir": "data/runs/aw-2026-11-09-push-all-3e557d1-1109-220800-3961",
+  "envoy_commit": "3e557d1c7c51335df35a449886077200abd2a357",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-all-3e557d1/traces/ExpenseDeleteMultiple__s1218531356.jsonl.gz",
+  "wall_s": 83.6,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.3
+  }
+ }
+}

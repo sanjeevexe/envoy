@@ -1,0 +1,130 @@
+{
+ "task": "RecipeAddMultipleRecipesFromMarkor2",
+ "seed": 1406555389,
+ "goal": "Add the recipes from recipes.txt in Markor that take 10 mins to prepare into the Broccoli recipe app.",
+ "score": 0.0,
+ "aw_run_time_s": 185.9,
+ "aw_episode_length": 60,
+ "agent": "envoy",
+ "finished": "2026-11-09 21:04:11.164333",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-dev-62f20b8-1109-210109-1310",
+  "goal": "Add the recipes from recipes.txt in Markor that take 10 mins to prepare into the Broccoli recipe app.",
+  "max_steps": 60,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "cost_limit",
+  "result": "stopped at $0.507",
+  "done": false,
+  "answer": null,
+  "steps_device": 47,
+  "iterations": 47,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 2,
+   "tap": 12,
+   "scroll": 10,
+   "type": 20,
+   "back": 3
+  },
+  "model_calls": 50,
+  "input_tokens": 165731,
+  "cached_tokens": 88488,
+  "output_tokens": 8994,
+  "reasoning_tokens": 3142,
+  "cost_usd": 0.50655,
+  "cost_at_standard_usd": 0.50655,
+  "duration_s": 172.97,
+  "model_s": 95.81,
+  "device_s": 77.16,
+  "connect_s": 0.88,
+  "approvals": [
+   {
+    "step": 15,
+    "description": "tap \"SAVE\" in com.flauschcode.broccoli",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 26,
+    "description": "tap \"SAVE\" in com.flauschcode.broccoli",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 36,
+    "description": "tap \"SAVE\" in com.flauschcode.broccoli",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Broccoli",
+   "subgoals": [
+    "Fill the Raspberry Almond Smoothie form: Description \"A delicious and healthy choice for any time of the day.\", Servings \"2 servings\", Time \"10 mins\"",
+    "Scroll down and fill Ingredients \"n/a\" and Directions \"Blend together raspberries, almond milk, banana, and a scoop of almond butter until smooth. Garnish with fresh herbs for a more vibrant taste.\"",
+    "Tap SAVE and confirm the Raspberry Almond Smoothie details screen",
+    "Go back to the Recipes list in Broccoli",
+    "Confirm Beef Stir Fry, Pan-Seared Salmon with Quinoa, and Raspberry Almond Smoothie are all listed"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Raspberry Almond Smoothie",
+    "field_hint": ""
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-2026-11-09-push-dev-62f20b8-1109-210109-1310",
+  "envoy_commit": "62f20b8e90bb253974ab4e72e48613cdb5be5fe6",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-dev-62f20b8/traces/RecipeAddMultipleRecipesFromMarkor2__s1406555389.jsonl.gz",
+  "wall_s": 175.7,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.5
+  }
+ }
+}

@@ -1,0 +1,103 @@
+{
+ "task": "RecipeDeleteMultipleRecipesWithConstraint",
+ "seed": 3296470235,
+ "goal": "Delete the recipes from Broccoli app that use black garlic in the directions.",
+ "score": 1.0,
+ "aw_run_time_s": 184.7,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 23:05:34.435017",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-all-3e557d1-1109-230234-b1ab",
+  "goal": "Delete the recipes from Broccoli app that use black garlic in the directions.",
+  "max_steps": 40,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "failed",
+  "result": "Checked and kept (no black garlic in directions): Avocado Toast with Egg, Baked Cod with Lemon and Dill, Beef Stir Fry, Caprese Salad Skewers, Cauliflower Fried \"Rice\", Chicken Alfredo Pasta, Chicken Caesar Salad Wrap, Chickpea Vegetable Soup, Garlic Butter Shrimp. No deletions made yet. Still unchecked on Recipes list: Grilled Cheese with Tomato and Basil (two entries), Lemon Garlic Tilapia (two entries), Pan-Seared Salmon with Quinoa (two entries), Quinoa Salad with Vegetables, and any recipes further below, so cannot confirm all black-garlic recipes deleted.",
+  "done": true,
+  "answer": null,
+  "steps_device": 34,
+  "iterations": 40,
+  "looks": 5,
+  "screenshots_sent": 9,
+  "replans": 2,
+  "stuck_recoveries": 2,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 14,
+   "scroll": 9,
+   "look": 5,
+   "back": 10,
+   "fail": 1
+  },
+  "model_calls": 43,
+  "input_tokens": 116784,
+  "cached_tokens": 75644,
+  "output_tokens": 8384,
+  "reasoning_tokens": 3511,
+  "cost_usd": 0.347369,
+  "cost_at_standard_usd": 0.347369,
+  "duration_s": 175.07,
+  "model_s": 112.28,
+  "device_s": 62.79,
+  "connect_s": 0.89,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Broccoli",
+   "subgoals": [
+    "Check the full Directions for Beef Stir Fry on this screen; delete it via More options only if it says black garlic, otherwise go back",
+    "From the Recipes list, open each recipe not yet checked, continuing below Avocado Toast, Baked Cod, and Beef Stir Fry",
+    "For each recipe, read the full Directions and delete it via More options > Delete only if the directions use black garlic",
+    "Keep every recipe whose directions do not use black garlic and return to the Recipes list",
+    "Finish on the Recipes list after the last recipe has been checked"
+   ],
+   "success_check": {
+    "kind": "app_foreground",
+    "value": "com.flauschcode.broccoli",
+    "field_hint": ""
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-2026-11-09-push-all-3e557d1-1109-230234-b1ab",
+  "envoy_commit": "3e557d1c7c51335df35a449886077200abd2a357",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-all-3e557d1/traces/RecipeDeleteMultipleRecipesWithConstraint__s3296470235.jsonl.gz",
+  "wall_s": 177.5,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.6
+  }
+ }
+}

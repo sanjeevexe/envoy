@@ -1,0 +1,128 @@
+{
+ "task": "MarkorDeleteAllNotes",
+ "seed": 13104511,
+ "goal": "Delete all my notes in Markor.",
+ "score": 1.0,
+ "aw_run_time_s": 70.6,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 22:21:41.115191",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-all-3e557d1-1109-222031-9050",
+  "goal": "Delete all my notes in Markor.",
+  "max_steps": 14,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "All notes in Markor have been deleted. The Files view now shows only the '..' and '.app' folders, with no .md note files remaining.",
+  "done": true,
+  "answer": "All notes in Markor have been deleted. The Files view now shows only the '..' and '.app' folders, with no .md note files remaining.",
+  "steps_device": 13,
+  "iterations": 14,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "scroll": 2,
+   "long_press": 1,
+   "tap": 9,
+   "done": 1
+  },
+  "model_calls": 16,
+  "input_tokens": 37888,
+  "cached_tokens": 25152,
+  "output_tokens": 3962,
+  "reasoning_tokens": 2320,
+  "cost_usd": 0.135214,
+  "cost_at_standard_usd": 0.135214,
+  "duration_s": 64.46,
+  "model_s": 45.85,
+  "device_s": 18.61,
+  "connect_s": 0.88,
+  "approvals": [
+   {
+    "step": 6,
+    "description": "tap \"Delete\" in net.gsantner.markor",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 7,
+    "description": "tap \"OK\" in net.gsantner.markor",
+    "reasons": [
+     "screen: confirming something that can't be taken back",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Markor",
+   "subgoals": [
+    "Open the To-Do tab and clear any remaining to-do note content",
+    "Open the QuickNote tab and clear any remaining quick-note content",
+    "Open the More tab and check for any other note locations or remaining notes",
+    "Return to the Files tab and select any remaining .md note files, without re-deleting the three already removed",
+    "Use Delete and confirm with OK if any remaining files were selected",
+    "Return to Files and confirm only the '..' and '.app' folders remain"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "confirmation that Files, To-Do, and QuickNote contain no remaining notes",
+    "field_hint": ""
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: Markor, Files"
+  },
+  "trace_dir": "data/runs/aw-2026-11-09-push-all-3e557d1-1109-222031-9050",
+  "envoy_commit": "3e557d1c7c51335df35a449886077200abd2a357",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-all-3e557d1/traces/MarkorDeleteAllNotes__s13104511.jsonl.gz",
+  "wall_s": 67.0,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.7
+  }
+ }
+}

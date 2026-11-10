@@ -1,0 +1,103 @@
+{
+ "task": "NotesRecipeIngredientCount",
+ "seed": 4265237062,
+ "goal": "What quantity of spirulina do I need for the recipe 'Chicken Alfredo' in the Joplin app? Express your answer in the format <amount> <unit> where both the amount and unit exactly match the format in the recipe.",
+ "score": 1.0,
+ "aw_run_time_s": 31.4,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 22:30:41.826104",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-all-3e557d1-1109-223018-5de5",
+  "goal": "What quantity of spirulina do I need for the recipe 'Chicken Alfredo' in the Joplin app? Express your answer in the format <amount> <unit> where both the amount and unit exactly match the format in the recipe.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "3/4 cup",
+  "done": true,
+  "answer": "3/4 cup",
+  "steps_device": 4,
+  "iterations": 5,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 2,
+   "type": 1,
+   "done": 1
+  },
+  "model_calls": 6,
+  "input_tokens": 12723,
+  "cached_tokens": 9144,
+  "output_tokens": 967,
+  "reasoning_tokens": 438,
+  "cost_usd": 0.035485,
+  "cost_at_standard_usd": 0.035485,
+  "duration_s": 17.85,
+  "model_s": 10.43,
+  "device_s": 7.42,
+  "connect_s": 0.9,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Joplin",
+   "subgoals": [
+    "Open Joplin",
+    "Find and open the note titled 'Chicken Alfredo'",
+    "Read the spirulina quantity from the recipe ingredients"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "quantity of spirulina needed for the Chicken Alfredo recipe, in '<amount> <unit>' format exactly as shown",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: 3, 4"
+  },
+  "trace_dir": "data/runs/aw-2026-11-09-push-all-3e557d1-1109-223018-5de5",
+  "envoy_commit": "3e557d1c7c51335df35a449886077200abd2a357",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-all-3e557d1/traces/NotesRecipeIngredientCount__s4265237062.jsonl.gz",
+  "wall_s": 20.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.6
+  }
+ }
+}

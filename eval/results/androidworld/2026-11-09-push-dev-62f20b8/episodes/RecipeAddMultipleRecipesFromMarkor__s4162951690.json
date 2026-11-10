@@ -1,0 +1,126 @@
+{
+ "task": "RecipeAddMultipleRecipesFromMarkor",
+ "seed": 4162951690,
+ "goal": "Add the recipes from recipes.txt in Markor to the Broccoli recipe app.",
+ "score": 1.0,
+ "aw_run_time_s": 144.5,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 21:01:03.272263",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-dev-62f20b8-1109-205843-005f",
+  "goal": "Add the recipes from recipes.txt in Markor to the Broccoli recipe app.",
+  "max_steps": 60,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Added all recipes from recipes.txt to Broccoli, including BBQ Chicken Quesadillas which is now confirmed in the Recipes list.",
+  "done": true,
+  "answer": "Added all recipes from recipes.txt to Broccoli, including BBQ Chicken Quesadillas which is now confirmed in the Recipes list.",
+  "steps_device": 37,
+  "iterations": 38,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 2,
+   "tap": 10,
+   "type": 19,
+   "scroll": 5,
+   "back": 1,
+   "done": 1
+  },
+  "model_calls": 41,
+  "input_tokens": 113604,
+  "cached_tokens": 69268,
+  "output_tokens": 7324,
+  "reasoning_tokens": 2697,
+  "cost_usd": 0.337678,
+  "cost_at_standard_usd": 0.337678,
+  "duration_s": 135.15,
+  "model_s": 77.72,
+  "device_s": 57.43,
+  "connect_s": 0.89,
+  "approvals": [
+   {
+    "step": 12,
+    "description": "tap \"SAVE\" in com.flauschcode.broccoli",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 32,
+    "description": "tap \"SAVE\" in com.flauschcode.broccoli",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Broccoli",
+   "subgoals": [
+    "Fill Description as 'A delicious and healthy choice for any time of the day.', Servings '8 servings', and Time '20 mins'",
+    "Fill Ingredients as 'per individual taste'",
+    "Scroll down, fill Directions as 'Mix shredded cooked chicken with BBQ sauce. Place on tortillas with cheese, fold and cook until crispy. Garnish with fresh herbs for a more vibrant taste.'",
+    "Tap SAVE for BBQ Chicken Quesadillas",
+    "Go back to the Recipes list and confirm BBQ Chicken Quesadillas is listed"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "BBQ Chicken Quesadillas",
+    "field_hint": ""
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'BBQ Chicken Quesadillas' is visible"
+  },
+  "trace_dir": "data/runs/aw-2026-11-09-push-dev-62f20b8-1109-205843-005f",
+  "envoy_commit": "62f20b8e90bb253974ab4e72e48613cdb5be5fe6",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-dev-62f20b8/traces/RecipeAddMultipleRecipesFromMarkor__s4162951690.jsonl.gz",
+  "wall_s": 137.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

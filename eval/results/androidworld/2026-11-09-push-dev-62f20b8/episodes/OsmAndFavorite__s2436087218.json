@@ -1,0 +1,115 @@
+{
+ "task": "OsmAndFavorite",
+ "seed": 2436087218,
+ "goal": "Add a favorite location marker for 47.1303814, 9.5930117 in the OsmAnd maps app.",
+ "score": 1.0,
+ "aw_run_time_s": 46.3,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 20:52:35.563354",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-dev-62f20b8-1109-205151-8372",
+  "goal": "Add a favorite location marker for 47.1303814, 9.5930117 in the OsmAnd maps app.",
+  "max_steps": 13,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Added favorite location marker for 47.1303814, 9.5930117 in OsmAnd; it appears as '47.1303814, 9.5930117 · Favorites'.",
+  "done": true,
+  "answer": "Added favorite location marker for 47.1303814, 9.5930117 in OsmAnd; it appears as '47.1303814, 9.5930117 · Favorites'.",
+  "steps_device": 7,
+  "iterations": 8,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 4,
+   "type": 2,
+   "done": 1
+  },
+  "model_calls": 9,
+  "input_tokens": 20694,
+  "cached_tokens": 10924,
+  "output_tokens": 1879,
+  "reasoning_tokens": 976,
+  "cost_usd": 0.078845,
+  "cost_at_standard_usd": 0.078845,
+  "duration_s": 36.2,
+  "model_s": 20.18,
+  "device_s": 16.02,
+  "connect_s": 0.88,
+  "approvals": [
+   {
+    "step": 7,
+    "description": "tap \"Save\" in net.osmand",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "OsmAnd",
+   "subgoals": [
+    "Open OsmAnd",
+    "Tap Search and enter 47.1303814, 9.5930117",
+    "Select the coordinate result to show it on the map",
+    "Tap Add to favorites and confirm Save/Done",
+    "Open My Places > Favorites to confirm the entry"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "47.1303814",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'47.1303814' is visible"
+  },
+  "trace_dir": "data/runs/aw-2026-11-09-push-dev-62f20b8-1109-205151-8372",
+  "envoy_commit": "62f20b8e90bb253974ab4e72e48613cdb5be5fe6",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-dev-62f20b8/traces/OsmAndFavorite__s2436087218.jsonl.gz",
+  "wall_s": 41.9,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.3
+  }
+ }
+}

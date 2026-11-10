@@ -1,0 +1,470 @@
+[
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-203917-bf74",
+  20,
+  "done",
+  {
+   "type": "done",
+   "result": "Moved holiday_photos.jpg from Podcasts to DCIM in the same storage area; the Files app showed 'Moving 1 item.' after confirming MOVE in DCIM."
+  },
+  false,
+  "read",
+  "read",
+  0.0143208
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-203917-bf74",
+  20,
+  "done",
+  {
+   "type": "done",
+   "result": "Moved holiday_photos.jpg from Podcasts to DCIM in the sdk_gphone storage area; the Files app showed 'Moving 1 item' after confirming MOVE in DCIM."
+  },
+  false,
+  "read",
+  "read",
+  0.016452
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-203917-bf74",
+  20,
+  "done",
+  {
+   "type": "done",
+   "result": "Moved holiday_photos.jpg from Podcasts to DCIM in the sdk_gphone storage area; the Files app showed 'Moving 1 item.' and returned to Podcasts where the file is no longer listed."
+  },
+  false,
+  "read",
+  "read",
+  0.0123032
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-204959-7271",
+  10,
+  "done",
+  {
+   "type": "fail",
+   "reason": "Could not determine the number of to-dos in the 'Ideas' folder: the current screen shows an opened 'Health' note under All notes, not the Ideas folder's to-do list, and no count was captured in earlier steps."
+  },
+  false,
+  "read",
+  "read",
+  0.0078568
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-204959-7271",
+  10,
+  "done",
+  {
+   "type": "fail",
+   "reason": "Could not determine the number of to-dos in the 'Ideas' folder: no count was recorded in earlier steps, and the current screen shows an individual 'Workout Routine' note under Health rather than the Ideas folder list."
+  },
+  false,
+  "read",
+  "read",
+  0.0072704
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-204959-7271",
+  10,
+  "done",
+  {
+   "type": "fail",
+   "reason": "Could not determine the number of to-dos in the 'Ideas' folder: the current screen shows a Health note (Workout Routine) and no Ideas folder list/count was captured in this task."
+  },
+  false,
+  "read",
+  "read",
+  0.0045248
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-212301-004b",
+  12,
+  "done",
+  {
+   "type": "done",
+   "result": "Resent the message 'Inconceivable!' to Noa Mohammed in Simple SMS Messenger."
+  },
+  false,
+  "read",
+  "read",
+  0.0060744
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-212301-004b",
+  12,
+  "done",
+  {
+   "type": "done",
+   "result": "Resent the last message \"Inconceivable!\" to Noa Mohammed in Simple SMS Messenger; it now appears again as the most recent message in the conversation."
+  },
+  false,
+  "read",
+  "read",
+  0.003936
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-212301-004b",
+  12,
+  "done",
+  {
+   "type": "done",
+   "result": "Resent \"Inconceivable!\" to Noa Mohammed in the same conversation; it now appears as the latest message in the thread."
+  },
+  false,
+  "read",
+  "read",
+  0.004256
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-213105-3f53",
+  10,
+  "done",
+  {
+   "type": "done",
+   "result": "6"
+  },
+  true,
+  "read",
+  "read",
+  0.0196384
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-213105-3f53",
+  10,
+  "done",
+  {
+   "type": "done",
+   "result": "6"
+  },
+  true,
+  "read",
+  "read",
+  0.021060799999999998
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-213105-3f53",
+  10,
+  "done",
+  {
+   "type": "done",
+   "result": "6"
+  },
+  true,
+  "read",
+  "read",
+  0.010940799999999999
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-203259-d70e",
+  10,
+  "done",
+  {
+   "type": "done",
+   "result": "Timer created showing 00h 16m 35s and not started."
+  },
+  false,
+  "read",
+  "read",
+  0.0065784
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-203259-d70e",
+  10,
+  "done",
+  {
+   "type": "done",
+   "result": "Timer created with 0 hours, 16 minutes, and 35 seconds (shows 00h 16m 35s). Timer was not started."
+  },
+  false,
+  "read",
+  "read",
+  0.0031536
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-203259-d70e",
+  10,
+  "done",
+  {
+   "type": "done",
+   "result": "Timer created with 0 hours, 16 minutes, and 35 seconds (00h 16m 35s) and not started."
+  },
+  false,
+  "read",
+  "read",
+  0.0031336
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-204335-0c38",
+  14,
+  "done",
+  {
+   "type": "done",
+   "result": "Deleted all notes in Markor: art_project_sketches_st16.md, backup_favorite_book_quotes.md, and final_budget_home_renovation.md. The Files list now shows only the '..' and '.app' folders with no .md notes remaining."
+  },
+  false,
+  "read",
+  "read",
+  0.0083384
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-204335-0c38",
+  14,
+  "done",
+  {
+   "type": "done",
+   "result": "All notes in Markor were deleted. The Files list now only shows the .. and .app folders; the 3 note files (art_project_sketches_st16.md, backup_favorite_book_quotes.md, final_budget_home_renovation.md) were deleted."
+  },
+  false,
+  "read",
+  "read",
+  0.0061536
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-204335-0c38",
+  14,
+  "done",
+  {
+   "type": "done",
+   "result": "All notes in Markor were deleted. The Files list was verified to show only the Folders '..' and '.app' remaining, with the 3 note files (art_project_sketches_st16.md, backup_favorite_book_quotes.md, final_budget_home_renovation.md) gone."
+  },
+  false,
+  "read",
+  "read",
+  0.0069736
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-212501-b416",
+  10,
+  "done",
+  {
+   "type": "done",
+   "result": "135"
+  },
+  true,
+  "read",
+  "read",
+  0.009302399999999999
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-212501-b416",
+  10,
+  "done",
+  {
+   "type": "done",
+   "result": "135"
+  },
+  true,
+  "read",
+  "read",
+  0.0074168
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-212501-b416",
+  10,
+  "done",
+  {
+   "type": "fail",
+   "reason": "Found an October 12, 2023 8:45 AM track with total/moving time 2:15:00 (135 minutes), but its category was not confirmed as skiing before the step limit, so the skiing activity cannot be verified."
+  },
+  false,
+  "read",
+  "read",
+  0.0082168
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-211708-4f7c",
+  14,
+  "done",
+  {
+   "type": "done",
+   "result": "Deleted all events on 2023-10-27 (Review session for Project X, Catch up on Project X, and Call with the Team). The October 27 day view now shows no events."
+  },
+  false,
+  "read",
+  "read",
+  0.0098184
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-211708-4f7c",
+  14,
+  "done",
+  {
+   "type": "done",
+   "result": "Deleted all calendar events on 2023-10-27 (Review session for Project X, Catch up on Project X, and Call with the Team). The October 27 day view now shows no events."
+  },
+  false,
+  "read",
+  "read",
+  0.0094384
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-211708-4f7c",
+  14,
+  "done",
+  {
+   "type": "done",
+   "result": "Deleted all calendar events on 2023-10-27 in Simple Calendar Pro. The October 27 day view now shows no events."
+  },
+  false,
+  "read",
+  "read",
+  0.0109248
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-211055-e668",
+  32,
+  "done",
+  {
+   "type": "fail",
+   "reason": "Songs were being rebuilt in queue in order Through the Storm, Hidden Paths, Forever Young, Whispers of the Past, Heartbeat Away, but the final playing-queue screen was not opened to confirm all five are listed in that order; current screen only shows Through the Storm as now playing."
+  },
+  false,
+  "read",
+  "read",
+  0.0126184
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-211055-e668",
+  32,
+  "done",
+  {
+   "type": "fail",
+   "reason": "Could not complete within step limit: queue rebuild had Through the Storm, Hidden Paths, and Forever Young added, but Whispers of the Past and Heartbeat Away still remained to add and verify in order."
+  },
+  false,
+  "read",
+  "read",
+  0.0078408
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-211055-e668",
+  32,
+  "done",
+  {
+   "type": "fail",
+   "reason": "Could not verify complete queue before step limit. Remembered progress shows Through the Storm, Hidden Paths, and Forever Young were added during rebuild, and later Add to playing queue taps were attempted, but the final Now Playing screen only confirms Through the Storm is playing; Whispers of the Past and Heartbeat Away in correct final order were not confirmed in the playing queue."
+  },
+  false,
+  "read",
+  "read",
+  0.0073808
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-212557-d1c7",
+  10,
+  "done",
+  {
+   "type": "fail",
+   "reason": "Found this week's tracks (Mon Oct 9\u2013Sun Oct 15, 2023), including Scenic Cycling on Oct 10 at 11.60 mi, but the screen/remembered notes do not show which tracks are categorized as mountain biking. The category for Scenic Cycling and the other candidates still needs to be checked before converting the longest mountain-biking distance to meters."
+  },
+  false,
+  "read",
+  "read",
+  0.0133184
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-212557-d1c7",
+  10,
+  "done",
+  {
+   "type": "fail",
+   "reason": "Found this week's tracks (Mon Oct 9\u2013Sun Oct 15): Wave Exploration 8.09 mi, Road Bike Ride 8.65 mi, Downhill Skiing 5.00 mi, Scenic Cycling 11.60 mi (Oct 10), Road Bike Session 0.62 mi, Skill work 0.75 mi, City Stroll 4.90 mi and 9.20 mi, but the current Stats screen for Scenic Cycling shows only name/date/distance (11.60 mi) and no activity category, so I could not verify which of these are mountain biking and therefore cannot reliably determine the longest mountain-biking distance in meters."
+  },
+  false,
+  "read",
+  "read",
+  0.010727200000000001
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-212557-d1c7",
+  10,
+  "done",
+  {
+   "type": "fail",
+   "reason": "Found this week's tracks (Oct 9-15) including Scenic Cycling on Oct 10 at 11.60 mi, but the current Stats screen does not show its activity category/type, and no mountain-biking category was verified for the candidate tracks. Therefore the longest mountain-biking distance in meters cannot be confirmed."
+  },
+  false,
+  "read",
+  "read",
+  0.0073872
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-212709-d0d8",
+  10,
+  "done",
+  {
+   "type": "fail",
+   "reason": "Only one running activity this week was verified: the Saturday Oct 14 track, duration 30:00 (30 minutes). The activity types for the other Mon Oct 9\u2013Sun Oct 15 tracks (e.g. Friday Quick Sweat 1:15:00 and others) were not checked, so the total running duration in minutes cannot be confirmed."
+  },
+  false,
+  "read",
+  "read",
+  0.0131344
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-212709-d0d8",
+  10,
+  "done",
+  {
+   "type": "fail",
+   "reason": "Only confirmed running activity this week is Saturday Oct 14 (Yesterday) with duration 30:00 = 30 minutes. The types of the other activities in Mon Oct 9\u2013Sun Oct 15 (Quick Sweat, Alpine Skiing, Mountain Bike, Skateboard, Crag Climbing, Trail Ride, Yacht Sailing, Surf Trek, etc.) were not all checked, so the total running duration cannot be completed reliably."
+  },
+  false,
+  "read",
+  "read",
+  0.0128344
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-212709-d0d8",
+  10,
+  "done",
+  {
+   "type": "fail",
+   "reason": "Found one confirmed running activity this week: Oct 14, 30 minutes. The remaining Mon Oct 9\u2013Sun Oct 15 activities (including Friday 'Quick Sweat' 1:15:00 and others) had not all had their activity types verified, so a reliable total running duration in minutes could not be determined."
+  },
+  false,
+  "read",
+  "read",
+  0.0149944
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-213301-bb0b",
+  10,
+  "done",
+  {
+   "type": "done",
+   "result": "Attend training session, Call client for follow-up, Research market trends, Change Air Filter, Renew Driver's License, Clean Out Fridge, Grocery Shopping, Learn to Play Guitar, Research Vacation Destinations, Water Plants, Read 'The Martian', Reply to Emails, Submit Expense Report, Organize Closet"
+  },
+  true,
+  "read",
+  "read",
+  0.015498399999999999
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-213301-bb0b",
+  10,
+  "done",
+  {
+   "type": "done",
+   "result": "Attend training session, Call client for follow-up, Research market trends, Change Air Filter, Renew Driver's License, Clean Out Fridge, Grocery Shopping, Learn to Play Guitar, Research Vacation Destinations, Water Plants, Read 'The Martian', Reply to Emails, Submit Expense Report, Organize Closet"
+  },
+  true,
+  "read",
+  "read",
+  0.0131344
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-213301-bb0b",
+  10,
+  "done",
+  {
+   "type": "done",
+   "result": "Attend training session, Call client for follow-up, Research market trends, Change Air Filter, Renew Driver's License, Clean Out Fridge, Grocery Shopping, Learn to Play Guitar, Research Vacation Destinations, Water Plants, Read 'The Martian', Reply to Emails, Submit Expense Report, Organize Closet"
+  },
+  true,
+  "read",
+  "read",
+  0.0094144
+ ]
+]

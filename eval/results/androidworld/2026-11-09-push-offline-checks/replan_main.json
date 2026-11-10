@@ -1,0 +1,181 @@
+[
+ [
+  "aw-2026-11-03-hybrid-7ed4aa6-1103-135126-73f2",
+  15,
+  {
+   "app": "Gallery",
+   "subgoals": [
+    "Long-press receipt_2023_01_22_sure_frog.jpg in DCIM to select it",
+    "Use the selected-item toolbar Copy to action instead of opening the image",
+    "In Select destination, choose Internal storage then the Download folder",
+    "Confirm the copy with OK or Done",
+    "Return to the folders list and open Download to show the copied file"
+   ],
+   "success_check": {
+    "kind": "element_present",
+    "value": "receipt_2023_01_22_sure_frog.jpg",
+    "field_hint": "Download folder"
+   }
+  },
+  0.018138400000000002
+ ],
+ [
+  "aw-2026-11-03-hybrid-7ed4aa6-1103-135126-73f2",
+  15,
+  {
+   "app": "Gallery",
+   "subgoals": [
+    "Open receipt_2023_01_22_sure_frog.jpg from DCIM to the full-screen viewer",
+    "Open the viewer's More options menu and choose Copy to or Copy file",
+    "In the destination picker, navigate into internal storage and choose the Download folder",
+    "Confirm the copy, keeping the same filename",
+    "Return to the folder list and open Download to verify the copy is there"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "receipt_2023_01_22_sure_frog.jpg",
+    "field_hint": null
+   }
+  },
+  0.0203984
+ ],
+ [
+  "aw-2026-11-03-hybrid-7ed4aa6-1103-135126-73f2",
+  15,
+  {
+   "app": "Gallery",
+   "subgoals": [
+    "Tap receipt_2023_01_22_sure_frog.jpg to open it in the full-screen viewer",
+    "In the viewer, open More options and choose Copy to",
+    "In Select destination, navigate up to the storage root and open the Download folder",
+    "Confirm Copy/Paste there, keeping the same filename",
+    "Open the Download folder in Gallery so receipt_2023_01_22_sure_frog.jpg is shown there"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "receipt_2023_01_22_sure_frog.jpg",
+    "field_hint": ""
+   }
+  },
+  0.0195392
+ ],
+ [
+  "aw-2026-11-03-hybrid-7ed4aa6-1103-124937-429d",
+  16,
+  {
+   "app": "Files",
+   "subgoals": [
+    "Tap 'Show roots' and open the sdk_gphone_x86_64 storage area, keeping the 'Moving 1 item' operation active",
+    "Open the DCIM folder within sdk_gphone_x86_64",
+    "Tap the Move action in the 'Moving 1 item.' bar to place the file in DCIM",
+    "Verify holiday_photos.jpg appears in the DCIM file list"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "holiday_photos.jpg",
+    "field_hint": null
+   }
+  },
+  0.021906400000000003
+ ],
+ [
+  "aw-2026-11-03-hybrid-7ed4aa6-1103-124937-429d",
+  16,
+  {
+   "app": "Files",
+   "subgoals": [
+    "Cancel the in-progress 'Moving 1 item' operation if it is for the wrong file, and stay in the Podcasts folder",
+    "Scroll the Podcasts list to find the exact file holiday_photos.jpg and long-press to select it",
+    "Open More options for the selected file and choose Move to",
+    "Use Show roots to open the sdk_gphone_x86_64 storage area, then open the DCIM folder",
+    "Tap Move here to complete the move and verify DCIM is displayed"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "holiday_photos.jpg",
+    "field_hint": "DCIM folder listing"
+   }
+  },
+  0.018828
+ ],
+ [
+  "aw-2026-11-03-hybrid-7ed4aa6-1103-124937-429d",
+  16,
+  {
+   "app": "Files",
+   "subgoals": [
+    "Keep the 'Moving 1 item' operation active and tap 'Show roots' to open the navigation drawer",
+    "Select the sdk_gphone_x86_64 storage area from the roots list",
+    "Open the DCIM folder within that storage area",
+    "Tap 'Move' in the 'Moving 1 item' bar to move the file into DCIM",
+    "Verify the holiday_photos file is now listed in DCIM"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "holiday_photos",
+    "field_hint": null
+   }
+  },
+  0.02414
+ ],
+ [
+  "aw-2026-11-03-hybrid-7ed4aa6-1103-134310-ad23",
+  21,
+  {
+   "app": "Retro Music",
+   "subgoals": [
+    "Open the Playlists tab and open \"Hip Hop Bangers 270\" if it exists; otherwise create it there with that exact title",
+    "Return to the Songs tab showing the song list",
+    "Open the menu beside \"Golden Days\" and use Add to playlist to add it to \"Hip Hop Bangers 270\"",
+    "Open the menu beside \"Dreamer's Awake\" and add it to the same playlist next",
+    "Open the menu beside \"Hidden Paths\" and add it to the same playlist last, then open the playlist from the Playlists tab to verify the three songs in order"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Hip Hop Bangers 270",
+    "field_hint": ""
+   }
+  },
+  0.0219704
+ ],
+ [
+  "aw-2026-11-03-hybrid-7ed4aa6-1103-134310-ad23",
+  21,
+  {
+   "app": "Retro Music",
+   "subgoals": [
+    "Open the Playlists tab from the bottom navigation",
+    "Open the existing \"Hip Hop Bangers 270\" playlist if listed, otherwise create it from Playlists",
+    "Use the add option inside the playlist detail, not the individual song menus",
+    "Select Golden Days, then Dreamer's Awake, then Hidden Paths in that order and confirm",
+    "Reopen \"Hip Hop Bangers 270\" and verify the 3 songs are listed in order"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Hip Hop Bangers 270",
+    "field_hint": null
+   }
+  },
+  0.0195184
+ ],
+ [
+  "aw-2026-11-03-hybrid-7ed4aa6-1103-134310-ad23",
+  21,
+  {
+   "app": "Retro Music",
+   "subgoals": [
+    "Open the Playlists tab and open \"Hip Hop Bangers 270\" if it already exists, otherwise create it with that exact title via New playlist",
+    "Go to the Songs tab and use the menu button beside \"Golden Days\" to Add to playlist, choosing \"Hip Hop Bangers 270\"",
+    "Use the menu beside \"Dreamer's Awake\" to Add to playlist, choosing \"Hip Hop Bangers 270\" second",
+    "Use the menu beside \"Hidden Paths\" to Add to playlist, choosing \"Hip Hop Bangers 270\" third",
+    "Open the Playlists tab and open \"Hip Hop Bangers 270\" to show the three songs in order"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Hip Hop Bangers 270",
+    "field_hint": "playlist UI"
+   }
+  },
+  0.0202184
+ ]
+]

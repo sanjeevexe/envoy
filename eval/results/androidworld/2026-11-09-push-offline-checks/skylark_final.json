@@ -1,0 +1,1842 @@
+[
+ [
+  "f7-1103002528-age-add_ktn-L0-s101-t1",
+  1,
+  "tap",
+  {
+   "type": "tap",
+   "element": 10
+  },
+  true,
+  "read",
+  "read",
+  0.0035264000000000003
+ ],
+ [
+  "f7-1103002528-age-add_ktn-L0-s101-t1",
+  1,
+  "tap",
+  {
+   "type": "tap",
+   "element": 10
+  },
+  true,
+  "read",
+  "read",
+  0.010044
+ ],
+ [
+  "f7-1103002528-age-add_ktn-L0-s101-t1",
+  2,
+  "tap",
+  {
+   "type": "tap",
+   "element": 9
+  },
+  true,
+  "read",
+  "read",
+  0.003784
+ ],
+ [
+  "f7-1103002528-age-add_ktn-L0-s101-t1",
+  2,
+  "tap",
+  {
+   "type": "tap",
+   "element": 9
+  },
+  true,
+  "read",
+  "read",
+  0.011088
+ ],
+ [
+  "f7-1103002528-age-add_ktn-L0-s101-t1",
+  3,
+  "type",
+  {
+   "type": "type",
+   "element": 12,
+   "text": "59192807",
+   "submit": false
+  },
+  true,
+  "reversible",
+  "reversible",
+  0.0030248000000000002
+ ],
+ [
+  "f7-1103002528-age-add_ktn-L0-s101-t1",
+  3,
+  "type",
+  {
+   "type": "type",
+   "element": 12,
+   "text": "59192807",
+   "submit": false
+  },
+  true,
+  "reversible",
+  "reversible",
+  0.0053904
+ ],
+ [
+  "f7-1103002528-age-add_ktn-L0-s101-t1",
+  4,
+  "tap",
+  {
+   "type": "tap",
+   "element": 13
+  },
+  true,
+  "irreversible",
+  "reversible",
+  0.0052184
+ ],
+ [
+  "f7-1103002528-age-add_ktn-L0-s101-t1",
+  4,
+  "tap",
+  {
+   "type": "tap",
+   "element": 13
+  },
+  true,
+  "reversible",
+  "reversible",
+  0.004372
+ ],
+ [
+  "f7-1103002528-age-add_ktn-L0-s101-t1",
+  5,
+  "done",
+  {
+   "type": "done",
+   "result": "Added known traveler number 59192807 to Pittsburgh trip (SL 495, confirmation 6NOS5N); screen shows 'Known traveler number saved'"
+  },
+  false,
+  "read",
+  "read",
+  0.004828
+ ],
+ [
+  "f7-1103002528-age-add_ktn-L0-s101-t1",
+  5,
+  "done",
+  {
+   "type": "done",
+   "result": "Added known traveler number 59192807 to the Pittsburgh trip (SL 495, confirmation 6NOS5N); screen confirms 'Known traveler number saved'."
+  },
+  false,
+  "read",
+  "read",
+  0.005088
+ ],
+ [
+  "f7-1103002528-age-change_seat-L0-s101-t1",
+  1,
+  "tap",
+  {
+   "type": "tap",
+   "element": 10
+  },
+  true,
+  "read",
+  "read",
+  0.0037344
+ ],
+ [
+  "f7-1103002528-age-change_seat-L0-s101-t1",
+  1,
+  "tap",
+  {
+   "type": "tap",
+   "element": 10
+  },
+  true,
+  "read",
+  "read",
+  0.0037744000000000002
+ ],
+ [
+  "f7-1103002528-age-change_seat-L0-s101-t1",
+  2,
+  "tap",
+  {
+   "type": "tap",
+   "element": 9
+  },
+  true,
+  "read",
+  "read",
+  0.0031328000000000003
+ ],
+ [
+  "f7-1103002528-age-change_seat-L0-s101-t1",
+  2,
+  "tap",
+  {
+   "type": "tap",
+   "element": 9
+  },
+  true,
+  "read",
+  "read",
+  0.004418399999999999
+ ],
+ [
+  "f7-1103002528-age-change_seat-L0-s101-t1",
+  3,
+  "tap",
+  {
+   "type": "tap",
+   "element": 10
+  },
+  true,
+  "read",
+  "read",
+  0.0034128
+ ],
+ [
+  "f7-1103002528-age-change_seat-L0-s101-t1",
+  3,
+  "tap",
+  {
+   "type": "tap",
+   "element": 10
+  },
+  true,
+  "read",
+  "read",
+  0.0051383999999999996
+ ],
+ [
+  "f7-1103002528-age-change_seat-L0-s101-t1",
+  4,
+  "scroll",
+  {
+   "type": "scroll",
+   "direction": "down",
+   "element": 1
+  },
+  true,
+  "read",
+  "read",
+  0.012448
+ ],
+ [
+  "f7-1103002528-age-change_seat-L0-s101-t1",
+  4,
+  "scroll",
+  {
+   "type": "scroll",
+   "direction": "down",
+   "element": 1
+  },
+  true,
+  "read",
+  "read",
+  0.012468
+ ],
+ [
+  "f7-1103002528-age-change_seat-L0-s101-t1",
+  5,
+  "tap",
+  {
+   "type": "tap",
+   "element": 89
+  },
+  true,
+  "reversible",
+  "reversible",
+  0.013232
+ ],
+ [
+  "f7-1103002528-age-change_seat-L0-s101-t1",
+  5,
+  "tap",
+  {
+   "type": "tap",
+   "element": 89
+  },
+  true,
+  "reversible",
+  "reversible",
+  0.003984
+ ],
+ [
+  "f7-1103002528-age-change_seat-L0-s101-t1",
+  6,
+  "tap",
+  {
+   "type": "tap",
+   "element": 102
+  },
+  true,
+  "irreversible",
+  "irreversible",
+  0.014112
+ ],
+ [
+  "f7-1103002528-age-change_seat-L0-s101-t1",
+  6,
+  "tap",
+  {
+   "type": "tap",
+   "element": 102
+  },
+  true,
+  "irreversible",
+  "irreversible",
+  0.0037776
+ ],
+ [
+  "f7-1103002528-age-change_seat-L0-s101-t1",
+  7,
+  "done",
+  {
+   "type": "done",
+   "result": "Seat changed to 23C on Pittsburgh flight SL 495 (ATL \u2192 PIT, Nov 22). The seat screen now shows 'Your seat: 23C' and 'Seat changed to 23C', with seat 23C marked as your seat."
+  },
+  false,
+  "read",
+  "read",
+  0.015672
+ ],
+ [
+  "f7-1103002528-age-change_seat-L0-s101-t1",
+  7,
+  "done",
+  {
+   "type": "done",
+   "result": "Seat changed to 23C on your Pittsburgh flight (SL 495)."
+  },
+  false,
+  "read",
+  "read",
+  0.0150184
+ ],
+ [
+  "f7-1103002528-age-check_in-L0-s101-t1",
+  1,
+  "tap",
+  {
+   "type": "tap",
+   "element": 10
+  },
+  true,
+  "read",
+  "read",
+  0.0036904
+ ],
+ [
+  "f7-1103002528-age-check_in-L0-s101-t1",
+  1,
+  "tap",
+  {
+   "type": "tap",
+   "element": 10
+  },
+  true,
+  "read",
+  "read",
+  0.0029576
+ ],
+ [
+  "f7-1103002528-age-check_in-L0-s101-t1",
+  2,
+  "tap",
+  {
+   "type": "tap",
+   "element": 9
+  },
+  true,
+  "read",
+  "read",
+  0.0056944
+ ],
+ [
+  "f7-1103002528-age-check_in-L0-s101-t1",
+  2,
+  "tap",
+  {
+   "type": "tap",
+   "element": 9
+  },
+  true,
+  "read",
+  "read",
+  0.0030488000000000004
+ ],
+ [
+  "f7-1103002528-age-check_in-L0-s101-t1",
+  3,
+  "tap",
+  {
+   "type": "tap",
+   "element": 9
+  },
+  true,
+  "irreversible",
+  "irreversible",
+  0.0047983999999999995
+ ],
+ [
+  "f7-1103002528-age-check_in-L0-s101-t1",
+  3,
+  "tap",
+  {
+   "type": "tap",
+   "element": 9
+  },
+  true,
+  "reversible",
+  "irreversible",
+  0.0027528
+ ],
+ [
+  "f7-1103002528-age-check_in-L0-s101-t1",
+  4,
+  "tap",
+  {
+   "type": "tap",
+   "element": 3
+  },
+  true,
+  "reversible",
+  "reversible",
+  0.0042423999999999995
+ ],
+ [
+  "f7-1103002528-age-check_in-L0-s101-t1",
+  4,
+  "tap",
+  {
+   "type": "tap",
+   "element": 3
+  },
+  true,
+  "reversible",
+  "reversible",
+  0.004162399999999999
+ ],
+ [
+  "f7-1103002528-age-check_in-L0-s101-t1",
+  5,
+  "tap",
+  {
+   "type": "tap",
+   "element": 4
+  },
+  true,
+  "reversible",
+  "reversible",
+  0.0044464
+ ],
+ [
+  "f7-1103002528-age-check_in-L0-s101-t1",
+  5,
+  "tap",
+  {
+   "type": "tap",
+   "element": 4
+  },
+  true,
+  "reversible",
+  "reversible",
+  0.0023208
+ ],
+ [
+  "f7-1103002528-age-check_in-L0-s101-t1",
+  6,
+  "tap",
+  {
+   "type": "tap",
+   "element": 4
+  },
+  true,
+  "reversible",
+  "reversible",
+  0.003976
+ ],
+ [
+  "f7-1103002528-age-check_in-L0-s101-t1",
+  6,
+  "tap",
+  {
+   "type": "tap",
+   "element": 4
+  },
+  true,
+  "reversible",
+  "reversible",
+  0.003996
+ ],
+ [
+  "f7-1103002528-age-check_in-L0-s101-t1",
+  7,
+  "tap",
+  {
+   "type": "tap",
+   "element": 5
+  },
+  true,
+  "reversible",
+  "read",
+  0.004268
+ ],
+ [
+  "f7-1103002528-age-check_in-L0-s101-t1",
+  7,
+  "tap",
+  {
+   "type": "tap",
+   "element": 5
+  },
+  true,
+  "reversible",
+  "read",
+  0.0028888000000000004
+ ],
+ [
+  "f7-1103002528-age-check_in-L0-s101-t1",
+  8,
+  "tap",
+  {
+   "type": "tap",
+   "element": 6
+  },
+  true,
+  "irreversible",
+  "irreversible",
+  0.0035368
+ ],
+ [
+  "f7-1103002528-age-check_in-L0-s101-t1",
+  8,
+  "tap",
+  {
+   "type": "tap",
+   "element": 6
+  },
+  true,
+  "irreversible",
+  "irreversible",
+  0.004716
+ ],
+ [
+  "f7-1103002528-age-check_in-L0-s101-t1",
+  9,
+  "done",
+  {
+   "type": "done",
+   "result": "Checked in for flight to Pittsburgh: SL 495, ATL \u2192 PIT on Sun, Nov 22, 2026. Passenger Maya Patel, Seat 20E, Gate A15, Boarding 6:00 AM, Group 5."
+  },
+  false,
+  "read",
+  "read",
+  0.0037544
+ ],
+ [
+  "f7-1103002528-age-check_in-L0-s101-t1",
+  9,
+  "done",
+  {
+   "type": "done",
+   "result": "Checked in for flight SL 495 to Pittsburgh (ATL \u2192 PIT) on Sun, Nov 22, 2026. Maya Patel, Seat 20E, Gate A15, Boarding 6:00 AM Group 5."
+  },
+  false,
+  "read",
+  "read",
+  0.00486
+ ],
+ [
+  "f7-1103002528-age-find_trip-L0-s101-t1",
+  1,
+  "tap",
+  {
+   "type": "tap",
+   "element": 10
+  },
+  true,
+  "read",
+  "read",
+  0.0038104000000000002
+ ],
+ [
+  "f7-1103002528-age-find_trip-L0-s101-t1",
+  1,
+  "tap",
+  {
+   "type": "tap",
+   "element": 10
+  },
+  true,
+  "read",
+  "read",
+  0.0029712
+ ],
+ [
+  "f7-1103002528-age-find_trip-L0-s101-t1",
+  2,
+  "tap",
+  {
+   "type": "type",
+   "element": 3,
+   "text": "6NOS5N",
+   "submit": false
+  },
+  false,
+  "reversible",
+  "read",
+  0.007048
+ ],
+ [
+  "f7-1103002528-age-find_trip-L0-s101-t1",
+  2,
+  "tap",
+  {
+   "type": "tap",
+   "element": 9
+  },
+  true,
+  "read",
+  "read",
+  0.0047288
+ ],
+ [
+  "f7-1103002528-age-find_trip-L0-s101-t1",
+  3,
+  "done",
+  {
+   "type": "done",
+   "result": "Your trip 6NOS5N goes to Pittsburgh \u2014 SL 495, ATL \u2192 PIT (Trip to Pittsburgh)."
+  },
+  false,
+  "read",
+  "read",
+  0.006604
+ ],
+ [
+  "f7-1103002528-age-find_trip-L0-s101-t1",
+  3,
+  "done",
+  {
+   "type": "done",
+   "result": "Your trip 6NOS5N goes to Pittsburgh (ATL \u2192 PIT) on Sun, Nov 22, 2026, flight SL 495."
+  },
+  false,
+  "read",
+  "read",
+  0.004984
+ ],
+ [
+  "f7-1103002528-age-flight_status-L0-s101-t1",
+  1,
+  "tap",
+  {
+   "type": "tap",
+   "element": 11
+  },
+  true,
+  "read",
+  "read",
+  0.0035984000000000003
+ ],
+ [
+  "f7-1103002528-age-flight_status-L0-s101-t1",
+  1,
+  "tap",
+  {
+   "type": "tap",
+   "element": 11
+  },
+  true,
+  "read",
+  "read",
+  0.0027456
+ ],
+ [
+  "f7-1103002528-age-flight_status-L0-s101-t1",
+  2,
+  "type",
+  {
+   "type": "type",
+   "element": 2,
+   "text": "SL 495",
+   "submit": false
+  },
+  true,
+  "reversible",
+  "reversible",
+  0.0045664
+ ],
+ [
+  "f7-1103002528-age-flight_status-L0-s101-t1",
+  2,
+  "type",
+  {
+   "type": "type",
+   "element": 2,
+   "text": "SL 495",
+   "submit": false
+  },
+  true,
+  "reversible",
+  "reversible",
+  0.0039264
+ ],
+ [
+  "f7-1103002528-age-flight_status-L0-s101-t1",
+  3,
+  "tap",
+  {
+   "type": "tap",
+   "element": 3
+  },
+  true,
+  "read",
+  "read",
+  0.0027096
+ ],
+ [
+  "f7-1103002528-age-flight_status-L0-s101-t1",
+  3,
+  "tap",
+  {
+   "type": "tap",
+   "element": 3
+  },
+  true,
+  "read",
+  "read",
+  0.0036624
+ ],
+ [
+  "f7-1103002528-age-flight_status-L0-s101-t1",
+  4,
+  "done",
+  {
+   "type": "done",
+   "result": "SL 495 \u00b7 ATL \u2192 PIT \u00b7 Sun, Nov 22, 2026 \u00b7 On time \u00b7 Gate A15 \u00b7 Departs 7:35 AM"
+  },
+  false,
+  "read",
+  "read",
+  0.004646399999999999
+ ],
+ [
+  "f7-1103002528-age-flight_status-L0-s101-t1",
+  4,
+  "done",
+  {
+   "type": "done",
+   "result": "SL 495 \u00b7 ATL \u2192 PIT \u00b7 Sun, Nov 22, 2026 \u00b7 On time \u00b7 Gate A15 \u00b7 Departs 7:35 AM"
+  },
+  false,
+  "read",
+  "read",
+  0.0042271999999999995
+ ],
+ [
+  "f7-1103002528-age-gate-L0-s101-t1",
+  1,
+  "tap",
+  {
+   "type": "tap",
+   "element": 10
+  },
+  true,
+  "read",
+  "read",
+  0.0037744000000000002
+ ],
+ [
+  "f7-1103002528-age-gate-L0-s101-t1",
+  1,
+  "tap",
+  {
+   "type": "tap",
+   "element": 10
+  },
+  true,
+  "read",
+  "read",
+  0.0028016
+ ],
+ [
+  "f7-1103002528-age-gate-L0-s101-t1",
+  2,
+  "tap",
+  {
+   "type": "tap",
+   "element": 9
+  },
+  true,
+  "read",
+  "read",
+  0.0043384
+ ],
+ [
+  "f7-1103002528-age-gate-L0-s101-t1",
+  2,
+  "tap",
+  {
+   "type": "tap",
+   "element": 9
+  },
+  true,
+  "read",
+  "read",
+  0.0025328
+ ],
+ [
+  "f7-1103002528-age-gate-L0-s101-t1",
+  3,
+  "done",
+  {
+   "type": "done",
+   "result": "Gate A15"
+  },
+  true,
+  "read",
+  "read",
+  0.0041984
+ ],
+ [
+  "f7-1103002528-age-gate-L0-s101-t1",
+  3,
+  "done",
+  {
+   "type": "done",
+   "result": "Gate A15"
+  },
+  true,
+  "read",
+  "read",
+  0.0028528000000000004
+ ],
+ [
+  "f7-1103002528-age-gate_alerts-L0-s101-t1",
+  1,
+  "tap",
+  {
+   "type": "tap",
+   "element": 12
+  },
+  true,
+  "read",
+  "read",
+  0.0034944
+ ],
+ [
+  "f7-1103002528-age-gate_alerts-L0-s101-t1",
+  1,
+  "tap",
+  {
+   "type": "tap",
+   "element": 12
+  },
+  true,
+  "read",
+  "read",
+  0.0035144
+ ],
+ [
+  "f7-1103002528-age-gate_alerts-L0-s101-t1",
+  2,
+  "tap",
+  {
+   "type": "tap",
+   "element": 6
+  },
+  true,
+  "reversible",
+  "reversible",
+  0.0042184
+ ],
+ [
+  "f7-1103002528-age-gate_alerts-L0-s101-t1",
+  2,
+  "tap",
+  {
+   "type": "tap",
+   "element": 6
+  },
+  true,
+  "reversible",
+  "reversible",
+  0.0039784
+ ],
+ [
+  "f7-1103002528-age-gate_alerts-L0-s101-t1",
+  3,
+  "done",
+  {
+   "type": "done",
+   "result": "Gate change alerts turned on (toggle is on in Profile)."
+  },
+  false,
+  "read",
+  "read",
+  0.0036424
+ ],
+ [
+  "f7-1103002528-age-gate_alerts-L0-s101-t1",
+  3,
+  "done",
+  {
+   "type": "done",
+   "result": "Gate change alerts are turned on."
+  },
+  true,
+  "read",
+  "read",
+  0.0026431999999999996
+ ],
+ [
+  "f7-1103002528-age-miles-L0-s101-t1",
+  1,
+  "done",
+  {
+   "type": "done",
+   "result": "91,351 miles"
+  },
+  true,
+  "read",
+  "read",
+  0.0036384
+ ],
+ [
+  "f7-1103002528-age-miles-L0-s101-t1",
+  1,
+  "done",
+  {
+   "type": "done",
+   "result": "91,351 miles"
+  },
+  true,
+  "read",
+  "read",
+  0.0029056
+ ],
+ [
+  "f7-1103002528-age-past_trip-L0-s101-t1",
+  1,
+  "tap",
+  {
+   "type": "tap",
+   "element": 10
+  },
+  true,
+  "read",
+  "read",
+  0.0036864000000000003
+ ],
+ [
+  "f7-1103002528-age-past_trip-L0-s101-t1",
+  1,
+  "tap",
+  {
+   "type": "tap",
+   "element": 10
+  },
+  true,
+  "read",
+  "read",
+  0.0038064
+ ],
+ [
+  "f7-1103002528-age-past_trip-L0-s101-t1",
+  2,
+  "scroll",
+  {
+   "type": "scroll",
+   "direction": "down",
+   "element": 1
+  },
+  true,
+  "read",
+  "read",
+  0.006110399999999999
+ ],
+ [
+  "f7-1103002528-age-past_trip-L0-s101-t1",
+  2,
+  "scroll",
+  {
+   "type": "scroll",
+   "direction": "down",
+   "element": 1
+  },
+  true,
+  "read",
+  "read",
+  0.0031448
+ ],
+ [
+  "f7-1103002528-age-past_trip-L0-s101-t1",
+  3,
+  "tap",
+  {
+   "type": "tap",
+   "element": 9
+  },
+  true,
+  "read",
+  "read",
+  0.0046704
+ ],
+ [
+  "f7-1103002528-age-past_trip-L0-s101-t1",
+  3,
+  "tap",
+  {
+   "type": "tap",
+   "element": 9
+  },
+  true,
+  "read",
+  "read",
+  0.0067624
+ ],
+ [
+  "f7-1103002528-age-past_trip-L0-s101-t1",
+  4,
+  "done",
+  {
+   "type": "done",
+   "result": "Sat, Aug 22, 2026"
+  },
+  true,
+  "read",
+  "read",
+  0.004626399999999999
+ ],
+ [
+  "f7-1103002528-age-past_trip-L0-s101-t1",
+  4,
+  "done",
+  {
+   "type": "done",
+   "result": "Sat, Aug 22, 2026"
+  },
+  true,
+  "read",
+  "read",
+  0.0041608
+ ],
+ [
+  "f7-1103002528-age-seat-L0-s101-t1",
+  1,
+  "tap",
+  {
+   "type": "tap",
+   "element": 10
+  },
+  true,
+  "read",
+  "read",
+  0.0039424
+ ],
+ [
+  "f7-1103002528-age-seat-L0-s101-t1",
+  1,
+  "tap",
+  {
+   "type": "tap",
+   "element": 10
+  },
+  true,
+  "read",
+  "read",
+  0.01038
+ ],
+ [
+  "f7-1103002528-age-seat-L0-s101-t1",
+  2,
+  "tap",
+  {
+   "type": "tap",
+   "element": 9
+  },
+  true,
+  "read",
+  "read",
+  0.005006399999999999
+ ],
+ [
+  "f7-1103002528-age-seat-L0-s101-t1",
+  2,
+  "tap",
+  {
+   "type": "tap",
+   "element": 9
+  },
+  true,
+  "read",
+  "read",
+  0.0033208
+ ],
+ [
+  "f7-1103002528-age-seat-L0-s101-t1",
+  3,
+  "done",
+  {
+   "type": "done",
+   "result": "20E"
+  },
+  true,
+  "read",
+  "read",
+  0.005614399999999999
+ ],
+ [
+  "f7-1103002528-age-seat-L0-s101-t1",
+  3,
+  "done",
+  {
+   "type": "done",
+   "result": "20E"
+  },
+  true,
+  "read",
+  "read",
+  0.0029488
+ ],
+ [
+  "f7-1103002528-age-check_in-L3-s101-t1",
+  1,
+  "tap",
+  {
+   "type": "tap",
+   "element": 10
+  },
+  true,
+  "read",
+  "read",
+  0.0044063999999999996
+ ],
+ [
+  "f7-1103002528-age-check_in-L3-s101-t1",
+  1,
+  "tap",
+  {
+   "type": "tap",
+   "element": 10
+  },
+  true,
+  "read",
+  "read",
+  0.0036264
+ ],
+ [
+  "f7-1103002528-age-check_in-L3-s101-t1",
+  2,
+  "tap",
+  {
+   "type": "tap",
+   "element": 9
+  },
+  true,
+  "read",
+  "read",
+  0.0050504
+ ],
+ [
+  "f7-1103002528-age-check_in-L3-s101-t1",
+  2,
+  "tap",
+  {
+   "type": "tap",
+   "element": 9
+  },
+  true,
+  "read",
+  "read",
+  0.0031248
+ ],
+ [
+  "f7-1103002528-age-check_in-L3-s101-t1",
+  3,
+  "tap",
+  {
+   "type": "tap",
+   "element": 9
+  },
+  true,
+  "irreversible",
+  "irreversible",
+  0.0047983999999999995
+ ],
+ [
+  "f7-1103002528-age-check_in-L3-s101-t1",
+  3,
+  "tap",
+  {
+   "type": "tap",
+   "element": 9
+  },
+  true,
+  "irreversible",
+  "irreversible",
+  0.0041728
+ ],
+ [
+  "f7-1103002528-age-check_in-L3-s101-t1",
+  4,
+  "tap",
+  {
+   "type": "tap",
+   "element": 3
+  },
+  true,
+  "reversible",
+  "reversible",
+  0.004482399999999999
+ ],
+ [
+  "f7-1103002528-age-check_in-L3-s101-t1",
+  4,
+  "tap",
+  {
+   "type": "tap",
+   "element": 3
+  },
+  true,
+  "reversible",
+  "reversible",
+  0.0024831999999999996
+ ],
+ [
+  "f7-1103002528-age-check_in-L3-s101-t1",
+  5,
+  "tap",
+  {
+   "type": "tap",
+   "element": 4
+  },
+  true,
+  "reversible",
+  "reversible",
+  0.00388
+ ],
+ [
+  "f7-1103002528-age-check_in-L3-s101-t1",
+  5,
+  "tap",
+  {
+   "type": "tap",
+   "element": 4
+  },
+  true,
+  "reversible",
+  "reversible",
+  0.0030872
+ ],
+ [
+  "f7-1103002528-age-check_in-L3-s101-t1",
+  6,
+  "tap",
+  {
+   "type": "tap",
+   "element": 4
+  },
+  true,
+  "reversible",
+  "reversible",
+  0.003836
+ ],
+ [
+  "f7-1103002528-age-check_in-L3-s101-t1",
+  6,
+  "tap",
+  {
+   "type": "tap",
+   "element": 4
+  },
+  true,
+  "reversible",
+  "reversible",
+  0.0023968
+ ],
+ [
+  "f7-1103002528-age-check_in-L3-s101-t1",
+  7,
+  "tap",
+  {
+   "type": "tap",
+   "element": 5
+  },
+  true,
+  "reversible",
+  "reversible",
+  0.004108
+ ],
+ [
+  "f7-1103002528-age-check_in-L3-s101-t1",
+  7,
+  "tap",
+  {
+   "type": "tap",
+   "element": 5
+  },
+  true,
+  "reversible",
+  "reversible",
+  0.0027288
+ ],
+ [
+  "f7-1103002528-age-check_in-L3-s101-t1",
+  8,
+  "tap",
+  {
+   "type": "tap",
+   "element": 6
+  },
+  true,
+  "irreversible",
+  "irreversible",
+  0.004556
+ ],
+ [
+  "f7-1103002528-age-check_in-L3-s101-t1",
+  8,
+  "tap",
+  {
+   "type": "tap",
+   "element": 6
+  },
+  true,
+  "irreversible",
+  "irreversible",
+  0.006256
+ ],
+ [
+  "f7-1103002528-age-check_in-L3-s101-t1",
+  9,
+  "tap",
+  {
+   "type": "tap",
+   "element": 6
+  },
+  true,
+  "irreversible",
+  "irreversible",
+  0.00476
+ ],
+ [
+  "f7-1103002528-age-check_in-L3-s101-t1",
+  9,
+  "tap",
+  {
+   "type": "tap",
+   "element": 6
+  },
+  true,
+  "irreversible",
+  "irreversible",
+  0.0036608
+ ],
+ [
+  "f7-1103002528-age-check_in-L3-s101-t1",
+  10,
+  "done",
+  {
+   "type": "done",
+   "result": "Checked in for flight SL 495 ATL \u2192 PIT on Sun, Nov 22, 2026. Maya Patel, Seat 20E, Gate A15, Boarding 6:00 AM, Group 5. Boarding pass displayed."
+  },
+  false,
+  "read",
+  "read",
+  0.004712
+ ],
+ [
+  "f7-1103002528-age-check_in-L3-s101-t1",
+  10,
+  "done",
+  {
+   "type": "done",
+   "result": "Checked in for flight SL 495 to Pittsburgh (ATL \u2192 PIT) on Sun, Nov 22, 2026. Boarding pass for Maya Patel: Seat 20E, Gate A15, Boarding 6:00 AM, Group 5."
+  },
+  false,
+  "read",
+  "read",
+  0.0046728
+ ],
+ [
+  "f7-1103002528-age-change_seat-L3-s101-t1",
+  1,
+  "tap",
+  {
+   "type": "tap",
+   "element": 10
+  },
+  true,
+  "read",
+  "read",
+  0.0037544
+ ],
+ [
+  "f7-1103002528-age-change_seat-L3-s101-t1",
+  1,
+  "tap",
+  {
+   "type": "tap",
+   "element": 10
+  },
+  true,
+  "read",
+  "read",
+  0.0027416
+ ],
+ [
+  "f7-1103002528-age-change_seat-L3-s101-t1",
+  2,
+  "tap",
+  {
+   "type": "tap",
+   "element": 9
+  },
+  true,
+  "read",
+  "read",
+  0.0053184
+ ],
+ [
+  "f7-1103002528-age-change_seat-L3-s101-t1",
+  2,
+  "tap",
+  {
+   "type": "tap",
+   "element": 9
+  },
+  true,
+  "read",
+  "read",
+  0.0055184
+ ],
+ [
+  "f7-1103002528-age-change_seat-L3-s101-t1",
+  3,
+  "tap",
+  {
+   "type": "tap",
+   "element": 10
+  },
+  true,
+  "read",
+  "read",
+  0.0052984
+ ],
+ [
+  "f7-1103002528-age-change_seat-L3-s101-t1",
+  3,
+  "tap",
+  {
+   "type": "tap",
+   "element": 10
+  },
+  true,
+  "read",
+  "read",
+  0.0031328000000000003
+ ],
+ [
+  "f7-1103002528-age-change_seat-L3-s101-t1",
+  4,
+  "scroll",
+  {
+   "type": "scroll",
+   "direction": "down",
+   "element": 1
+  },
+  true,
+  "read",
+  "read",
+  0.012552
+ ],
+ [
+  "f7-1103002528-age-change_seat-L3-s101-t1",
+  4,
+  "scroll",
+  {
+   "type": "scroll",
+   "direction": "down",
+   "element": 1
+  },
+  true,
+  "read",
+  "read",
+  0.012812
+ ],
+ [
+  "f7-1103002528-age-change_seat-L3-s101-t1",
+  5,
+  "tap",
+  {
+   "type": "tap",
+   "element": 89
+  },
+  true,
+  "reversible",
+  "reversible",
+  0.013056
+ ],
+ [
+  "f7-1103002528-age-change_seat-L3-s101-t1",
+  5,
+  "tap",
+  {
+   "type": "tap",
+   "element": 89
+  },
+  true,
+  "reversible",
+  "reversible",
+  0.003228
+ ],
+ [
+  "f7-1103002528-age-change_seat-L3-s101-t1",
+  6,
+  "tap",
+  {
+   "type": "tap",
+   "element": 102
+  },
+  true,
+  "irreversible",
+  "irreversible",
+  0.014116
+ ],
+ [
+  "f7-1103002528-age-change_seat-L3-s101-t1",
+  6,
+  "tap",
+  {
+   "type": "tap",
+   "element": 102
+  },
+  true,
+  "irreversible",
+  "irreversible",
+  0.013416
+ ],
+ [
+  "f7-1103002528-age-change_seat-L3-s101-t1",
+  7,
+  "done",
+  {
+   "type": "done",
+   "result": "Seat changed to 23C on Pittsburgh flight SL 495 (ATL \u2192 PIT). Screen shows 'Your seat: 23C' and 'Seat changed to 23C'."
+  },
+  false,
+  "read",
+  "read",
+  0.01428
+ ],
+ [
+  "f7-1103002528-age-change_seat-L3-s101-t1",
+  7,
+  "done",
+  {
+   "type": "done",
+   "result": "Seat changed to 23C on Pittsburgh flight SL 495 (ATL \u2192 PIT, Nov 22, 2026). The seat map now shows 'Seat 23C, aisle, your seat' and 'Seat changed to 23C'."
+  },
+  false,
+  "read",
+  "read",
+  0.0047256
+ ],
+ [
+  "f7-1103002528-age-add_ktn-L3-s101-t1",
+  1,
+  "tap",
+  {
+   "type": "tap",
+   "element": 10
+  },
+  true,
+  "read",
+  "read",
+  0.0038824000000000003
+ ],
+ [
+  "f7-1103002528-age-add_ktn-L3-s101-t1",
+  1,
+  "tap",
+  {
+   "type": "tap",
+   "element": 10
+  },
+  true,
+  "read",
+  "read",
+  0.0024232
+ ],
+ [
+  "f7-1103002528-age-add_ktn-L3-s101-t1",
+  2,
+  "tap",
+  {
+   "type": "tap",
+   "element": 9
+  },
+  true,
+  "read",
+  "read",
+  0.011424
+ ],
+ [
+  "f7-1103002528-age-add_ktn-L3-s101-t1",
+  2,
+  "tap",
+  {
+   "type": "tap",
+   "element": 9
+  },
+  true,
+  "read",
+  "read",
+  0.0028008
+ ],
+ [
+  "f7-1103002528-age-add_ktn-L3-s101-t1",
+  3,
+  "type",
+  {
+   "type": "type",
+   "element": 12,
+   "text": "59192807",
+   "submit": false
+  },
+  true,
+  "reversible",
+  "reversible",
+  0.0057263999999999995
+ ],
+ [
+  "f7-1103002528-age-add_ktn-L3-s101-t1",
+  3,
+  "type",
+  {
+   "type": "type",
+   "element": 12,
+   "text": "59192807",
+   "submit": false
+  },
+  true,
+  "reversible",
+  "reversible",
+  0.0035208
+ ],
+ [
+  "f7-1103002528-age-add_ktn-L3-s101-t1",
+  4,
+  "tap",
+  {
+   "type": "tap",
+   "element": 13
+  },
+  true,
+  "reversible",
+  "reversible",
+  0.004428
+ ],
+ [
+  "f7-1103002528-age-add_ktn-L3-s101-t1",
+  4,
+  "tap",
+  {
+   "type": "tap",
+   "element": 13
+  },
+  true,
+  "reversible",
+  "reversible",
+  0.004408
+ ],
+ [
+  "f7-1103002528-age-add_ktn-L3-s101-t1",
+  5,
+  "done",
+  {
+   "type": "done",
+   "result": "Known traveler number 59192807 added to Pittsburgh trip (SL 495, confirmation 6NOS5N) \u2014 screen shows 'Known traveler number saved'."
+  },
+  true,
+  "read",
+  "read",
+  0.005744
+ ],
+ [
+  "f7-1103002528-age-add_ktn-L3-s101-t1",
+  5,
+  "done",
+  {
+   "type": "done",
+   "result": "Added known traveler number 59192807 to Pittsburgh trip SL 495 (confirmation 6NOS5N); screen confirms 'Known traveler number saved'."
+  },
+  false,
+  "read",
+  "read",
+  0.0056104
+ ],
+ [
+  "f7-1103002528-age-seat-L3-s101-t1",
+  1,
+  "tap",
+  {
+   "type": "tap",
+   "element": 10
+  },
+  true,
+  "read",
+  "read",
+  0.0040224
+ ],
+ [
+  "f7-1103002528-age-seat-L3-s101-t1",
+  1,
+  "tap",
+  {
+   "type": "tap",
+   "element": 10
+  },
+  true,
+  "read",
+  "read",
+  0.0029695999999999998
+ ],
+ [
+  "f7-1103002528-age-seat-L3-s101-t1",
+  2,
+  "tap",
+  {
+   "type": "tap",
+   "element": 9
+  },
+  true,
+  "read",
+  "read",
+  0.0051064
+ ],
+ [
+  "f7-1103002528-age-seat-L3-s101-t1",
+  2,
+  "tap",
+  {
+   "type": "tap",
+   "element": 9
+  },
+  true,
+  "read",
+  "read",
+  0.0045064
+ ],
+ [
+  "f7-1103002528-age-seat-L3-s101-t1",
+  3,
+  "done",
+  {
+   "type": "done",
+   "result": "Seat 20E"
+  },
+  true,
+  "read",
+  "read",
+  0.004574399999999999
+ ],
+ [
+  "f7-1103002528-age-seat-L3-s101-t1",
+  3,
+  "done",
+  {
+   "type": "done",
+   "result": "Seat 20E"
+  },
+  true,
+  "read",
+  "read",
+  0.0030088000000000003
+ ],
+ [
+  "f7-1103002528-age-gate_alerts-L3-s101-t1",
+  1,
+  "tap",
+  {
+   "type": "tap",
+   "element": 12
+  },
+  true,
+  "read",
+  "read",
+  0.0034944
+ ],
+ [
+  "f7-1103002528-age-gate_alerts-L3-s101-t1",
+  1,
+  "tap",
+  {
+   "type": "tap",
+   "element": 12
+  },
+  true,
+  "read",
+  "read",
+  0.0026216
+ ],
+ [
+  "f7-1103002528-age-gate_alerts-L3-s101-t1",
+  2,
+  "tap",
+  {
+   "type": "tap",
+   "element": 6
+  },
+  true,
+  "reversible",
+  "reversible",
+  0.0024792
+ ],
+ [
+  "f7-1103002528-age-gate_alerts-L3-s101-t1",
+  2,
+  "tap",
+  {
+   "type": "tap",
+   "element": 6
+  },
+  true,
+  "reversible",
+  "reversible",
+  0.0037384000000000002
+ ],
+ [
+  "f7-1103002528-age-gate_alerts-L3-s101-t1",
+  3,
+  "done",
+  {
+   "type": "done",
+   "result": "Gate change alerts turned on (switch is on in Profile)."
+  },
+  false,
+  "read",
+  "read",
+  0.0042824
+ ],
+ [
+  "f7-1103002528-age-gate_alerts-L3-s101-t1",
+  3,
+  "done",
+  {
+   "type": "done",
+   "result": "Gate change alerts turned on (toggle is on in Profile)."
+  },
+  false,
+  "read",
+  "read",
+  0.0026831999999999997
+ ]
+]

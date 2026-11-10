@@ -1,0 +1,105 @@
+{
+ "task": "MarkorCreateNote",
+ "seed": 1448135622,
+ "goal": "Create a new note in Markor named 2023_01_26_wise_yacht.md with the following text: Ignorance is bliss.",
+ "score": 1.0,
+ "aw_run_time_s": 30.8,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 22:17:08.653979",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-all-3e557d1-1109-221640-1658",
+  "goal": "Create a new note in Markor named 2023_01_26_wise_yacht.md with the following text: Ignorance is bliss.",
+  "max_steps": 16,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Created note 2023_01_26_wise_yacht.md in Markor with text: Ignorance is bliss.",
+  "done": true,
+  "answer": "Created note 2023_01_26_wise_yacht.md in Markor with text: Ignorance is bliss.",
+  "steps_device": 6,
+  "iterations": 7,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 3,
+   "type": 2,
+   "done": 1
+  },
+  "model_calls": 8,
+  "input_tokens": 16917,
+  "cached_tokens": 12704,
+  "output_tokens": 1354,
+  "reasoning_tokens": 518,
+  "cost_usd": 0.046473,
+  "cost_at_standard_usd": 0.046473,
+  "duration_s": 23.48,
+  "model_s": 14.96,
+  "device_s": 8.52,
+  "connect_s": 0.88,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Markor",
+   "subgoals": [
+    "Open Markor",
+    "Tap the create/new file button",
+    "Name the file 2023_01_26_wise_yacht.md and confirm creation",
+    "Type the text: Ignorance is bliss.",
+    "Save the note and confirm it is open"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Ignorance is bliss.",
+    "field_hint": ""
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Ignorance is bliss.' is visible"
+  },
+  "trace_dir": "data/runs/aw-2026-11-09-push-all-3e557d1-1109-221640-1658",
+  "envoy_commit": "3e557d1c7c51335df35a449886077200abd2a357",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-all-3e557d1/traces/MarkorCreateNote__s1448135622.jsonl.gz",
+  "wall_s": 25.9,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.9
+  }
+ }
+}

@@ -1,0 +1,105 @@
+{
+ "task": "SimpleCalendarNextMeetingWithPerson",
+ "seed": 2293569519,
+ "goal": "When is my next meeting with Ava in Simple Calendar Pro? Express your answer in the format <month name> <day> <year> <hour in 24-hour format>:<minutes>.",
+ "score": 1.0,
+ "aw_run_time_s": 37.6,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 21:22:35.359163",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-dev-62f20b8-1109-212200-5789",
+  "goal": "When is my next meeting with Ava in Simple Calendar Pro? Express your answer in the format <month name> <day> <year> <hour in 24-hour format>:<minutes>.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "October 27 2023 15:15",
+  "done": true,
+  "answer": "October 27 2023 15:15",
+  "steps_device": 6,
+  "iterations": 7,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 2,
+   "type": 1,
+   "back": 2,
+   "done": 1
+  },
+  "model_calls": 8,
+  "input_tokens": 19864,
+  "cached_tokens": 12576,
+  "output_tokens": 1983,
+  "reasoning_tokens": 1149,
+  "cost_usd": 0.071327,
+  "cost_at_standard_usd": 0.071327,
+  "duration_s": 29.75,
+  "model_s": 20.37,
+  "device_s": 9.38,
+  "connect_s": 0.9,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Calendar (com.simplemobiletools.calendar.pro)",
+   "subgoals": [
+    "Open Simple Calendar Pro",
+    "Search for events with Ava",
+    "Open the earliest Ava meeting after Sunday, October 15 2023, 15:34",
+    "Read the meeting's start date and time"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "next meeting with Ava date and time in format <month name> <day> <year> <hour in 24-hour format>:<minutes>",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: October, 27, 15:15"
+  },
+  "trace_dir": "data/runs/aw-2026-11-09-push-dev-62f20b8-1109-212200-5789",
+  "envoy_commit": "62f20b8e90bb253974ab4e72e48613cdb5be5fe6",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-dev-62f20b8/traces/SimpleCalendarNextMeetingWithPerson__s2293569519.jsonl.gz",
+  "wall_s": 32.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.0
+  }
+ }
+}

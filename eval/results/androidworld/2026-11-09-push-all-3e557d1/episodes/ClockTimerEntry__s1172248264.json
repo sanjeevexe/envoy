@@ -1,0 +1,103 @@
+{
+ "task": "ClockTimerEntry",
+ "seed": 1172248264,
+ "goal": "Create a timer with 0 hours, 16 minutes, and 35 seconds. Do not start the timer.",
+ "score": 1.0,
+ "aw_run_time_s": 41.7,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 21:55:28.854710",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-all-3e557d1-1109-215447-12ad",
+  "goal": "Create a timer with 0 hours, 16 minutes, and 35 seconds. Do not start the timer.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done_unverified",
+  "result": "Timer set to 00h 16m 35s (0 hours, 16 minutes, 35 seconds) and not started.",
+  "done": true,
+  "answer": "Timer set to 00h 16m 35s (0 hours, 16 minutes, 35 seconds) and not started.",
+  "steps_device": 6,
+  "iterations": 8,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 1,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 5,
+   "done": 2
+  },
+  "model_calls": 9,
+  "input_tokens": 20115,
+  "cached_tokens": 14484,
+  "output_tokens": 1991,
+  "reasoning_tokens": 934,
+  "cost_usd": 0.065241,
+  "cost_at_standard_usd": 0.065241,
+  "duration_s": 32.49,
+  "model_s": 23.99,
+  "device_s": 8.5,
+  "connect_s": 0.91,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Clock",
+   "subgoals": [
+    "Open the Clock app",
+    "Go to the Timer tab",
+    "Enter 0 hours, 16 minutes and 35 seconds",
+    "Verify the timer shows 16:35 and is not started"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "16:35",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": false,
+   "evaluable": true,
+   "detail": "'16:35' is not visible"
+  },
+  "trace_dir": "data/runs/aw-2026-11-09-push-all-3e557d1-1109-215447-12ad",
+  "envoy_commit": "3e557d1c7c51335df35a449886077200abd2a357",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-all-3e557d1/traces/ClockTimerEntry__s1172248264.jsonl.gz",
+  "wall_s": 35.0,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.9
+  }
+ }
+}

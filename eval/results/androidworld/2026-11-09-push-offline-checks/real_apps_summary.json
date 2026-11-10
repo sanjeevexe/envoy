@@ -1,0 +1,413 @@
+{
+ "main ed98762": {
+  "calls": 154,
+  "same_as_recorded": 120,
+  "final_step_same": 24,
+  "final_step_done": 30,
+  "final_step_calls": 36,
+  "labelled_irreversible": 0,
+  "cost_usd": 0.932,
+  "workflows": {
+   "amazon": {
+    "calls": 8,
+    "same": 8,
+    "final_calls": 2,
+    "final_same": 2,
+    "final_done": 2
+   },
+   "calendar_today": {
+    "calls": 2,
+    "same": 0,
+    "final_calls": 2,
+    "final_same": 0,
+    "final_done": 2
+   },
+   "chipotle": {
+    "calls": 24,
+    "same": 18,
+    "final_calls": 2,
+    "final_same": 1,
+    "final_done": 2
+   },
+   "chrome_wikipedia": {
+    "calls": 14,
+    "same": 11,
+    "final_calls": 2,
+    "final_same": 0,
+    "final_done": 2
+   },
+   "contacts_count": {
+    "calls": 2,
+    "same": 0,
+    "final_calls": 2,
+    "final_same": 0,
+    "final_done": 2
+   },
+   "doordash": {
+    "calls": 14,
+    "same": 9,
+    "final_calls": 2,
+    "final_same": 0,
+    "final_done": 0
+   },
+   "doordash_search": {
+    "calls": 6,
+    "same": 6,
+    "final_calls": 2,
+    "final_same": 2,
+    "final_done": 2
+   },
+   "gmail_newest": {
+    "calls": 4,
+    "same": 4,
+    "final_calls": 2,
+    "final_same": 2,
+    "final_done": 2
+   },
+   "gmail_search": {
+    "calls": 8,
+    "same": 7,
+    "final_calls": 2,
+    "final_same": 1,
+    "final_done": 2
+   },
+   "maps_address": {
+    "calls": 8,
+    "same": 6,
+    "final_calls": 2,
+    "final_same": 2,
+    "final_done": 2
+   },
+   "play_rating": {
+    "calls": 8,
+    "same": 7,
+    "final_calls": 2,
+    "final_same": 2,
+    "final_done": 2
+   },
+   "settings_bluetooth": {
+    "calls": 8,
+    "same": 8,
+    "final_calls": 2,
+    "final_same": 2,
+    "final_done": 2
+   },
+   "settings_version": {
+    "calls": 10,
+    "same": 8,
+    "final_calls": 2,
+    "final_same": 2,
+    "final_done": 2
+   },
+   "starbucks": {
+    "calls": 16,
+    "same": 16,
+    "final_calls": 2,
+    "final_same": 2,
+    "final_done": 2
+   },
+   "target": {
+    "calls": 2,
+    "same": 2,
+    "final_calls": 2,
+    "final_same": 2,
+    "final_done": 0
+   },
+   "target_search": {
+    "calls": 2,
+    "same": 2,
+    "final_calls": 2,
+    "final_same": 2,
+    "final_done": 0
+   },
+   "youtube_search": {
+    "calls": 10,
+    "same": 2,
+    "final_calls": 2,
+    "final_same": 0,
+    "final_done": 2
+   },
+   "ytmusic_artist": {
+    "calls": 8,
+    "same": 6,
+    "final_calls": 2,
+    "final_same": 2,
+    "final_done": 2
+   }
+  }
+ },
+ "62f20b8 (dev run)": {
+  "calls": 154,
+  "same_as_recorded": 117,
+  "final_step_same": 23,
+  "final_step_done": 29,
+  "final_step_calls": 36,
+  "labelled_irreversible": 0,
+  "cost_usd": 0.871,
+  "workflows": {
+   "amazon": {
+    "calls": 8,
+    "same": 7,
+    "final_calls": 2,
+    "final_same": 1,
+    "final_done": 2
+   },
+   "calendar_today": {
+    "calls": 2,
+    "same": 0,
+    "final_calls": 2,
+    "final_same": 0,
+    "final_done": 2
+   },
+   "chipotle": {
+    "calls": 24,
+    "same": 18,
+    "final_calls": 2,
+    "final_same": 2,
+    "final_done": 2
+   },
+   "chrome_wikipedia": {
+    "calls": 14,
+    "same": 12,
+    "final_calls": 2,
+    "final_same": 0,
+    "final_done": 2
+   },
+   "contacts_count": {
+    "calls": 2,
+    "same": 1,
+    "final_calls": 2,
+    "final_same": 1,
+    "final_done": 2
+   },
+   "doordash": {
+    "calls": 14,
+    "same": 8,
+    "final_calls": 2,
+    "final_same": 0,
+    "final_done": 0
+   },
+   "doordash_search": {
+    "calls": 6,
+    "same": 6,
+    "final_calls": 2,
+    "final_same": 2,
+    "final_done": 2
+   },
+   "gmail_newest": {
+    "calls": 4,
+    "same": 4,
+    "final_calls": 2,
+    "final_same": 2,
+    "final_done": 2
+   },
+   "gmail_search": {
+    "calls": 8,
+    "same": 6,
+    "final_calls": 2,
+    "final_same": 2,
+    "final_done": 2
+   },
+   "maps_address": {
+    "calls": 8,
+    "same": 6,
+    "final_calls": 2,
+    "final_same": 2,
+    "final_done": 2
+   },
+   "play_rating": {
+    "calls": 8,
+    "same": 7,
+    "final_calls": 2,
+    "final_same": 2,
+    "final_done": 2
+   },
+   "settings_bluetooth": {
+    "calls": 8,
+    "same": 6,
+    "final_calls": 2,
+    "final_same": 0,
+    "final_done": 2
+   },
+   "settings_version": {
+    "calls": 10,
+    "same": 7,
+    "final_calls": 2,
+    "final_same": 1,
+    "final_done": 2
+   },
+   "starbucks": {
+    "calls": 16,
+    "same": 16,
+    "final_calls": 2,
+    "final_same": 2,
+    "final_done": 2
+   },
+   "target": {
+    "calls": 2,
+    "same": 2,
+    "final_calls": 2,
+    "final_same": 2,
+    "final_done": 0
+   },
+   "target_search": {
+    "calls": 2,
+    "same": 2,
+    "final_calls": 2,
+    "final_same": 2,
+    "final_done": 0
+   },
+   "youtube_search": {
+    "calls": 10,
+    "same": 3,
+    "final_calls": 2,
+    "final_same": 0,
+    "final_done": 1
+   },
+   "ytmusic_artist": {
+    "calls": 8,
+    "same": 6,
+    "final_calls": 2,
+    "final_same": 2,
+    "final_done": 2
+   }
+  }
+ },
+ "3e557d1 (final)": {
+  "calls": 154,
+  "same_as_recorded": 116,
+  "final_step_same": 23,
+  "final_step_done": 29,
+  "final_step_calls": 36,
+  "labelled_irreversible": 0,
+  "cost_usd": 0.799,
+  "workflows": {
+   "amazon": {
+    "calls": 8,
+    "same": 7,
+    "final_calls": 2,
+    "final_same": 1,
+    "final_done": 2
+   },
+   "calendar_today": {
+    "calls": 2,
+    "same": 0,
+    "final_calls": 2,
+    "final_same": 0,
+    "final_done": 2
+   },
+   "chipotle": {
+    "calls": 24,
+    "same": 20,
+    "final_calls": 2,
+    "final_same": 2,
+    "final_done": 2
+   },
+   "chrome_wikipedia": {
+    "calls": 14,
+    "same": 11,
+    "final_calls": 2,
+    "final_same": 0,
+    "final_done": 2
+   },
+   "contacts_count": {
+    "calls": 2,
+    "same": 0,
+    "final_calls": 2,
+    "final_same": 0,
+    "final_done": 2
+   },
+   "doordash": {
+    "calls": 14,
+    "same": 7,
+    "final_calls": 2,
+    "final_same": 0,
+    "final_done": 0
+   },
+   "doordash_search": {
+    "calls": 6,
+    "same": 6,
+    "final_calls": 2,
+    "final_same": 2,
+    "final_done": 2
+   },
+   "gmail_newest": {
+    "calls": 4,
+    "same": 4,
+    "final_calls": 2,
+    "final_same": 2,
+    "final_done": 2
+   },
+   "gmail_search": {
+    "calls": 8,
+    "same": 6,
+    "final_calls": 2,
+    "final_same": 2,
+    "final_done": 2
+   },
+   "maps_address": {
+    "calls": 8,
+    "same": 6,
+    "final_calls": 2,
+    "final_same": 2,
+    "final_done": 2
+   },
+   "play_rating": {
+    "calls": 8,
+    "same": 6,
+    "final_calls": 2,
+    "final_same": 2,
+    "final_done": 2
+   },
+   "settings_bluetooth": {
+    "calls": 8,
+    "same": 6,
+    "final_calls": 2,
+    "final_same": 0,
+    "final_done": 2
+   },
+   "settings_version": {
+    "calls": 10,
+    "same": 10,
+    "final_calls": 2,
+    "final_same": 2,
+    "final_done": 2
+   },
+   "starbucks": {
+    "calls": 16,
+    "same": 14,
+    "final_calls": 2,
+    "final_same": 2,
+    "final_done": 2
+   },
+   "target": {
+    "calls": 2,
+    "same": 2,
+    "final_calls": 2,
+    "final_same": 2,
+    "final_done": 0
+   },
+   "target_search": {
+    "calls": 2,
+    "same": 2,
+    "final_calls": 2,
+    "final_same": 2,
+    "final_done": 0
+   },
+   "youtube_search": {
+    "calls": 10,
+    "same": 3,
+    "final_calls": 2,
+    "final_same": 0,
+    "final_done": 1
+   },
+   "ytmusic_artist": {
+    "calls": 8,
+    "same": 6,
+    "final_calls": 2,
+    "final_same": 2,
+    "final_done": 2
+   }
+  }
+ }
+}

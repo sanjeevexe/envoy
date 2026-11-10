@@ -1,0 +1,102 @@
+{
+ "task": "SimpleSmsResend",
+ "seed": 4246161322,
+ "goal": "Resend the message I just sent to Noa Mohammed in Simple SMS Messenger",
+ "score": 0.0,
+ "aw_run_time_s": 106.7,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 23:42:40.067032",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-all-3e557d1-1109-234117-f636",
+  "goal": "Resend the message I just sent to Noa Mohammed in Simple SMS Messenger",
+  "max_steps": 12,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "failed",
+  "result": "Copied 'Inconceivable!' from Noa Mohammed thread, but ran out of steps before exiting selection, pasting it into the message field, and tapping SMS to resend it.",
+  "done": true,
+  "answer": null,
+  "steps_device": 10,
+  "iterations": 12,
+  "looks": 1,
+  "screenshots_sent": 1,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 5,
+   "long_press": 2,
+   "back": 2,
+   "look": 1,
+   "fail": 1
+  },
+  "model_calls": 14,
+  "input_tokens": 31256,
+  "cached_tokens": 22104,
+  "output_tokens": 4350,
+  "reasoning_tokens": 2803,
+  "cost_usd": 0.128029,
+  "cost_at_standard_usd": 0.128029,
+  "duration_s": 76.7,
+  "model_s": 58.71,
+  "device_s": 17.99,
+  "connect_s": 0.93,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "SMS Messenger",
+   "subgoals": [
+    "Tap 'Copy to clipboard' in the top bar for the selected 'Inconceivable!' message",
+    "Tap 'Done' to exit selection mode and return to the normal Noa Mohammed thread",
+    "Tap the 'Type a message…' field and paste the copied text, or type 'Inconceivable!' if paste is unavailable",
+    "Tap the 'SMS' send button to send the message again"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Inconceivable!",
+    "field_hint": ""
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-2026-11-09-push-all-3e557d1-1109-234117-f636",
+  "envoy_commit": "3e557d1c7c51335df35a449886077200abd2a357",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-all-3e557d1/traces/SimpleSmsResend__s4246161322.jsonl.gz",
+  "wall_s": 79.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.8
+  }
+ }
+}

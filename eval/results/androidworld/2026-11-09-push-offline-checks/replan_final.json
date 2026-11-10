@@ -1,0 +1,167 @@
+[
+ [
+  "aw-2026-11-03-hybrid-7ed4aa6-1103-135126-73f2",
+  15,
+  {
+   "app": "Gallery",
+   "subgoals": [
+    "Go back to the folder list",
+    "Open the Download folder and confirm receipt_2023_01_22_sure_frog.jpg is shown there"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "receipt_2023_01_22_sure_frog.jpg",
+    "field_hint": ""
+   }
+  },
+  0.011775200000000001
+ ],
+ [
+  "aw-2026-11-03-hybrid-7ed4aa6-1103-135126-73f2",
+  15,
+  {
+   "app": "Gallery",
+   "subgoals": [
+    "Go back to the main folder list",
+    "Open the Download folder",
+    "Confirm receipt_2023_01_22_sure_frog.jpg is shown there"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "receipt_2023_01_22_sure_frog.jpg",
+    "field_hint": ""
+   }
+  },
+  0.01982
+ ],
+ [
+  "aw-2026-11-03-hybrid-7ed4aa6-1103-135126-73f2",
+  15,
+  {
+   "app": "com.simplemobiletools.gallery.pro",
+   "subgoals": [
+    "Go back from DCIM to the main folders list",
+    "Open the Download folder",
+    "Confirm receipt_2023_01_22_sure_frog.jpg is shown in Download, toggling filename visibility if needed"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "receipt_2023_01_22_sure_frog.jpg",
+    "field_hint": ""
+   }
+  },
+  0.0248952
+ ],
+ [
+  "aw-2026-11-03-hybrid-7ed4aa6-1103-124937-429d",
+  16,
+  {
+   "app": "Files",
+   "subgoals": [
+    "Wait for the 'Moving 1 item.' operation to finish while staying in Podcasts",
+    "Open Show roots and scroll the roots list to reveal sdk_gphone_x86_64, avoiding sdk_gphone64_arm64",
+    "Open sdk_gphone_x86_64, then open its DCIM folder",
+    "Confirm holiday_photos.jpg is in this DCIM; if it is in another storage area's DCIM instead, move it from there to this DCIM"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "holiday_photos.jpg",
+    "field_hint": ""
+   }
+  },
+  0.024782400000000003
+ ],
+ [
+  "aw-2026-11-03-hybrid-7ed4aa6-1103-124937-429d",
+  16,
+  {
+   "app": "Files",
+   "subgoals": [
+    "Tap Show roots and scroll the roots list to find the distinct sdk_gphone_x86_64 storage entry",
+    "Open sdk_gphone_x86_64, then DCIM, and check whether holiday_photos.jpg is already there",
+    "If it is not there, open sdk_gphone64_arm64, then DCIM, and long-press holiday_photos.jpg to select it",
+    "Choose Move to\u2026, then in the picker select sdk_gphone_x86_64 and open its DCIM folder",
+    "Tap MOVE, then reopen sdk_gphone_x86_64 > DCIM to confirm the file is present"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "holiday_photos.jpg",
+    "field_hint": null
+   }
+  },
+  0.0234024
+ ],
+ [
+  "aw-2026-11-03-hybrid-7ed4aa6-1103-124937-429d",
+  16,
+  {
+   "app": "Files",
+   "subgoals": [
+    "Open Show roots and open the sdk_gphone storage root shown",
+    "Open the DCIM folder in that storage",
+    "Confirm holiday_photos.jpg is visible in DCIM"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "holiday_photos.jpg",
+    "field_hint": null
+   }
+  },
+  0.0288624
+ ],
+ [
+  "aw-2026-11-03-hybrid-7ed4aa6-1103-134310-ad23",
+  21,
+  {
+   "app": "Retro Music",
+   "subgoals": [
+    "Tap Playlists in the bottom navigation",
+    "Open the playlist \"Hip Hop Bangers 270\"",
+    "Confirm Golden Days, Dreamer's Awake, and Hidden Paths appear in that order"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Hidden Paths",
+    "field_hint": ""
+   }
+  },
+  0.014766399999999999
+ ],
+ [
+  "aw-2026-11-03-hybrid-7ed4aa6-1103-134310-ad23",
+  21,
+  {
+   "app": "Retro Music",
+   "subgoals": [
+    "Open the Playlists tab from the bottom navigation",
+    "Open the 'Hip Hop Bangers 270' playlist to verify its contents",
+    "Confirm it shows 3 songs in order: Golden Days, Dreamer's Awake, Hidden Paths",
+    "If any required song is missing, add only that song from the Songs tab via its menu > Add to playlist, preserving the required order"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "3 Songs",
+    "field_hint": ""
+   }
+  },
+  0.013463200000000002
+ ],
+ [
+  "aw-2026-11-03-hybrid-7ed4aa6-1103-134310-ad23",
+  21,
+  {
+   "app": "Retro Music",
+   "subgoals": [
+    "Open the Playlists tab",
+    "Open the playlist Hip Hop Bangers 270",
+    "Confirm it contains Golden Days, Dreamer's Awake, and Hidden Paths in that order"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "3 Songs",
+    "field_hint": ""
+   }
+  },
+  0.0081632
+ ]
+]

@@ -6,6 +6,8 @@ AndroidWorld (Google Research; Rawles et al., 2024; Apache-2.0) is a benchmark o
 
 **The shipped default, Nov 3:** 74 of 116 tasks (63.8%), +20 −3 over the Oct 28 run (p = 0.0005; not a model-only comparison; below).
 
+**With five more general changes, Nov 10 (branch `claude/aw-push-853c98`, not yet on `main`):** 85 of 116 (73.3%), and 44 of 58 (75.9%) on the held-out half, against the Nov 3 run's 74 and 36 on the same model, profile, cap and settings (+15 −4, p = 0.019; held-out +9 −1, p = 0.021). Same cost: $14.54 for all 116. Details in [Round 4](#round-4-nov-910-five-general-changes-on-the-shipped-default).
+
 **Headline.** Envoy as on `main` before these changes (the Oct 28 baseline) solved 21 of 116 tasks (18.1%) on the standard tier. With 13 general agent changes, found on the dev half only (merged into `main` on Oct 29), it solved 57 (49.1%). On the held-out half, never used to choose a change, that is 31 of 58 (53.4%) against 12 (+20 −1, p < 0.0001). Both runs are seed 30, pass@1, at about $0.04 and 38 s per task (median $0.030).
 
 **Routines.** Envoy compiled 59 routines from its solved runs, and 22 did their own seed-30 task on their own. On three new seeds of their 23 tasks:
@@ -248,6 +250,153 @@ The failures are concentrated in the tags above and in apps where every screen i
 
 **Two outages during the run.** From 10:49 to 11:12 this Mac couldn't reach Meta's API, and 98 episodes in a row failed in seconds. A second outage from about 11:56 cost one more. All 99 were set aside with the reason (`eval/results/androidworld/final-standard/invalidated/README.md`) and rerun into the same stage. The runner now waits out an outage instead of burning through tasks. None of the 116 counted episodes had an API error.
 
+## Round 4 (Nov 9–10): five general changes on the shipped default
+
+*Branch `claude/aw-push-853c98`, measured on `3e557d1`. Results: `eval/results/androidworld/2026-11-09-push-all-3e557d1/` (all 116), `2026-11-09-push-dev-62f20b8/` (the dev-half tuning run), `2026-11-09-push-offline-checks/` (real apps, SkyLark, safety, replays).*
+
+**All 116: 85 (73.3%), against the Nov 3 run's 74 (63.8%). Held-out half: 44 of 58 (75.9%), against 36 (62.1%).** Paired by task, that is +15 −4 overall (p = 0.019) and +9 −1 on held-out (p = 0.021). Seed 30, pass@1, standard tier, the shipped `hybrid` profile and $0.50 cap, at the same total cost ($14.54).
+
+This comparison isolates the changes, unlike Nov 3's against Oct 28:
+- **The base is the Nov 3 code.** That run was `main` at `7ed4aa6`. The only agent-side change between it and this branch's base (`ed98762`) is a Lyft-only policy rule, and AndroidWorld's approvals are scripted.
+- **Everything else is the same:** model, profile, effort, cap, harness, AndroidWorld commit, emulator and tier.
+
+### What was wrong, and what changed
+
+The changes were chosen from the Nov 3 run's 20 dev-half failures, read step by step:
+- 15 ran out of steps. Most were 10-step question tasks (Tasks, OpenTracks, Joplin), plus tasks that finished the work and then ran out checking it.
+- 2 hit the $0.50 cap, 2 stopped as `failed`, and 1 said done wrongly.
+
+No held-out trace was read before the final run. The held-out half's list of failed task names and how they ended was seen once, in the first overview of the 42 failures. None of the changes names an app, a task or AndroidWorld, and the AndroidWorld adapter is unchanged apart from keeping the new scroll report in trace digests.
+
+| # | Commits | Cause on the dev half | What changes |
+| --- | --- | --- | --- |
+| A | `7eb4c97`, `a66759d`, `d91db22` | The agent never knew how many steps it had left. SaveCopyOfReceipt made its copy at step 13 of 16 and spent the rest checking it. MarkorChangeNoteContent's done on its 12th and last step was rejected by the plan's check (it wanted "name.md", the app showed "name"), so the run ended at the step limit | Once 5 steps or fewer remain, the step says STEPS LEFT, and the prompt says to spend them on the goal. On the last step it says done only if SCREEN or REMEMBERED shows the goal done or the complete answer, and otherwise fails and says what is missing. A done on the last step is accepted, and always reported as `done_unverified` |
+| B | `bacd449` | A replan (after going in circles) saw the goal, the screen and the screens visited, but nothing of what had been done, so it planned the task from the start: copy the receipt again, re-add three songs already in the playlist | A replan gets DONE SO FAR (the last 20 history lines) and REMEMBERED, and plans only what is left |
+| C | `ea13482`, `3e557d1` | Per-row icons with no text: Retro Music's song menus read `[19] Button (id: menu)`, so the agent tapped them by position and lost track of which song each was for | An unlabeled control in a list row reads `(in row "Hidden Paths · Ian")`, from its own row only, and only for row-sized containers. Its label stays empty, so policy, routines and checks don't change |
+| D | `2c93c13`, `db32629`, `0dec38c` | 88 of the dev half's 297 scrolls moved nothing: the list was already at its end, and SCREEN always says "scroll to see more". Question tasks scrolled up and down lists they had already read (TasksIncompleteTasksOnDate: 9 scrolls in 10 steps) | After a scroll, HISTORY says how many items came into view for the first time in this task, how many were seen before, and whether the list reached its end. "End" means the content moved less than 0.75 of the drag, calibrated on the Nov 3 run's 167 list scrolls: full scrolls moved 0.8–1.2 of the drag, scrolls into an end 0.6 or less |
+| E | `2c93c13` | A 12,101-character file was shown as its first 4,000 characters. Scrolling an EditText doesn't change the tree, so the rest could never be read, and RecipeAddMultipleRecipesFromMarkor2 failed as stuck at step 10 of 60 | Text over the cap is shown in parts, each saying which characters it holds; scrolling over it shows the next part |
+
+`62f20b8` makes sure the new scroll code can never fail a scroll or a run.
+
+### How the final set was reached
+
+1. **The first set (`62f20b8`) ran on the dev half only** (`2026-11-09-push-dev-62f20b8`): 44 of 58, against Nov 3's 38 (+8 −2, p = 0.11), at $7.14 against $7.30.
+2. **That run showed three problems, all fixed on dev evidence:**
+   - **Last-step guesses.** 12 tasks ended with a done on their very last step, and 4 of those were guesses ("Last step; using longest candidate … from remembered list", songs claimed added that weren't). The rule now says never guess. Replaying those 12 last steps 3 times each: wrong claims 10/12 → 3/12, right dones 23/24 → 20/24.
+   - **Scroll reports counted against the last screen only.** Scrolling back to rows already read reported them as "new" again.
+   - **Row text on the home screen's pager,** whose "rows" are whole pages.
+3. **All 116 then ran once on `3e557d1`** (`2026-11-09-push-all-3e557d1`), on Nov 9 from 21:45 to 00:15 ET.
+4. **`d91db22` came after that run.** It only relabels a last-step done as `done_unverified`: no decision changes, and AndroidWorld counts both as done with the answer, so the scores stand.
+
+### Results, paired by task with the Nov 3 run
+
+| | Nov 3 (`7ed4aa6`) | Nov 10 (`3e557d1`) | Gained / lost | Sign test |
+| --- | ---: | ---: | --- | --- |
+| **All 116** | 74 (63.8%) | **85 (73.3%)** | +15 −4 | p = 0.019 |
+| **Held-out half (58)** | 36 (62.1%) | **44 (75.9%)** | +9 −1 | p = 0.021 |
+| Dev half (58) | 38 (65.5%) | 41 (70.7%) | +6 −3 | p = 0.51 |
+| Counting only episodes Envoy ended as done: all / held-out | 74 / 36 | 83 / 43 | +14 −5 / +8 −1 | p = 0.064 / 0.039 |
+| Easy / medium / hard (61 / 36 / 19) | 50 / 19 / 5 | 54 / 23 / 8 | +5 −1 / +6 −2 / +4 −1 | |
+| held-out: easy / medium / hard (30 / 18 / 10) | 23 / 9 / 4 | 27 / 11 / 6 | | |
+| dev: easy / medium / hard (31 / 18 / 9) | 27 / 10 / 1 | 27 / 12 / 2 | | |
+| Cost: total; mean, median per task | $14.54; $0.125, $0.090 | $14.54; $0.125, $0.101 | | |
+| Cost per solved task | $0.197 | $0.171 | | |
+| Envoy time per task, median (model / device) | 51.8 s (32.7 / 16.1) | 54.9 s (35.4 / 17.9) | | |
+| AndroidWorld time per task, median (setup to score) | 60.5 s | 66.2 s | | |
+| Steps used; model calls | 1,600; 1,837 | 1,679; 1,942 | | |
+| Screenshots sent (share of steps) | 173 (10.8%) | 138 (8.2%) | | |
+| Ended: done / unverified done / Envoy's own fail / step limit / cost cap | 54 / 22 / 3 / 35 / 2 | 67 / 25 / 17 / 4 / 3 | | |
+| Dones that AndroidWorld scored 0 | 2 | 9 | | |
+
+**Every episode** recorded `3e557d1`, profile `hybrid` and step model `muse-wonder-1.0`. There were no API retries, no crash dialogs and no harness exceptions. AndroidWorld's 24 of 24 app snapshots were in place from the dev run's setup, which had re-run after the cold boot; VLC's APK failed to install there, as it always does on arm64.
+
+**Gained, held-out (9):**
+- ExpenseDeleteDuplicates2, SimpleDrawProCreateDrawing: done in their last 5 steps, both step limits on Nov 3.
+- MarkorTranscribeReceipt, RecipeDeleteDuplicateRecipes, SimpleCalendarEventsInNextWeek, SportsTrackerActivitiesOnDate, TasksDueOnDate: done on their last step, all step limits on Nov 3. Six of these seven runs had a list-end report on the way.
+- RecipeAddMultipleRecipesFromImage: done at step 51 of 60. On Nov 3 it said done at 58 and scored 0.
+- RecipeDeleteMultipleRecipesWithConstraint: AndroidWorld scored a `failed` ending 1. Seed 30's instance has no recipe to delete. Envoy checked the recipes it reached, kept them all, and on its last step said it couldn't confirm it had seen every recipe. On Nov 3 it ran out of steps.
+
+**Lost, held-out (1):** MarkorCreateNoteAndSms ran out of steps at 18 (on Nov 3 it was done at 16).
+
+**Gained, dev (6):**
+- FilesMoveFile, SaveCopyOfReceiptTaskEval, SimpleCalendarFirstEventAfterStartTime, TasksHighPriorityTasks: done on their last step.
+- MarkorChangeNoteContent, TasksDueNextWeek: done in their last 5 steps.
+
+All six ran out of steps on Nov 3.
+
+**Lost, dev (3):**
+- MarkorCreateNoteFromClipboard ran out of steps.
+- RetroPlayingQueue said on its last step that all five songs were queued, which wasn't true.
+- VlcCreateTwoPlaylists hit the $0.50 cap at step 40.
+
+**By app** (Nov 3 → Nov 10, of n):
+- Up: Tasks 0 → 3 of 6, Simple Calendar Pro 15 → 17 of 17, Broccoli 6 → 8 of 10, OpenTracks 1 → 2 of 6, Markor 7 → 8 of 10, Pro Expense 5 → 6 of 7, Files 1 → 2 of 2, Simple Gallery 0 → 1, Simple Draw 0 → 1.
+- Down: Retro Music 2 → 1 of 4, VLC 2 → 1 of 2.
+- Unchanged: the rest. Settings stays 14 of 14; Chrome (3) and Clipper still 0.
+
+### What the mechanisms did on the held-out half
+
+Counted from the traces after the run (`comparison-2026-11-03-hybrid.json`):
+
+| Measure, held-out (58 episodes) | Nov 3 | Nov 10 |
+| --- | ---: | ---: |
+| Ended at the step limit | 20 | 3 |
+| Ended with a done on the very last step (scored 1) | 0 | 10 (8) |
+| Ended with a done in the last 5 steps (scored 1) | 13 (12) | 19 (16) |
+| Ended with Envoy's own fail | 1 | 8 |
+| Scroll reports (said the list reached its end; said nothing new came into view) | — | 87 (57; 25) |
+| Scrolls | 101 | 85 |
+| Screens with row text | — | 167 |
+| Long text shown in parts (scrolled to a next part) | — | 3 (2) |
+| Replans | 33 | 31 |
+| Screenshots sent | 95 | 74 |
+
+### What it costs in honesty, and the guard against it
+
+Most of the gain comes from ending, on or near the last step, tasks that used to run out of steps. That includes answers the agent would not otherwise have given:
+- **Across all 116, 21 episodes ended with a done on their very last step.** 15 were right. The other 6 were guesses the never-guess rule didn't stop: an answer from part of a list, a distance for an activity whose type it hadn't checked, a count of 0, songs and recipes claimed added, a video claimed saved.
+- **Dones that scored 0 rose from 2 to 9 in all.** Besides the 6, ExpenseAddMultipleFromMarkor and MarkorAddNoteHeader said done earlier with work AndroidWorld didn't accept, and MarkorMergeNotes failed the same way as on Nov 3.
+- **Envoy's own fails rose from 3 to 17.** Most are the rule working: on its last step the agent said what it had and what was missing instead of guessing.
+- **AndroidWorld scores a guess like no answer,** so the benchmark doesn't punish them, but on a real app a confident wrong answer is worse than "ran out of steps". So `d91db22` reports every last-step done as `done_unverified`: the product never presents one as checked, and routines are never compiled from one.
+- **Two of the 85 are `failed` endings scored 1** (above, and dev's ExpenseDeleteSingle, which deleted the expense, then said on its last step that it couldn't confirm none was left). Counting only done endings gives 83 and 43, and the held-out gain is still significant (+8 −1, p = 0.039).
+
+### Real apps, SkyLark and safety, checked offline before the final run
+
+Before the final run, `main` (`ed98762`) and the final code (`3e557d1`) were run on the same recorded inputs, on the hybrid profile's step model (Muse Wonder):
+- **Safety and SkyLark:** the safety suite's fixture screens, and SkyLark's agent runs from the Nov 3 final eval.
+- **Real apps:** the 18 real-app first runs from the Nov 3 final eval (`f7-1103034419-real-*`). Each step's input was rebuilt with each checkout's own screen code, history lines and prompts, and the step model was called twice per step.
+- **Not committed:** the real apps' answers and screens are the user's accounts, so only counts are committed.
+
+| Check | `main` | Final |
+| --- | ---: | ---: |
+| Safety probe: irreversible controls labelled irreversible (bar 82) | 89/100 | 89/100 |
+| Safety probe: reversible controls labelled irreversible | 6/44 | 7/44 |
+| Amazon Buy Now: labelled irreversible | 4/5 | 4/5 |
+| Real apps (77 steps × 2): same decision as the recorded run | 120/154 | 116/154 |
+| Real apps, final step (36): same answer / any done | 24 / 30 | 23 / 29 |
+| Real apps: any step labelled irreversible | 0 | 0 |
+| SkyLark (15 agent runs, 70 steps × 2): same decision as recorded | 122/140 | 121/140 |
+| SkyLark commit steps (Confirm check-in, seat change): taken | 14/14 | 14/14 |
+| AndroidWorld dev replans that restart finished work (3 replans × 3) | 7/9 | 0/9 |
+
+- **The step budget was first shown on every step.** Then Buy Now's irreversible label fell (9/20 twice, against 17/20 for the same prompt without the line, and 11–14/20 on `main`). That's why it only appears in the last 5 steps, where a real-app run rarely is (`7eb4c97`). The policy gate's code signals flag Buy Now regardless (20/20 controls in the Nov 3 safety suite).
+- **The real-app differences go both ways by app** (Chipotle and settings_version +2; Starbucks, DoorDash and settings_bluetooth −2), and so do the steps where typed text was worded differently. I read them as replay noise: the same replay of `main` against itself wasn't run, so that can't be shown.
+- **SkyLark's label differences** are all on the trip page's "Check in", which only opens the flow; `main` labels it either way. "Confirm check-in" stays irreversible in every call.
+
+### Noise, and what this does and doesn't show
+
+- **Run-to-run noise.** The dev-half tuning run (`62f20b8`) and the final run's dev half differ on 9 of 58 tasks (44 against 41, +3 −6), with only the last-step wording and the scroll-count follow-ups between them. The Oct 28 runs gave the same picture: about four tasks per half move between identical runs. The held-out gain (+9 −1) is outside that, and it's the estimate to quote. The dev half has now been used twice.
+- **The held-out half has been used before.** It ran on Oct 28–29 and Nov 3, and its traces were read for mechanism counts then. Its failure list was also seen at the start of this round. No held-out trace was read before this run, and no change was tested on held-out tasks.
+- **One run, one seed.** pass@1 on seed 30. 85 could plausibly be anywhere from about 80 to 90 in a rerun.
+- **Against the leaderboard.** The best tree-only entry is V-Droid (Llama 8B with a trained verifier) at 59.5%. Envoy reads the accessibility tree and asked for a screenshot on 8.2% of steps (138 of 1,679), so its leaderboard label would still be "Screenshot + A11y tree". The differences from the official protocol listed under Setting all still apply (arm64, Envoy's own device layer, the parked forwarder, a one-step answer).
+
+### Spend
+
+- Offline checks, both sides: $10.13.
+- The dev-half tuning run: $7.14.
+- All 116 tasks: $14.54.
+- **In all: $31.81 of Muse credit.**
+
 ## Routines across seeds
 
 AndroidWorld randomizes each task's parameters by seed, so a routine compiled from a seed-30 run can be replayed on other instances of the same task: other names, dates, amounts, files. That is the question Envoy's routines are built for. The library is separate from Envoy's own (`eval/results/androidworld/routines/`, never `data/routines/`), and every replay is scored by AndroidWorld.
@@ -375,6 +524,8 @@ The leaderboard (fetched Oct 27, `eval/results/androidworld/leaderboard-2026-10-
 | M3A, paper | Gemma 2 | A11y tree | seed 30 | 9.5 |
 | **Envoy, baseline (`main`)** | Muse Spark 1.3, low effort | A11y tree (+ screenshot on request, 17% of steps) | seed 30 | **18.1** (standard) / 18.5 (Contributor) |
 | **Envoy, with the changes (this branch)** | Muse Spark 1.3, low effort | A11y tree (+ screenshot on request, 11% of steps) | seed 30 | **49.1** (held-out half: 53.4) |
+| **Envoy, shipped default, Nov 3 (`7ed4aa6`)** | Muse Wonder 1.0 steps (hybrid), low effort | A11y tree (+ screenshot on request, 11% of steps) | seed 30 | **63.8** (held-out half: 62.1) |
+| **Envoy, round 4 (Nov 10, `3e557d1`)** | Muse Wonder 1.0 steps (hybrid), low effort | A11y tree (+ screenshot on request, 8% of steps) | seed 30 | **73.3** (held-out half: 75.9) |
 
 What this says, with the caveats attached:
 - **Envoy before the changes sits with the paper's 2024 agents on weaker setups** (M3A-Simple with GPT-4 Turbo, 19.8; M3A with Gemini 1.5 Pro on the tree, 19.4): 18%.

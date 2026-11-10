@@ -1,0 +1,119 @@
+{
+ "task": "FilesMoveFile",
+ "seed": 4058110435,
+ "goal": "Move the file holiday_photos.jpg from Podcasts within the sdk_gphone_x86_64 storage area to the DCIM within the same sdk_gphone_x86_64 storage area in the Android filesystem.",
+ "score": 1.0,
+ "aw_run_time_s": 91.6,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 22:14:21.436126",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-all-3e557d1-1109-221253-22fc",
+  "goal": "Move the file holiday_photos.jpg from Podcasts within the sdk_gphone_x86_64 storage area to the DCIM within the same sdk_gphone_x86_64 storage area in the Android filesystem.",
+  "max_steps": 20,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Moved holiday_photos.jpg from Podcasts to DCIM in the sdk_gphone_x86_64 (sdk_gphone64_arm64) storage area.",
+  "done": true,
+  "answer": "Moved holiday_photos.jpg from Podcasts to DCIM in the sdk_gphone_x86_64 (sdk_gphone64_arm64) storage area.",
+  "steps_device": 17,
+  "iterations": 20,
+  "looks": 2,
+  "screenshots_sent": 2,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 11,
+   "scroll": 2,
+   "look": 2,
+   "back": 1,
+   "type": 1,
+   "long_press": 1,
+   "done": 1
+  },
+  "model_calls": 23,
+  "input_tokens": 53221,
+  "cached_tokens": 37484,
+  "output_tokens": 4244,
+  "reasoning_tokens": 1992,
+  "cost_usd": 0.155325,
+  "cost_at_standard_usd": 0.155325,
+  "duration_s": 82.53,
+  "model_s": 53.55,
+  "device_s": 28.98,
+  "connect_s": 0.9,
+  "approvals": [
+   {
+    "step": 19,
+    "description": "tap \"MOVE\" in com.google.android.documentsui",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Files",
+   "subgoals": [
+    "Long-press to select holiday_photos.jpg in the Podcasts search results",
+    "Open the overflow menu and choose Move to",
+    "Navigate to the sdk_gphone64_arm64 storage and open the DCIM folder",
+    "Tap Move here to confirm the move",
+    "Verify holiday_photos.jpg is shown inside DCIM"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "holiday_photos.jpg",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'holiday_photos.jpg' is visible"
+  },
+  "trace_dir": "data/runs/aw-2026-11-09-push-all-3e557d1-1109-221253-22fc",
+  "envoy_commit": "3e557d1c7c51335df35a449886077200abd2a357",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-all-3e557d1/traces/FilesMoveFile__s4058110435.jsonl.gz",
+  "wall_s": 85.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.3
+  }
+ }
+}

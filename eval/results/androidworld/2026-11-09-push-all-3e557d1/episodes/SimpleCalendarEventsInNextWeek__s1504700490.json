@@ -1,0 +1,106 @@
+{
+ "task": "SimpleCalendarEventsInNextWeek",
+ "seed": 1504700490,
+ "goal": "What events do I have in the next week in Simple Calendar Pro? Assume the week starts from Monday. Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+ "score": 1.0,
+ "aw_run_time_s": 79.3,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 23:33:05.291593",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-all-3e557d1-1109-233147-fe4f",
+  "goal": "What events do I have in the next week in Simple Calendar Pro? Assume the week starts from Monday. Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Product demo, Movie night",
+  "done": true,
+  "answer": "Product demo, Movie night",
+  "steps_device": 8,
+  "iterations": 10,
+  "looks": 1,
+  "screenshots_sent": 1,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 1,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "look": 1,
+   "tap_point": 1,
+   "scroll": 1,
+   "tap": 2,
+   "swipe": 3,
+   "done": 1
+  },
+  "model_calls": 15,
+  "input_tokens": 27145,
+  "cached_tokens": 18044,
+  "output_tokens": 3063,
+  "reasoning_tokens": 1768,
+  "cost_usd": 0.114289,
+  "cost_at_standard_usd": 0.114289,
+  "duration_s": 72.51,
+  "model_s": 39.42,
+  "device_s": 33.09,
+  "connect_s": 0.89,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "com.simplemobiletools.calendar.pro",
+   "subgoals": [
+    "Open Simple Calendar Pro",
+    "Move the calendar view to the week starting Monday, October 16, 2023",
+    "Read the event titles shown for October 16-22, 2023"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "titles of events from October 16 to October 22, 2023",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: Movie"
+  },
+  "trace_dir": "data/runs/aw-2026-11-09-push-all-3e557d1-1109-233147-fe4f",
+  "envoy_commit": "3e557d1c7c51335df35a449886077200abd2a357",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-all-3e557d1/traces/SimpleCalendarEventsInNextWeek__s1504700490.jsonl.gz",
+  "wall_s": 75.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.6
+  }
+ }
+}

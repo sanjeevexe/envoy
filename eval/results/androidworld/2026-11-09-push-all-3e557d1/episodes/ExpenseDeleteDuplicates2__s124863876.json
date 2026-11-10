@@ -1,0 +1,129 @@
+{
+ "task": "ExpenseDeleteDuplicates2",
+ "seed": 124863876,
+ "goal": "Delete all but one of any expenses in pro expense that are exact duplicates, ensuring at least one instance of each unique expense remains.",
+ "score": 1.0,
+ "aw_run_time_s": 95.5,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 22:07:56.346554",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-all-3e557d1-1109-220624-3b21",
+  "goal": "Delete all but one of any expenses in pro expense that are exact duplicates, ensuring at least one instance of each unique expense remains.",
+  "max_steps": 18,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Deleted one duplicate Jeans expense (2023 Oct 1, 496.36), leaving one instance. Scanned the expense list and found no other exact duplicates.",
+  "done": true,
+  "answer": "Deleted one duplicate Jeans expense (2023 Oct 1, 496.36), leaving one instance. Scanned the expense list and found no other exact duplicates.",
+  "steps_device": 14,
+  "iterations": 16,
+  "looks": 1,
+  "screenshots_sent": 1,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 1,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "look": 1,
+   "tap_point": 1,
+   "tap": 4,
+   "scroll": 8,
+   "done": 1
+  },
+  "model_calls": 21,
+  "input_tokens": 55508,
+  "cached_tokens": 29736,
+  "output_tokens": 5244,
+  "reasoning_tokens": 2788,
+  "cost_usd": 0.221673,
+  "cost_at_standard_usd": 0.221673,
+  "duration_s": 87.34,
+  "model_s": 53.64,
+  "device_s": 33.7,
+  "connect_s": 0.89,
+  "approvals": [
+   {
+    "step": 13,
+    "description": "tap \"\" in com.arduia.expense",
+    "reasons": [
+     "rule: target id 'com.arduia.expense:id/btn_delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 14,
+    "description": "tap \"CONFIRM\" in com.arduia.expense",
+    "reasons": [
+     "rule: target says 'CONFIRM'",
+     "screen: confirming something that can't be taken back",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Pro Expense",
+   "subgoals": [
+    "Go back to Totals, then re-enter Expense Logs for a fresh top-to-bottom scan",
+    "Scroll to the top and compare each expense by name, date, and amount while scrolling through the whole list",
+    "For any exact duplicate found, open one extra copy only, delete it, and confirm the deletion",
+    "Continue scanning to the end of the list to ensure no other exact duplicates remain",
+    "Scroll to show the remaining single Jeans expense on 2023 Oct 1 for 496.36"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "496.36 · $",
+    "field_hint": ""
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'496.36 · $' is visible"
+  },
+  "trace_dir": "data/runs/aw-2026-11-09-push-all-3e557d1-1109-220624-3b21",
+  "envoy_commit": "3e557d1c7c51335df35a449886077200abd2a357",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-all-3e557d1/traces/ExpenseDeleteDuplicates2__s124863876.jsonl.gz",
+  "wall_s": 89.9,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

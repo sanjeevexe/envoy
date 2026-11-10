@@ -1,0 +1,105 @@
+{
+ "task": "MarkorMergeNotes",
+ "seed": 2594989658,
+ "goal": "Merge the contents of Markor notes tough_frog_2023_08_05.txt, proud_cat_edited.txt and 2023_08_21_friendly_koala.md (in the same order) into a new Markor note named mIObBbo4 and save it. Add a new line between the content of each note.",
+ "score": 0.0,
+ "aw_run_time_s": 66.0,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 22:24:46.908373",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-all-3e557d1-1109-222342-5d7a",
+  "goal": "Merge the contents of Markor notes tough_frog_2023_08_05.txt, proud_cat_edited.txt and 2023_08_21_friendly_koala.md (in the same order) into a new Markor note named mIObBbo4 and save it. Add a new line between the content of each note.",
+  "max_steps": 78,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Created new Markor note mIObBbo4.md containing merged contents of the three notes in order, separated by blank lines, and saved it.",
+  "done": true,
+  "answer": "Created new Markor note mIObBbo4.md containing merged contents of the three notes in order, separated by blank lines, and saved it.",
+  "steps_device": 14,
+  "iterations": 15,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 6,
+   "back": 5,
+   "type": 2,
+   "done": 1
+  },
+  "model_calls": 17,
+  "input_tokens": 42304,
+  "cached_tokens": 29236,
+  "output_tokens": 3176,
+  "reasoning_tokens": 1276,
+  "cost_usd": 0.121639,
+  "cost_at_standard_usd": 0.121639,
+  "duration_s": 53.77,
+  "model_s": 34.91,
+  "device_s": 18.86,
+  "connect_s": 0.9,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Markor",
+   "subgoals": [
+    "Tap 'Create a new file or folder' and create a new file named mIObBbo4",
+    "Enter the merged content exactly: m4kMyOGWaENoPj6FqLjd, blank line, fxHXZsqrmnwYjXvte9pg, blank line, f42GOjFWb2aKHogAFQSY",
+    "Save the new note",
+    "Return to the Documents file list showing the new mIObBbo4 note"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "mIObBbo4",
+    "field_hint": ""
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'mIObBbo4' is visible"
+  },
+  "trace_dir": "data/runs/aw-2026-11-09-push-all-3e557d1-1109-222342-5d7a",
+  "envoy_commit": "3e557d1c7c51335df35a449886077200abd2a357",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-all-3e557d1/traces/MarkorMergeNotes__s2594989658.jsonl.gz",
+  "wall_s": 59.3,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}
