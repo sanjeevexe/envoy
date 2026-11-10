@@ -125,12 +125,32 @@ def _scroll_direction(action: Action) -> str | None:
     return None
 
 
-def _scroll_note(before: ScreenState, after: ScreenState, action: Action, changed: bool) -> str | None:
+def _rows(s: ScreenState) -> list[Element]:
+    """A screen's list items with text: what a scroll brings into view."""
+    return [e for e in s.numbered if e.in_list and e.kind != "List" and e.label]
+
+
+def _row_key(e: Element) -> tuple[str, str, str]:
+    return e.kind, e.label, e.resource_id
+
+
+def _list_key(s: ScreenState, action: Action) -> str:
+    """Which list a scroll moved: its screen and the list's id (or place), or the whole screen."""
+    el = s.numbered[action.element - 1] if action.kind == "scroll" and action.element and 1 <= action.element <= len(s.numbered) else None
+    where = (el.resource_id or str(el.bounds)) if el is not None else "screen"
+    return f"{s.package}/{s.activity}/{where}"
+
+
+def _scroll_note(before: ScreenState, after: ScreenState, action: Action, changed: bool, seen: Counter | None = None) -> str | None:
     """What a scroll did to the list, for HISTORY: how many new items came into view, and whether the list has reached its
     end. On AndroidWorld 88 of 297 scrolls on the dev half moved nothing (the list was already at its end), and question
     tasks scrolled up and down a list they had read, because SCREEN always says there is more. A scroll that moves the
     content less than the drag reached the end; one that moves nothing was already there. None when it isn't a list scroll,
-    or the list is gone (another screen): then the usual history line applies."""
+    or the list is gone (another screen): then the usual history line applies.
+
+    `seen`: the items already seen in this list during the task (the loop keeps them). An item is new only if it was never
+    seen: counted against the last screen alone, scrolling back up to rows already read reported them as "new" again, and
+    TasksIncompleteTasksOnDate went up and down its list six times."""
     direction = _scroll_direction(action)
     if direction is None or (after.package, after.activity) != (before.package, before.activity):
         return None
@@ -149,16 +169,14 @@ def _scroll_note(before: ScreenState, after: ScreenState, action: Action, change
     if not changed:
         return f"the list did not move: it is already at {end}"
 
-    def rows(s: ScreenState) -> list[Element]:
-        return [e for e in s.numbered if e.in_list and e.kind != "List" and e.label]
-
-    def key(e: Element) -> tuple[str, str, str]:
-        return e.kind, e.label, e.resource_id
-
+    rows, key = _rows, _row_key
     a, b = rows(before), rows(after)
-    new = sum((Counter(map(key, b)) - Counter(map(key, a))).values())
+    known = (seen or Counter()) | Counter(map(key, a))
+    new = sum((Counter(map(key, b)) - known).values())
+    again = len(b) - new if seen else 0
+    items = f"{new} new item{'s' if new != 1 else ''} came into view" + (f" ({again} you had already seen)" if again and seen else "")
     if direction not in ("up", "down"):
-        return f"{new} new item{'s' if new != 1 else ''} came into view"
+        return items
     # How far the content moved: elements seen once on both screens, by their center's height.
     once_a = {k: e for k, e in ((key(e), e) for e in a) if Counter(map(key, a))[k] == 1}
     once_b = {k: e for k, e in ((key(e), e) for e in b) if Counter(map(key, b))[k] == 1}
@@ -168,7 +186,6 @@ def _scroll_note(before: ScreenState, after: ScreenState, action: Action, change
         drag = 2 * int((y2 - y1) * SCROLL_FRACTION)
     else:
         drag = abs((action.y2 or 0) - (action.y or 0))
-    items = f"{new} new item{'s' if new != 1 else ''} came into view"
     if not shifts:
         return f"{items}; the list moved by a whole screen or more"
     moved = shifts[len(shifts) // 2] * (1 if direction == "down" else -1)
@@ -250,6 +267,7 @@ class AgentRunner:
         last_bodies: list[str] = []  # the last screens' compact forms, for stuck detection
         volatile: dict[str, set[int]] = {}  # screen signature → lines seen changing on their own
         visits: dict[str, int] = {}  # screen signature -> times seen
+        list_seen: dict[str, Counter] = {}  # a list (screen and list id) -> the items seen in it so far, for scroll reports
         names: dict[str, str] = {}  # screen signature -> readable name
         replans = 0
         prev_sig = ""
@@ -547,7 +565,12 @@ class AgentRunner:
                 if progress_streak >= PROGRESS_STEPS:  # moving again: a later stuck spell starts its recoveries afresh
                     stuck_recoveries = 0
                 try:  # a report, never a reason for a run to fail
-                    note = _scroll_note(screen, after, action, changed) if result_.ok else None
+                    note = None
+                    if result_.ok and _scroll_direction(action):
+                        lk = _list_key(screen, action)
+                        known = list_seen.get(lk, Counter()) | Counter(map(_row_key, _rows(screen)))
+                        note = _scroll_note(screen, after, action, changed, known)
+                        list_seen[lk] = known | Counter(map(_row_key, _rows(after)))
                 except Exception as e:  # noqa: BLE001
                     note, record["scroll_note_error"] = None, f"{type(e).__name__}: {e}"[:200]
                 record.update({
