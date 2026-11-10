@@ -91,6 +91,9 @@ def test_a_scroll_says_how_many_new_items_came_into_view_and_when_the_list_ends(
     assert _scroll_note(a, b, Action(kind="tap", element=3), True) is None
     other = _screen(_node("Settings", rid="other_title", bounds="[0,200][1080,300]"))
     assert _scroll_note(a, other, down, True) is None
+    # a view outside the list that comes and goes as it scrolls (a collapsing header) changes the signature, not the list
+    b.signature = "another"
+    assert _scroll_note(a, b, down, True) == "6 new items came into view; there may be more"
 
 
 def test_the_step_prompt_explains_the_budget_and_the_last_step():

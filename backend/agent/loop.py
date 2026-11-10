@@ -129,11 +129,18 @@ def _scroll_note(before: ScreenState, after: ScreenState, action: Action, change
     """What a scroll did to the list, for HISTORY: how many new items came into view, and whether the list has reached its
     end. On AndroidWorld 88 of 297 scrolls on the dev half moved nothing (the list was already at its end), and question
     tasks scrolled up and down a list they had read, because SCREEN always says there is more. A scroll that moves the
-    content less than the drag reached the end; one that moves nothing was already there. None when it isn't a list scroll
-    on the same screen (then the usual history line applies)."""
+    content less than the drag reached the end; one that moves nothing was already there. None when it isn't a list scroll,
+    or the list is gone (another screen): then the usual history line applies."""
     direction = _scroll_direction(action)
-    if direction is None or after.signature != before.signature:
+    if direction is None or (after.package, after.activity) != (before.package, before.activity):
         return None
+    if action.kind == "scroll" and action.element and 1 <= action.element <= len(before.numbered):
+        # The same list must still be there. Not the screen's signature: on Chipotle's menu a scroll changed it (a view outside
+        # the list came and went) while the list itself only moved.
+        lst = before.numbered[action.element - 1]
+        if lst.kind == "List" and not any(e.kind == "List" and e.resource_id == lst.resource_id and (lst.resource_id or e.bounds == lst.bounds)
+                                          for e in after.numbered):
+            return None
     end = {"down": "the end of the list", "up": "the top of the list"}.get(direction, "the end of the list in that direction")
     paged = {e.text_key: e.label for e in before.numbered if e.text_key}
     for e in after.numbered:  # a long text shown in parts moved to another part (devices/screen.py)
