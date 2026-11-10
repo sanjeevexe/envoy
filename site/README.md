@@ -1,6 +1,6 @@
 # Envoy's showcase site
 
-A guided tour of Envoy for judges and other readers, built only from real recordings, captures and eval results in this
+A guided tour of Envoy, built only from real recordings, captures and eval results in this
 repo. Five sections tell one story, the same one as the demo video and the README's top, then an evidence appendix keeps the
 rest:
 
@@ -79,7 +79,7 @@ page):
   `compare_final-standard.json`;
 - `eval/results/showcase/live-2026-11-02/task-rows.json` (with the build's note for the songless TikTok, keyed by task id;
   every other row must be "done");
-- `prompts/phone-watch-report.md` (the Stage 2 table with "Landed on the Pixel");
+- `docs/reports/phone-watch-report.md` (the Stage 2 table with "Landed on the Pixel");
 - `eval/results/showcase-batch/RESULTS.md` (its per-workflow table: the build's counts from the attempts must match it);
 - `eval/results/learn-agent-path/README.md` (its two "**Agent path:** … **Learn rate:** … **New input:**" headlines must match
   the counts from `results.json` and `supplementary.json`);
@@ -114,7 +114,7 @@ Section numbers are positions on the page (the page numbers itself); "E:" is a g
 | 1, 3 | Muse's Nov 4 `cross_post` take; the tool count; "Changes since the evaluation" | `README.md` (`readme_facts` in the build; the tool count is checked against `backend/mcp_server/server.py`) |
 | 1 | One post, start to finish; the four posts and which went live | `eval/results/showcase/live-2026-11-02/task-rows.json` (the live API's rows for the five real posts, read read-only); "live" for each done row, per `docs/demo-showcase.md` |
 | 1 | Learns: first run vs routine, medians over the real-app workflows | the cost curve's pass (see section 5) |
-| 1 | Watches: 1.57 s | `prompts/phone-watch-report.md` (see section 4) |
+| 1 | Watches: 1.57 s | `docs/reports/phone-watch-report.md` (see section 4) |
 | 2. Learns | Starbucks first run: each step's frame, tapped element, reason, time, calls and dollars so far; the run's total; its compile | `eval/results/real-apps/loop-a/runs.jsonl`; `site/data/recordings/starbucks-first.json` (imported from the run's trace, its API copy and its model-cost log) |
 | 2 | Then it replays: first run vs routine on real apps (medians, ranges); compile cost | the cost curve's pass (see section 5) |
 | 2 | Starbucks's own replays and first runs (medians, ranges, 8 code versions) | `eval/results/real-apps/loop-a/runs.jsonl` (task `starbucks`/`starbucks2`, ok rows) |
@@ -135,7 +135,7 @@ Section numbers are positions on the page (the page numbers itself); "E:" is a g
 | 3 | Muse's Nov 2 dry run: five tasks, how each ended, calls, time | `eval/results/showcase/muse-2026-11-02/task-rows.json` (the live API's rows, read read-only); the Story notes are the build's words for the file's notes |
 | 3 | Muse for Mac's outbox; "there's no accept or approve tool" | `eval/results/muse-link/` (Oct 29) |
 | 3 | Only a person approves: per-agent keys, 30 a minute, a read-only key's refusal; 20/20 caught, 0 of 20 followed | `backend/api/auth.py`, `backend/api/agents.py`, `agents/meta-agent/evidence/2026-11-01/readonly-key-run.json`; `eval/results/final/safety.md`, `injection.md` |
-| 4. Watches | Real comments → the iPhone (+1.57 s Instagram; YouTube ~2 min; TikTok none) | `prompts/phone-watch-report.md` › Stage 2 (table copied) |
+| 4. Watches | Real comments → the iPhone (+1.57 s Instagram; YouTube ~2 min; TikTok none) | `docs/reports/phone-watch-report.md` › Stage 2 (table copied) |
 | 4 | Six trigger kinds; Muse's scheduled task | `backend/api/scheduler.py` (`KINDS`); `eval/results/muse-link/e1-muse-tells-you-unprompted.jpg` (cropped) |
 | 5. Results | The banner | `eval/results/final/report.md` ("Ran on") |
 | 5 | Real apps, one pass per row | each pass's own published stage table: `eval/results/final/real.md` (Oct 28 until the eval, then the final row), `eval/results/real_rerun_2026-10-31/real.md`, `eval/results/real_rerun_2026-11-02_wsd-baseline/real.md`; the two Oct 29 passes from `eval/results/real_rerun_2026-10-31/README.md` (its Oct 28 column is left out: its first-run cell is real.json's 13, the published table says 14) |

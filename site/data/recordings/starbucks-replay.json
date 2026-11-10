@@ -5,7 +5,7 @@
  "task_id": "task-1030-204136-b8d5",
  "device": "envoy-real",
  "device_note": "envoy-real, an Android emulator; no Starbucks account",
- "where": "loop A (prompts/loop-reliability.md), Oct 30, after the emulator's cold reboot",
+ "where": "loop A, Oct 30, after the emulator's cold reboot",
  "started_et": "2026-10-30 20:41:36",
  "routine": "starbucks_drink_calories",
  "version": 4,

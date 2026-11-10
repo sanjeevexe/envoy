@@ -1,6 +1,6 @@
 # Third-party components
 
-Envoy builds on the open-source projects below. The hackathon rules allow open source as long as it is credited, so this list is kept current: add a row when a dependency is added, and move a row from "Planned" to "In use" when it lands.
+Envoy builds on the open-source projects below, each credited with its license. The list is kept current: add a row when a dependency is added, and move a row from "Planned" to "In use" when it lands.
 
 Licenses for Python packages were read from the installed package metadata (Oct 26, 2026). Licenses for planned components come from their repositories and must be re-checked when they are added.
 

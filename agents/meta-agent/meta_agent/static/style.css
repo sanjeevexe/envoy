@@ -1,4 +1,4 @@
-/* The Sage look (prompts/ui-sage-redesign.md), sized for a 1080p screen recording. */
+/* The Sage look, sized for a 1080p screen recording. */
 @font-face { font-family: "Fraunces"; src: url("/static/fonts/fraunces-latin-wght-normal.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
 @font-face { font-family: "Manrope"; src: url("/static/fonts/manrope-latin-wght-normal.woff2") format("woff2"); font-weight: 200 800; font-display: swap; }
 
@@ -166,7 +166,7 @@ form { display: flex; gap: 10px; align-items: center; }
 
 .spin { animation: spin 1s linear infinite; transform-origin: 50% 50%; }
 
-/* the avatar (prompts/ui-sage-design/Main.dc.html) */
+/* the avatar */
 .ev-body { transform-box: fill-box; transform-origin: 50% 90%; animation: evBreathe 4.5s ease-in-out infinite; }
 .ev-eye { transform-box: fill-box; transform-origin: 50% 50%; animation: evBlink 5.5s infinite; }
 .ev-line { fill: none; stroke: #F6F3EC; stroke-width: 3.5; stroke-linecap: round; }

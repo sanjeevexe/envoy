@@ -8,7 +8,7 @@ On your iPhone, Envoy runs as a Home Screen app over a private HTTPS address on 
 
 The same check-in also ran from the **Muse app** on the iPhone, through Envoy's real MCP server: Muse started it, waited for your approval without being able to give it, and reported the boarding details once you had approved on Envoy's page.
 
-Plan: `prompts/phase-5-plan.md`. Results: `eval/results/phase5/` (`gate.json` scripted, `iphone_gate.json` your run, `muse_gate.json` the Muse run, `photos.json` screenshot accuracy).
+Results: `eval/results/phase5/` (`gate.json` scripted, `iphone_gate.json` your run, `muse_gate.json` the Muse run, `photos.json` screenshot accuracy).
 
 ## What was built
 

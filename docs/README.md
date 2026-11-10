@@ -1,13 +1,23 @@
 # Envoy docs
 
 **Envoy is the phone layer agents call.** It **acts** in Android apps, **learns** the tasks it does there, and
-**watches** the phone for events. Muse has a computer; Envoy gives it a phone.
+**watches** the phone for events. Envoy gives AI agents a phone.
 
-Envoy isn't a rival assistant. It's an MCP server: Muse, which leads our demo, or any other MCP agent is a way in. The
+Envoy isn't a rival assistant. It's an MCP server: Muse, Claude Code or any other MCP agent is a way in. The
 person asks there, and the agent calls Envoy. Envoy's own app, on the person's iPhone, is where they approve anything irreversible and watch the phone
 work.
 
 This page is the map. The final numbers come from the Nov 3 evaluation on the `eval-final` tag.
+
+## Start here
+
+| Read | For |
+| --- | --- |
+| [models.md](models.md) | What each Meta model does, how a run is compiled into a routine, repair, vision and memory |
+| [features.md](features.md) | Every feature, what it does, and the evidence for it |
+| [results.md](results.md) | Every result with its scope, configuration and commit |
+| [getting-started.md](getting-started.md) | Setup on a Mac, with or without a model key, the iPhone, and running the evaluation |
+| [reports/](reports/README.md) | Engineering reports from building each feature, cited as evidence |
 
 ## The current design
 
@@ -67,7 +77,7 @@ tools. The person's own phone still asks them first.
 
 ## Results
 
-The final numbers are in the [README's Results](../README.md#results) and
+The final numbers are in [results.md](results.md) and
 [final/report.md](../eval/results/final/report.md). The per-phase pages below have the detail and the method up to
 Oct 29.
 
@@ -90,6 +100,4 @@ what they describe.
 | [androidworld-results.md](androidworld-results.md) | Envoy on AndroidWorld (Oct 28–29) |
 | [real-app-test-set.md](real-app-test-set.md) | The first real-app results (Oct 27) |
 | [research/agents-and-bot-checks.md](research/agents-and-bot-checks.md) | Background research on phone agents and bot checks |
-| [meta-feedback.md](meta-feedback.md) | A running log of feedback on Meta's products, for the submission |
-
-[submission.md](submission.md) is the hackathon write-up.
+| [meta-feedback.md](meta-feedback.md) | Notes on Meta's AI tools: what worked and what could be better |

@@ -26,7 +26,7 @@ Underneath all three is a **memory** of what Envoy has seen in apps, in email an
 4. **A device layer that routes between phones.** One interface over emulators (on the Mac or in the cloud) and real Android phones, with routines that run on either. Agents can see the phones and pick one.
 5. **A human gate no agent can pass.** Each agent has its own key and its own tools. None of them can approve, accept an offer, or answer for the person: Envoy has no tool for it.
 
-**Fit with the hackathon.** Indie track, theme *Push the Frontier*, "give a machine a new capability": Envoy gives Muse, and any MCP agent, a phone. Three agents have called it: Muse (on the Mac and in its iPhone app), the Spark agent (a small agent on Meta's own models, `agents/meta-agent/`) and Claude Code.
+**Who calls it.** Envoy gives Muse, and any MCP agent, a phone. Three agents have called it: Muse (on the Mac and in its iPhone app), the Spark agent (a small agent on Meta's own models, `agents/meta-agent/`) and Claude Code.
 
 ## Goals and non-goals
 
@@ -153,7 +153,7 @@ On emulators, the agent's screenshots come from the emulator's own gRPC screensh
 - uiautomator2 (or the bridge, if built) is installed over adb. Android 13+ restricts accessibility access for sideloaded apps, so the bridge would be enabled once through the "Allow restricted settings" menu or an adb setting.
 - On Samsung phones, Auto Blocker must be turned off.
 - Secure sign-in and payment screens behave as described in Live view and sign-in.
-- Google Play's policy forbids publishing an app that uses accessibility features to act autonomously, so any on-phone helper stays sideloaded. That is fine for the hackathon and is the main barrier to shipping this as a consumer product.
+- Google Play's policy forbids publishing an app that uses accessibility features to act autonomously, so any on-phone helper stays sideloaded. That is fine for a personal setup and is the main barrier to shipping this as a consumer product.
 
 ### Choosing which phone runs a task
 
@@ -921,8 +921,8 @@ The biggest risk is reliability: phone agents are flaky, and "whether it works" 
 | Learned routines break often on app updates | Medium | Medium | Element-based targeting, step checks, local repair, and versioned routines with rollback |
 | Memory fills with wrong or duplicate facts | Medium | Medium | Facts record source, time and confidence; entity matching before insert; newer facts replace older ones; the user can correct facts in the graph view |
 | Laptop resources (24 GB RAM) limit running two emulators plus everything else | Medium | Medium | One emulator during development, a second only for comparison tasks; headless mode; snapshots instead of cold boots |
-| Automating real apps breaks their terms of service | Medium | Low (for the hackathon) | Our own test apps for most testing; real apps only on the user's own accounts; noted here |
-| Muse custom connectors are not open to hackathon developers | Medium | Low | Envoy's own web app and MCP server work without it; the connector is an add-on |
+| Automating real apps breaks their terms of service | Medium | Low (personal use) | Our own test apps for most testing; real apps only on the user's own accounts; noted here |
+| Muse custom connectors are not open to third-party developers | Medium | Low | Envoy's own web app and MCP server work without it; the connector is an add-on |
 | Scope grows beyond what one person can finish | High | High | Strict build phases with exit criteria; nothing from a later phase starts until the current phase passes |
 
 **How these turned out (Nov 3):**
@@ -1107,9 +1107,8 @@ Several coding sessions shared one Mac, so each device was claimed through a loc
 
 Researched October 26, 2026.
 
-**Hackathon and Meta**
+**Meta**
 
-- [Meta Global AI Developer Hackathon](https://cerebralvalley.ai/e/meta-ai-developer-hackathon)
 - [Meta Model API docs](https://dev.meta.ai/docs/) · [pricing and rate limits](https://dev.meta.ai/docs/pricing-rate-limits/) · [models](https://dev.meta.ai/docs/models/) · [image understanding](https://dev.meta.ai/docs/image-understanding) · [computer use](https://dev.meta.ai/docs/computer-use) · [structured output](https://dev.meta.ai/docs/structured-output) · [tool calling](https://dev.meta.ai/docs/tool-calling) · [prompt caching](https://dev.meta.ai/docs/prompt-caching) · [reasoning](https://dev.meta.ai/docs/reasoning)
 - [SAM on the Meta API](https://dev.meta.ai/docs/sam/overview) · [speech to text](https://dev.meta.ai/docs/speech-to-text) · [Muse Glimmer](https://dev.meta.ai/docs/muse-glimmer) · [Muse Code](https://dev.meta.ai/docs/muse-code)
 - [Introducing Muse Spark 1.3](https://research.meta.ai/blog/introducing-muse-spark-1-3) · [Muse Spark 1.1 and the Meta Model API](https://ai.meta.com/blog/introducing-muse-spark-meta-model-api/) · [Build with Muse Wonder](https://dev.meta.ai/resources/blog/build-with-muse-wonder)

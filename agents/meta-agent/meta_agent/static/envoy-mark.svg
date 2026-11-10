@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Envoy">
-  <!-- Envoy's mark: the avatar's resting face on a sage tile (prompts/ui-sage-design/Main.dc.html). The source of every
+  <!-- Envoy's mark: the avatar's resting face on a sage tile. The source of every
        icon in this folder: scripts/make_icons.mjs reads the face and the colors from here. -->
   <rect width="120" height="120" rx="28" fill="#3E7C5C"/>
   <g transform="translate(19 19) scale(0.68)">

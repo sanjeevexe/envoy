@@ -1,6 +1,6 @@
 # Envoy on AndroidWorld
 
-*Oct 28–29, 2026, with a separate run of the shipped default on Nov 3 (below the headline). Branch `androidworld`. Plan: `prompts/androidworld-plan.md`. Results: `eval/results/androidworld/`.*
+*Oct 28–29, 2026, with a separate run of the shipped default on Nov 3 (below the headline). Branch `androidworld`. Results: `eval/results/androidworld/`.*
 
 AndroidWorld (Google Research; Rawles et al., 2024; Apache-2.0) is a benchmark of 116 parameterized tasks across 20 open-source Android apps, set up, randomized and scored by its own code on a live emulator. This page reports Envoy on it: the headline success rate, its cost and speed, where it fails and why, what general changes fixed, and what routines did across seeds.
 
@@ -127,7 +127,7 @@ Measured from the digests over the whole run (`signals.py`), not just the labell
 
 ## What I changed, and why
 
-Each change is general (no app, task or AndroidWorld knowledge), has its own commit and an offline test, and was chosen from the dev-half analysis above before any re-measurement (`prompts/androidworld-plan.md`, Oct 28). They are written against current `main` (merged into the branch at `29dc9d4`), so each can be proposed as it stands.
+Each change is general (no app, task or AndroidWorld knowledge), has its own commit and an offline test, and was chosen from the dev-half analysis above before any re-measurement (Oct 28). They are written against current `main` (merged into the branch at `29dc9d4`), so each can be proposed as it stands.
 
 | # | Commit | Cause it addresses | What changes |
 | --- | --- | --- | --- |
@@ -190,7 +190,7 @@ Round 2 shows that 10b does what it was built to do, without a score change I ca
 
 Round 3 adds that memory (11) and the keyboard fix (4b): **29/58**, the best dev score, +6 −2 against round 2 (p = 0.29, so within noise on its own) and +17 −1 against the Contributor baseline. The model kept something in 507 of 995 steps, in 45 of the 58 episodes, without spending steps on it (it is a field of the step, and output tokens fell slightly: 272k against 277k). The clearest effect is on relaunching: launches by name fell from 101 to 67. In RecipeAddMultipleRecipesFromMarkor, rounds 1 and 2 launched Markor 39 and 40 times. Round 3 read recipes.txt once, kept the recipes (`Recipe: Thai Peanut Noodle Salad description: A quick and easy meal…`) and entered the first one complete from memory. It went back once for the second recipe's ingredients, lost count of which recipes it had already added, and ran out of steps entering the third (10 launches). It still failed, but on a later problem. VlcCreateTwoPlaylists, never solved before, was solved.
 
-The keyboard line now appears (186 screens), and on the screens I checked it is right. 169 of the 186 follow a tap or typing. The rest follow scrolls inside a form being filled, where the keyboard stays up, and one screenshot shows it: uiautomator2's own slim input bar ("Clear Text · Done · Switch IME"). Neither loss traces to the round's changes. In SystemBluetoothTurnOn Envoy took wrong turns in Settings and kept nothing. In MarkorCreateNoteFromClipboard its first done came at step 12 of 14; the plan's check rejected it, and the budget ran out before a second. By the rule fixed before the result (`prompts/androidworld-plan.md`), the final set is the branch after round 3.
+The keyboard line now appears (186 screens), and on the screens I checked it is right. 169 of the 186 follow a tap or typing. The rest follow scrolls inside a form being filled, where the keyboard stays up, and one screenshot shows it: uiautomator2's own slim input bar ("Clear Text · Done · Switch IME"). Neither loss traces to the round's changes. In SystemBluetoothTurnOn Envoy took wrong turns in Settings and kept nothing. In MarkorCreateNoteFromClipboard its first done came at step 12 of 14; the plan's check rejected it, and the budget ran out before a second. By the rule fixed before the result, the final set is the branch after round 3.
 
 Round 3's episodes record two commits: `a80b976` for the first ones and `70ed7a8` (the plan's decision rule, committed during the run) for the rest. Their `backend/` is identical.
 

@@ -1,6 +1,8 @@
-# Feedback on Meta products (running log for the submission)
+# Notes on Meta's AI tools
 
-The submission form asks for "feedback from your experience using Meta products". Add an entry whenever something surprises us, good or bad, with the date and evidence, so the final answer is specific rather than written from memory on Nov 4.
+What we learned building Envoy on Meta's models (Muse Spark, Muse Wonder, SAM 3.1, Muse Voice Transcribe) and the Muse
+app: what worked well and what could be better, each with its date and evidence. For what each model does in Envoy, see
+[models.md](models.md).
 
 ## Muse app: custom MCP connector (Oct 26–27, Phase 0 test B2)
 
@@ -48,7 +50,7 @@ The submission form asks for "feedback from your experience using Meta products"
 - **`minimal` effort was no faster than `low`** in our test (median 0.99 s against 0.87 s) and was less accurate on a simple element choice (11/15 against 10/10). Guidance on when `minimal` helps would be useful.
 - **A full-resolution phone screenshot costs about 3,200 input tokens**, about twice the docs' "~1,300–1,500 for ~1280 px". A documented token formula per resolution would help budgeting.
 - SAM 3.1 returns nothing for generic UI phrases such as "button" or "text". Examples of good prompts for screenshots would help.
-- **Billing:** our own account's billing was not working, so the $50 balance and the hackathon's $150 credits couldn't be used. Faster billing support during a 10-day hackathon would matter.
+- **Billing:** our own account's billing was not working at first, so its balance couldn't be used. Faster billing support would matter for a short project.
 
 ## Muse Wonder and Muse Spark in Phase 2: compiling app routines (Oct 27)
 

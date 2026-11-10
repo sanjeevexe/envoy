@@ -1,4 +1,4 @@
-"""creator-workflow: a clip from the Mac posted to Instagram from the real phone, as a script (prompts/creator-workflow.md).
+"""creator-workflow: a clip from the Mac posted to Instagram from the real phone, as a script.
 
 Stage 0 looks before anything is built, with no model calls. Claim the phone first
 (`~/Desktop/Envoy/coord/devices.sh claim pixel5 creator-workflow <minutes> <purpose>`):

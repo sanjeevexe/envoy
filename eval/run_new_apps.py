@@ -1,4 +1,4 @@
-"""Loop B: new real apps on envoy-real, first run against replay (prompts/loop-new-apps.md).
+"""Loop B: new real apps on envoy-real, first run against replay.
 
   uv run --project backend python eval/run_new_apps.py run  --app <pkg> --kind first  --goal "In the Clock app, ..."
   uv run --project backend python eval/run_new_apps.py run  --app <pkg> --kind replay --goal "..." [--goal "..."]

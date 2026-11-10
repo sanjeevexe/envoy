@@ -6,7 +6,7 @@
  "task_id": "task-1030-155711-51c2",
  "device": "envoy-real",
  "device_note": "envoy-real, an Android emulator signed in to Google's Play Store; no Starbucks account",
- "where": "loop A (prompts/loop-reliability.md), Oct 30",
+ "where": "loop A, Oct 30",
  "started_et": "2026-10-30 15:57:11",
  "goal": "In the Starbucks app, how many calories are in a Grande Caffè Latte?",
  "answer": "190 calories",

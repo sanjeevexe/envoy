@@ -822,7 +822,7 @@ window.ENVOY = {
    "path": "eval/results/agent-door/agent-tools-new-1080p.png"
   },
   "report_src": {
-   "path": "prompts/agent-door-report.md"
+   "path": "docs/reports/agent-door-report.md"
   }
  },
  "showcase": {
@@ -2020,7 +2020,7 @@ window.ENVOY = {
    }
   ],
   "src": {
-   "path": "prompts/phone-watch-report.md",
+   "path": "docs/reports/phone-watch-report.md",
    "note": "Stage 2, the live API and the Pixel"
   },
   "code_src": {
@@ -2211,7 +2211,7 @@ window.ENVOY = {
    "path": "docs/agents.md"
   },
   "report_src": {
-   "path": "prompts/agent-keys-report.md"
+   "path": "docs/reports/agent-keys-report.md"
   }
  },
  "first_run": {
@@ -2222,7 +2222,7 @@ window.ENVOY = {
   "task_id": "task-1030-155711-51c2",
   "device": "envoy-real",
   "device_note": "envoy-real, an Android emulator signed in to Google's Play Store; no Starbucks account",
-  "where": "loop A (prompts/loop-reliability.md), Oct 30",
+  "where": "loop A, Oct 30",
   "started_et": "2026-10-30 15:57:11",
   "goal": "In the Starbucks app, how many calories are in a Grande Caffè Latte?",
   "answer": "190 calories",

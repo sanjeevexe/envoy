@@ -1,4 +1,4 @@
-// Envoy's avatar: one face in seven moods, drawn exactly as on the approved canvas (prompts/ui-sage-design/Main.dc.html),
+// Envoy's avatar: one face in seven moods, drawn exactly as on the approved canvas,
 // cheeks included. SVG plus the CSS keyframes in globals.css; no motion under prefers-reduced-motion.
 // The page picks the mood from real state (lib/mood.ts): offline, needs, listening, working, thinking, done, idle.
 

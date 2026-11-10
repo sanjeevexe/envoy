@@ -57,7 +57,7 @@ RECORDINGS = {
         "api": LOOP_A_API,
         "costs": LOOP_A / "logs/model_costs.jsonl",
         "device": "envoy-real, an Android emulator signed in to Google's Play Store; no Starbucks account",
-        "where": "loop A (prompts/loop-reliability.md), Oct 30",
+        "where": "loop A, Oct 30",
     },
     "starbucks-replay": {
         "kind": "routine",
@@ -67,7 +67,7 @@ RECORDINGS = {
         "api": LOOP_A_API,
         "costs": LOOP_A / "logs/model_costs.jsonl",
         "device": "envoy-real, an Android emulator; no Starbucks account",
-        "where": "loop A (prompts/loop-reliability.md), Oct 30, after the emulator's cold reboot",
+        "where": "loop A, Oct 30, after the emulator's cold reboot",
     },
 }
 
@@ -1083,7 +1083,7 @@ def tools() -> dict:
         "shot": image(SPARK / "routine-tool-run.png", "tools-spark-by-name", 1600),
         "settings": image(door / "agent-tools-new-1080p.png", "tools-settings-agent-tools", crop=(545, 615, 1245, 1080)),
         "settings_src": src("eval/results/agent-door/agent-tools-new-1080p.png"),
-        "report_src": src("prompts/agent-door-report.md"),
+        "report_src": src("docs/reports/agent-door-report.md"),
     }
 
 
@@ -1264,13 +1264,13 @@ def watches() -> dict:
     """Watching the phone: the trigger kinds (from the scheduler's code) and the Nov 2 live check of notification triggers
     on Envoy's phone with real comments (phone-watch's report, its table copied)."""
     kinds = re.search(r"^KINDS = \(([^)]*)\)", (REPO / "backend/api/scheduler.py").read_text(), re.M).group(1)
-    md = (REPO / "prompts/phone-watch-report.md").read_text()
+    md = (REPO / "docs/reports/phone-watch-report.md").read_text()
     # The report's table is indented under a list item; read it with the indent taken off.
     table = next(t for t in md_tables("\n".join(l.strip() for l in md.splitlines()))
                  if t and "Landed on the Pixel" in t[0])
     return {"kinds": re.findall(r'"(\w+)"', kinds), "kinds_src": src("backend/api/scheduler.py", "KINDS"),
             "live": [{k: plain(v) for k, v in r.items()} for r in table],
-            "src": src("prompts/phone-watch-report.md", "Stage 2, the live API and the Pixel"),
+            "src": src("docs/reports/phone-watch-report.md", "Stage 2, the live API and the Pixel"),
             "code_src": src("backend/api/notifications.py"),
             "muse": image(REPO / "eval/results/muse-link/e1-muse-tells-you-unprompted.jpg", "muse-watches-updates",
                           crop=(0, 64, 564, 1146)),
@@ -1290,7 +1290,7 @@ def keys() -> dict:
             "readonly_shot": image(SPARK / "readonly-key-run.png", "keys-spark-read-only", 1600),
             "settings": image(door / "agent-tools-new-1080p.png", "keys-settings-agents", crop=(545, 120, 1245, 605)),
             "settings_src": src("eval/results/agent-door/agent-tools-new-1080p.png"),
-            "doc_src": src("docs/agents.md"), "report_src": src("prompts/agent-keys-report.md")}
+            "doc_src": src("docs/agents.md"), "report_src": src("docs/reports/agent-keys-report.md")}
 
 
 def numbers(data: dict) -> dict:

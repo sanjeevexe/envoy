@@ -20,7 +20,7 @@ an agent calls as a tool of its own (`docs/technical-design.md`, "Routines as ag
   cross-post dry run".
 - **Comments come back.** One Instagram comment on a showcase post reached the iPhone 1.57 s after it landed on Envoy's
   phone (Nov 2; agents see it at their next `phone_updates` check). A YouTube comment took about 2 minutes, all but
-  3.6 s of it YouTube's own delay. No TikTok notification came (`prompts/phone-watch-report.md`).
+  3.6 s of it YouTube's own delay. No TikTok notification came (`docs/reports/phone-watch-report.md`).
 - **Every showcase post ran on Envoy's phone, the Pixel.** Library songs and stickers haven't been tried on an emulator.
 
 Since Nov 2 the library runs v3 of all four. The Reel's and the Short's v3 are automatic repairs Envoy made during the
@@ -118,3 +118,18 @@ three apps: a request typed in Envoy's own app counts as approval for a button i
 gets the same kind of offer as Instagram ("Put clip.mp4 on Envoy's phone and post it to TikTok?"): a plain post with
 the caption; it doesn't use the sound routines yet. The templates are
 `tiktok` and `youtube` in `api/handoff.py` `HANDOFF_TEMPLATES`. A Short's caption is its title (100 characters at most).
+
+## Hand edits, stated exactly
+
+Each showcase routine was compiled by Muse Wonder from one agent run. Its versions, and every change made to it by hand
+or by Envoy, are listed in `data/routines/<name>/index.json`.
+
+| Routine (active version) | By hand | Since |
+| --- | --- | --- |
+| `instagram_reel_song` (v5) | v4 (Nov 3, after the posting batch): the caption edit ends with Instagram's OK instead of Back, and the caption is typed again if it's empty before Share. v5 (Nov 4): an optional wait after Share, because the done-check ended before Instagram finished sharing. No hand edits to any step before v4 | recompiled once after a compiler fix, from the same run; after the live post, Envoy repaired two after-checks on its own (v3), and that version passed its trial in Muse's dry run (0 model calls in Envoy's replay, declined at Share). v4 and v5 are the hand edits; v6, Envoy's own repair from a Nov 4 run, failed its trial and was rejected, so v5 stays active |
+| `instagram_story_poll` (v3) | none | recompiled twice after compiler fixes, from the same run |
+| `tiktok_post_sound` (v3) | a 3 s wait before tapping TikTok's drawn sound list; the app's name corrected (the source run predates TikTok in Envoy's app list); the launch step's before-checks dropped | recompiled after compiler fixes, from the same run, with those edits re-applied: it now checks that the editor names the sound |
+| `youtube_short_sound` (v3) | one before-check dropped (a "Captions unavailable" label from a video playing when the run was recorded) | recompiled once after a compiler fix, from the same run; after the live post, Envoy repaired one after-check on its own, and that version passed its trial in Muse's dry run (0 model calls in Envoy's replay, declined at Upload Short) |
+
+The outcome checks added on Nov 2 (song, caption, clip) live in code and change none of these routines. The posting
+batch ([results](results.md#the-posting-batch)) ran every routine at v3, before the Reel's v4 and v5.

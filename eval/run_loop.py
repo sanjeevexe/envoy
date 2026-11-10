@@ -1,4 +1,4 @@
-"""Loop A (prompts/loop-reliability.md): first runs against replays on the apps Envoy supports, through an API copy, the
+"""Loop A: first runs against replays on the apps Envoy supports, through an API copy, the
 way the web app sends a task. Hybrid profile (the default).
 
   uv run --project backend python eval/run_loop.py run <task> --mode first --n 3     # routine switched off: the agent

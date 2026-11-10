@@ -1,5 +1,5 @@
 """showcase (T1c): one clip posted from Envoy's phone to Instagram, TikTok and YouTube Shorts, each with a feature only the
-app has, each a learned routine an agent can call (prompts/phone-layer-plan.md §5 "showcase").
+app has, each a learned routine an agent can call.
 
 Stage 0 (P3) looks before anything is compiled, with no model calls. Claim the phone first
 (`~/Desktop/Envoy/coord/devices.sh claim pixel5 showcase 60 <purpose>`):

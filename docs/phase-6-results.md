@@ -6,7 +6,7 @@ Oct 27, 2026 (evening); the real phone on Oct 28 (evening, in Phase 7). **The ga
 
 Until the phone came, an emulator stood in for it (`ENVOY_TEST_PHONE`): the same code path a real phone uses, with no gRPC (frames, taps and screenshots through Envoy's own scrcpy client), the banner app, the physical-touch watcher, routing and asking first. On it, the check-in routine compiled on `envoy-test` ran end to end through the API, and all 6 SkyLark routines passed 12 of 12 with no model calls. Screens with no accessibility tree now work: on 52 targets, SAM 3.1 then grounding found all 52 (grounding alone 92 to 94%, the step model's own coordinates 37%).
 
-Plan: `prompts/phase-6-plan.md`. Results: `eval/results/phase6/`.
+Results: `eval/results/phase6/`.
 
 ## Status
 

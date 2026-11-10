@@ -1,6 +1,6 @@
 # Phase 7 results: the final evaluation
 
-**The final numbers are in `eval/results/final/report.md`: all 10 suites on the `eval-final` tag, Nov 3.** This page records what the measurement passes before it found (up to Oct 29) and what changed because of it. Plan: `prompts/phase-7-plan.md`.
+**The final numbers are in `eval/results/final/report.md`: all 10 suites on the `eval-final` tag, Nov 3.** This page records what the measurement passes before it found (up to Oct 29) and what changed because of it.
 
 ## What was built
 

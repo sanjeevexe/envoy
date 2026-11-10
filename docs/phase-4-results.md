@@ -4,7 +4,7 @@ Oct 27, 2026. **Gate passed.** The gate was "full check-in: the user signs in th
 
 You ran it yourself in the web app: you asked in chat, Envoy stopped at SkyLark's sign-in and asked you to take over, you signed in through the live view and handed back, the check-in ran up to its irreversible step, you approved, and the check-in completed and updated memory. A scripted version of the same path passes 10/10 (`eval/run_phase4.py`, 83 s from a clean demo state), and also checks the live view, the MCP server and chat. Your first attempt found a bug the scripted run could not (below); it was fixed, and your second attempt passed.
 
-Plan: `prompts/phase-4.md`. Results: `eval/results/phase4/gate.json`. To run it: `scripts/demo_setup.py`, then `python -m api`, then open the sign-in link it prints.
+Results: `eval/results/phase4/gate.json`. To run it: `scripts/demo_setup.py`, then `python -m api`, then open the sign-in link it prints.
 
 ## What was built
 

@@ -358,7 +358,7 @@ Oct 27, run on the shared API key (`scripts/meta_api_check.py`). Raw data: `eval
 
 | Question | Status after Part A |
 | --- | --- |
-| Credits (do they cover Wonder, SAM 3.1, Voice?) | **Partly answered.** On the shared key in use now (about $38), Muse Wonder and SAM 3.1 both work, and all 9 models are listed, including Voice Transcribe. Your own $50 and the $150 hackathon credits are blocked by a Meta billing issue (expected to clear within about 4 business days). |
+| Credits (do they cover Wonder, SAM 3.1, Voice?) | **Partly answered.** On the shared key in use now (about $38), Muse Wonder and SAM 3.1 both work, and all 9 models are listed, including Voice Transcribe. Your own $50 balance and the promotional credits are blocked by a Meta billing issue (expected to clear within about 4 business days). |
 | Speed of a Spark 1.3 step | **Answered.** At `low` effort: median 0.87 s, p90 1.09 s (10 runs). At `minimal`: median 0.99 s, p90 1.44 s. Device side: about 0.07 s to read a screen, under 1 ms to tap, about 1.5 s to settle after a screen change. A full agent step is about 2.5 s. |
 | Grounding on tall screenshots; SAM 3.1 on UI | **Answered.** Spark grounding on 1080×2400 screenshots: 3/3 box centers on target, center error at most 22 px, IoU 0.64–0.88, about 2 s per call. SAM 3.1 finds UI parts with specific noun phrases ("toggle switch", "search bar", "icon") but nothing for "button" or "text". |
 | Limits: max output tokens, minimum cacheable prompt | **Partly answered.** Caching works for our prefix of about 1,900 tokens: 19 of 20 repeated calls had 1,905 cached tokens, and screenshots are cached too. The minimum length and maximum output tokens are still undocumented, but neither matters at our sizes. |
@@ -366,7 +366,6 @@ Oct 27, run on the shared API key (`scripts/meta_api_check.py`). Raw data: `eval
 | Real apps on the emulator | **Answered (B1):** Target, Starbucks, Chipotle and Amazon run and work as guests; DoorDash runs but its guest mode hangs (sign-in works, and the session survives restarts); Uber Eats won't install ("device isn't compatible"). |
 | Android phone (IPaT loan, Oct 28) | **Open** |
 | Sign-in codes on iPhone (Shortcuts while locked) | **Open** |
-| Official rules | **Open** → B3 |
 | Apple account | Already decided (Home Screen web app) |
 
 Settled by Part A, though not on the list:
@@ -510,55 +509,9 @@ Oct 26–27. Muse free tier on your iPhone 16 Plus, driven partly through iPhone
 - **Muse's own per-site prompts** ("Allow once / Always allow this site") sit in front of Envoy's approvals. For the demo, choose "Always allow this site" for the Envoy domain once, so the only approval left is Envoy's.
 - **Setup is a 2-minute script:** say "add a custom connector called Envoy at <URL>", tap Add, paste the token, allow once three times. Worth rehearsing for the demo video, with a stable URL (a named Cloudflare tunnel or Tailscale Funnel) rather than a random quick tunnel.
 
-### B3. Official rules
+### B3. Remaining for Phase 0
 
-From the public event page (cerebralvalley.ai/e/meta-ai-developer-hackathon, read Oct 27). The full Official Rules aren't public: they go to accepted participants.
-- **Indie track judging:** "creativity, technical ambition, and whether it works". The startup track is judged on production readiness.
-- **Theme "Push the Frontier":** use Meta's models to give machines new capabilities. Envoy's "phone layer for agents" fits.
-- **Dates (ET):**
-  - Workshops and Discord office hours: Oct 27 – Nov 4
-  - **Submissions due: Nov 4, 9:00 PM**
-  - Judging: Nov 4–8
-  - Winners: Nov 9
-- **Models listed:** Muse Spark series, Muse Wonder, Muse Image and SAM 3.1 (Model API), open-weights models, and Muse Code. The page doesn't explicitly require any of them.
-- **Not on the public page:** open-source and pre-existing code rules, attribution, required materials, demo video length, team size.
-
-**Open-source use** (from you, Oct 27): open source is allowed. Your bar is that Envoy must be **genuinely new on top of it**, not a repackaging of other people's work. Rule for the build: open-source projects are plumbing, credited in `THIRD_PARTY.md`. Every claim in the write-up and demo points at something Envoy built itself. The "What Envoy builds itself" section of `THIRD_PARTY.md` keeps that line visible.
-
-**Submission form** (pasted Oct 27). Required fields are marked *.
-
-| Field | What it means for the build |
-| --- | --- |
-| Team name* / members | Team of one (you). Pick a name; "Envoy" works. |
-| Track* | Indie |
-| Problem statement* | Two options: "Build for Your World" or "Push the Frontier" ("give a machine a new capability"). **Choose Push the Frontier**: Envoy gives Muse a capability it lacks, operating phone apps. |
-| Most Viral Track (optional) | An X post link. A short clip of Muse checking you in through Envoy is the shareable moment. |
-| Project description* | Start from the design doc's overview: "Agents can search the web. Your phone knows your life." |
-| **Public GitHub repository*** | The repo must be public by Nov 4. That means no secrets ever committed (`.env` is gitignored; Phase 0 results are already redacted), a LICENSE, `THIRD_PARTY.md`, and a README a judge can run. **It has no GitHub remote yet.** |
-| **3-minute demo video*** (YouTube) | Hard cap of 3 minutes. Storyboard by Nov 2: Muse "check me in" → Envoy on the phone → approval on the iPhone → memory updates → a routine rerun with no model calls → a broken UI repaired. |
-| Use of Meta products* | Muse Spark 1.3 (agent steps, plans, extraction), Muse Wonder (routine compiling, if credits cover it), SAM 3.1 and visual grounding (screens with no tree), Muse Voice Transcribe (voice), **and the Muse app itself as the front end through a custom MCP connector (B2)** |
-| Why Meta's models matter* | Structured output that always matches the action schema; risk labels; grounding on the 0–1000 grid. Muse acts through web and connectors but cannot operate phone apps, and Envoy gives it that. |
-| Feedback on Meta products | Kept as we go in `docs/meta-feedback.md`, started with Phase 0's findings |
-| Feedback on partner tech (Fireworks, Modal, Baseten) | Optional. Only if we use one; Muse Glimmer on partner GPUs is the design doc's optional idea. |
-| Publicity grant | Meta and Cerebral Valley may publish the submission, so the video and repo must show no personal data. Use the test accounts only. |
-
-**`THIRD_PARTY.md` check:** every component we use is credited with its license. All are permissive (MIT, Apache-2.0, BSD-3-Clause), and the copyleft Mobilerun Portal is deliberately not used. Added: ffmpeg (an external tool in Phase 0 scripts), uiautomator2's on-device helper APK, and a "What Envoy builds itself" section.
-
-**Participant guide rules that matter (pasted Oct 27):**
-- Repos must be public.
-- Teams have at most 4 people; solo is allowed.
-- **The demo may only show features built during the hackathon (Oct 27 – Nov 4), clearly identified**, or the project can be disqualified. Our git history starts Oct 26 and `THIRD_PARTY.md` separates plumbing from our own work, which keeps this clean.
-- **Judging** runs in stages: a pass/fail check that the project fits the theme and uses Meta's models, then a 0–10 rubric, then a top-5 final per track with the videos watched live.
-- **Dates (ET):** the closing ceremony is Nov 9, and the $150 credit claim is due by Nov 4, 9 PM, through Meta's form (yours to file).
-- **Anti-projects** (basic RAG, chatbots and so on): none apply to Envoy.
-
-**Connector applications:** both are **deferred** (decided Oct 27). Route 2 already works without approval, and an application is stronger once there's a public repo and a working demo. Revisit after Phase 4.
-**Muse:** you confirmed the old Envoy connector is disconnected.
- with route 2 working, the Muse Connector Platform submission is optional, and it needs business verification. The Meta AI Connectors waitlist is still worth two minutes. Status: [ ] Muse Connector Platform (optional)  [ ] Meta AI Connectors waitlist. Both are yours to submit.
-
-### B4. Remaining for Phase 0
-
-- [x] B1 real apps, B2 Muse connector, B3 rules and submission requirements, recorded above
+- [x] B1 real apps and B2 Muse connector, recorded above
 - [x] **Ran `scripts/meta_api_check.py` on the shared key. The Phase 0 gate passed** (Oct 27).
 - [ ] You: submit the Meta AI Connectors waitlist (optional: the Muse Connector Platform)
 - [x] Design-doc changes applied Oct 27 (you said to use my judgment): all proposed changes from A, B1, B2 and the API results are in `docs/technical-design.md` and the live doc, plus a "Phase 0 results" section and the answered open questions ticked.

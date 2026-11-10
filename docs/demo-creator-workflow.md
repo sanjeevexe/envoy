@@ -8,9 +8,9 @@ Ground rules: a **test account**, **every post approved by the person on Instagr
 volume, and **no likes, follows or DMs**.
 
 Status: measured Oct 29 on the Pixel 5 (Instagram 453, test account envoy3955): two real posts approved by the author and
-four rehearsals (`eval/results/creator/runs/runs.md`; details in `prompts/creator-workflow-report.md`). Rehearsed again
+four rehearsals (`eval/results/creator/runs/runs.md`; details in `docs/reports/creator-workflow-report.md`). Rehearsed again
 Oct 30 on the hybrid model profile, with the take setup in one command, a full-resolution recording of the phone, and the
-phone called "Envoy's phone" on screen (`prompts/creator-rehearsal-report.md`).
+phone called "Envoy's phone" on screen (`docs/reports/creator-rehearsal-report.md`).
 
 On screen the Pixel is **Envoy's phone**: name it so in Settings › Phones (the name field under the phone), and offers,
 "Before I start" and the task's notes say "Envoy's phone" instead of "your Pixel 5". `scripts/instagram_take.py --api-dir`
@@ -197,5 +197,5 @@ uv run --project backend python eval/run_creator.py rehearse --clip <clip.mp4> -
 Runs the whole flow on an API copy, says yes to the offer from that copy's session, and **declines at Share**, so nothing
 is posted; then it leaves the composer with Start over (no draft saved; the next `instagram_take.py` clears what comes
 back). It fails loudly if the task ever ends done without Share having been asked, or if anything before Share waited for
-the user. Timings are in the shot list and `prompts/creator-rehearsal-report.md`; Oct 29 (Spark): ~45–52 s from the clip
+the user. Timings are in the shot list and `docs/reports/creator-rehearsal-report.md`; Oct 29 (Spark): ~45–52 s from the clip
 to the declined Share with the routine (2 model calls, ~$0.01), ~2 min with the agent alone (14 calls, $0.06).

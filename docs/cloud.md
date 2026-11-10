@@ -4,7 +4,7 @@ Oct 29, 2026. **The same SkyLark routines, compiled on the Mac, ran unchanged on
 
 Envoy runs on the person's own Mac by default: the API, the web app, the emulators and the USB connection to Envoy's phone (the Pixel 5). Only the model calls go to Meta. The design always said "a cloud host later". This is the first step: the same code and the same routines on a Google Cloud server, measured against the numbers the Mac already recorded. Nothing was re-measured on the Mac.
 
-Results: `eval/results/cloud/`. Scripts: `scripts/cloud/`. Report: `prompts/cloud-proof-report.md`.
+Results: `eval/results/cloud/`. Scripts: `scripts/cloud/`. Report: `docs/reports/cloud-proof-report.md`.
 
 **Where this stands (Nov 2):**
 - **What's true:** "Envoy's phones can run in the cloud" was tested on Google Cloud. Stages 1–3 below ran there on Oct 29, and a plain Instagram Reel reached Share on the cloud phone on Nov 1 (declined).

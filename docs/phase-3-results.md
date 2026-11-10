@@ -4,7 +4,7 @@ Oct 27, 2026. **Gate passed.** The gate was "email and app facts merge into one 
 
 On the phone, every booking's email and app facts merged into one trip and one flight; "What's my gate?" was answered from memory ("Gate B12, from the SkyLark app just now") with no phone action; when the gate changed in the app, a routine refresh replaced B12 with C14 and kept the history; 45 minutes later the answer warned it may have changed; and "check me in" ran with its trip filled from memory. Extraction was 99% right on 28 test emails and 98% on 12 app screens, with no wrong value stored. All of Phase 3 used 76 model calls and $0.45.
 
-Plan: `prompts/phase-3.md` (written by Claude from the design doc, at your request to continue unattended). Reports: `eval/results/phase3/report.md` and the JSON next to it (`eval/run_memory.py`, `eval/memory_report.py`). The memory database itself (`data/memory.db`, `data/phase3/`) is not committed.
+Reports: `eval/results/phase3/report.md` and the JSON next to it (`eval/run_memory.py`, `eval/memory_report.py`). The memory database itself (`data/memory.db`, `data/phase3/`) is not committed.
 
 ## What was built
 
