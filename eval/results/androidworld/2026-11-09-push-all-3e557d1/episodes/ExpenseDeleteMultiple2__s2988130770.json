@@ -1,0 +1,168 @@
+{
+ "task": "ExpenseDeleteMultiple2",
+ "seed": 2988130770,
+ "goal": "Delete the following expenses from pro expense: Streaming Services, Unexpected Expenses, Pet Supplies.",
+ "score": 1.0,
+ "aw_run_time_s": 66.4,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 22:10:34.297456",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-all-3e557d1-1109-220931-ff39",
+  "goal": "Delete the following expenses from pro expense: Streaming Services, Unexpected Expenses, Pet Supplies.",
+  "max_steps": 34,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Deleted Streaming Services, Unexpected Expenses, and Pet Supplies from Pro Expense.",
+  "done": true,
+  "answer": "Deleted Streaming Services, Unexpected Expenses, and Pet Supplies from Pro Expense.",
+  "steps_device": 14,
+  "iterations": 15,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 10,
+   "scroll": 3,
+   "done": 1
+  },
+  "model_calls": 16,
+  "input_tokens": 39166,
+  "cached_tokens": 27072,
+  "output_tokens": 2513,
+  "reasoning_tokens": 907,
+  "cost_usd": 0.10405,
+  "cost_at_standard_usd": 0.10405,
+  "duration_s": 57.84,
+  "model_s": 35.32,
+  "device_s": 22.52,
+  "connect_s": 0.89,
+  "approvals": [
+   {
+    "step": 3,
+    "description": "tap \"\" in com.arduia.expense",
+    "reasons": [
+     "rule: target id 'com.arduia.expense:id/btn_delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 4,
+    "description": "tap \"CONFIRM\" in com.arduia.expense",
+    "reasons": [
+     "rule: target says 'CONFIRM'",
+     "screen: confirming something that can't be taken back",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 6,
+    "description": "tap \"\" in com.arduia.expense",
+    "reasons": [
+     "rule: target id 'com.arduia.expense:id/btn_delete'"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 7,
+    "description": "tap \"CONFIRM\" in com.arduia.expense",
+    "reasons": [
+     "rule: target says 'CONFIRM'",
+     "screen: confirming something that can't be taken back",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 13,
+    "description": "tap \"\" in com.arduia.expense",
+    "reasons": [
+     "rule: target id 'com.arduia.expense:id/btn_delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 14,
+    "description": "tap \"CONFIRM\" in com.arduia.expense",
+    "reasons": [
+     "rule: target says 'CONFIRM'",
+     "screen: confirming something that can't be taken back",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Pro Expense",
+   "subgoals": [
+    "Open Pro Expense and go to the expenses list",
+    "Open the Streaming Services expense and delete it",
+    "Open the Unexpected Expenses expense and delete it",
+    "Open the Pet Supplies expense and delete it",
+    "Verify none of the three expenses remain in the list"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "expense list without Streaming Services, Unexpected Expenses, or Pet Supplies",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: Expense"
+  },
+  "trace_dir": "data/runs/aw-2026-11-09-push-all-3e557d1-1109-220931-ff39",
+  "envoy_commit": "3e557d1c7c51335df35a449886077200abd2a357",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-all-3e557d1/traces/ExpenseDeleteMultiple2__s2988130770.jsonl.gz",
+  "wall_s": 60.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

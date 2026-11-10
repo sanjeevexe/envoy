@@ -1,0 +1,103 @@
+{
+ "task": "RecipeDeleteDuplicateRecipes2",
+ "seed": 2434742942,
+ "goal": "Delete all but one of any recipes in the Broccoli app that are exact duplicates, ensuring at least one instance of each unique recipe remains",
+ "score": 0.0,
+ "aw_run_time_s": 144.7,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 21:07:28.859167",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-dev-62f20b8-1109-210508-36e1",
+  "goal": "Delete all but one of any recipes in the Broccoli app that are exact duplicates, ensuring at least one instance of each unique recipe remains",
+  "max_steps": 24,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "failed",
+  "result": "Ran out of steps before deleting exact duplicate recipes: multiple Caprese Salad Skewers entries (at least two distinct variants, 3-4 servings/45 mins and 6 servings/20 mins) still need full comparison and deletion of exact duplicates only.",
+  "done": true,
+  "answer": null,
+  "steps_device": 23,
+  "iterations": 24,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "scroll": 12,
+   "tap": 5,
+   "back": 5,
+   "fail": 1
+  },
+  "model_calls": 27,
+  "input_tokens": 66137,
+  "cached_tokens": 44220,
+  "output_tokens": 7742,
+  "reasoning_tokens": 4392,
+  "cost_usd": 0.251352,
+  "cost_at_standard_usd": 0.251352,
+  "duration_s": 132.76,
+  "model_s": 81.81,
+  "device_s": 50.95,
+  "connect_s": 0.88,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Broccoli",
+   "subgoals": [
+    "Open the second Caprese Salad Skewers entry in the list, not the first one already inspected",
+    "Compare its servings, time, description, ingredients and directions with the remembered first entry: 3-4 servings, 45 mins, 'An ideal recipe...', 'various amounts', directions starting 'Thread cherry tomatoes...'",
+    "If it matches exactly, open the menu on its detail screen, choose Delete and confirm; if it differs, go back and keep it",
+    "Repeat this open-compare-delete process for the remaining identical 'ideal' Caprese entries, and then scroll through Pan-Seared Salmon, Raspberry Almond Smoothie and any other titles grouping only entries whose full details match exactly",
+    "Keep the differently-worded Caprese entry and any recipe whose details differ, so at least one copy of every unique recipe remains",
+    "Return to the Recipes list and scroll through it to confirm no exact-duplicate copies remain"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "recipe list after deletion: only one instance of each exact duplicate recipe remains, with at least one copy of every unique recipe still present",
+    "field_hint": ""
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-2026-11-09-push-dev-62f20b8-1109-210508-36e1",
+  "envoy_commit": "62f20b8e90bb253974ab4e72e48613cdb5be5fe6",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-dev-62f20b8/traces/RecipeDeleteDuplicateRecipes2__s2434742942.jsonl.gz",
+  "wall_s": 135.5,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

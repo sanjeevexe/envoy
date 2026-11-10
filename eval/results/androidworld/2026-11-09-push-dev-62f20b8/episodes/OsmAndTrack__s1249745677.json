@@ -1,0 +1,103 @@
+{
+ "task": "OsmAndTrack",
+ "seed": 1249745677,
+ "goal": "Save a track with waypoints Schönberg, Liechtenstein, Triesen, Liechtenstein, Bendern, Liechtenstein in the OsmAnd maps app in the same order as listed.",
+ "score": 0.0,
+ "aw_run_time_s": 247.9,
+ "aw_episode_length": 120,
+ "agent": "envoy",
+ "finished": "2026-11-09 20:56:44.469370",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-dev-62f20b8-1109-205238-87ee",
+  "goal": "Save a track with waypoints Schönberg, Liechtenstein, Triesen, Liechtenstein, Bendern, Liechtenstein in the OsmAnd maps app in the same order as listed.",
+  "max_steps": 120,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "cost_limit",
+  "result": "stopped at $0.511",
+  "done": false,
+  "answer": null,
+  "steps_device": 56,
+  "iterations": 64,
+  "looks": 8,
+  "screenshots_sent": 14,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 1,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 38,
+   "back": 13,
+   "look": 8,
+   "type": 3,
+   "tap_point": 1
+  },
+  "model_calls": 70,
+  "input_tokens": 174046,
+  "cached_tokens": 121320,
+  "output_tokens": 13407,
+  "reasoning_tokens": 6625,
+  "cost_usd": 0.510797,
+  "cost_at_standard_usd": 0.510797,
+  "duration_s": 237.27,
+  "model_s": 154.92,
+  "device_s": 82.35,
+  "connect_s": 0.87,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "OsmAnd",
+   "subgoals": [
+    "Exit the empty Plan a route to the main map",
+    "Use main Search for Liechtenstein and show it on the map to center the map there",
+    "Reopen Plan a route and create a new track from the centered map",
+    "Add waypoints in order via Add and Search: Schönberg, then Triesen, then Bendern, each as the Liechtenstein place",
+    "Save the track with Done/Options Save and confirm the points list"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Bendern",
+    "field_hint": ""
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-2026-11-09-push-dev-62f20b8-1109-205238-87ee",
+  "envoy_commit": "62f20b8e90bb253974ab4e72e48613cdb5be5fe6",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-dev-62f20b8/traces/OsmAndTrack__s1249745677.jsonl.gz",
+  "wall_s": 240.0,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.7
+  }
+ }
+}

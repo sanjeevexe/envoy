@@ -1,0 +1,104 @@
+{
+ "task": "ClockStopWatchPausedVerify",
+ "seed": 3959502054,
+ "goal": "Pause the stopwatch.",
+ "score": 1.0,
+ "aw_run_time_s": 56.0,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 20:32:57.359291",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-dev-62f20b8-1109-203202-ad5a",
+  "goal": "Pause the stopwatch.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done_unverified",
+  "result": "Stopwatch paused.",
+  "done": true,
+  "answer": "Stopwatch paused.",
+  "steps_device": 5,
+  "iterations": 8,
+  "looks": 1,
+  "screenshots_sent": 2,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 1,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 3,
+   "look": 1,
+   "wait": 1,
+   "done": 2
+  },
+  "model_calls": 9,
+  "input_tokens": 19559,
+  "cached_tokens": 13844,
+  "output_tokens": 2164,
+  "reasoning_tokens": 1364,
+  "cost_usd": 0.068909,
+  "cost_at_standard_usd": 0.068909,
+  "duration_s": 49.94,
+  "model_s": 30.09,
+  "device_s": 19.85,
+  "connect_s": 0.91,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Clock",
+   "subgoals": [
+    "Open Clock",
+    "Go to the Stopwatch tab",
+    "Pause the running stopwatch"
+   ],
+   "success_check": {
+    "kind": "element_present",
+    "value": "Resume",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": false,
+   "evaluable": true,
+   "detail": "element 'Resume' not present"
+  },
+  "trace_dir": "data/runs/aw-2026-11-09-push-dev-62f20b8-1109-203202-ad5a",
+  "envoy_commit": "62f20b8e90bb253974ab4e72e48613cdb5be5fe6",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-dev-62f20b8/traces/ClockStopWatchPausedVerify__s3959502054.jsonl.gz",
+  "wall_s": 52.7,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

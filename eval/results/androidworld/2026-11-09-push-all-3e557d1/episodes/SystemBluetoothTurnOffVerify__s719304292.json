@@ -1,0 +1,103 @@
+{
+ "task": "SystemBluetoothTurnOffVerify",
+ "seed": 719304292,
+ "goal": "Turn bluetooth off.",
+ "score": 1.0,
+ "aw_run_time_s": 30.6,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 23:53:43.076826",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-all-3e557d1-1109-235313-a528",
+  "goal": "Turn bluetooth off.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done_unverified",
+  "result": "Bluetooth is off (the 'Use Bluetooth' switch is off).",
+  "done": true,
+  "answer": "Bluetooth is off (the 'Use Bluetooth' switch is off).",
+  "steps_device": 4,
+  "iterations": 5,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 3,
+   "done": 1
+  },
+  "model_calls": 6,
+  "input_tokens": 11213,
+  "cached_tokens": 9400,
+  "output_tokens": 644,
+  "reasoning_tokens": 153,
+  "cost_usd": 0.022012,
+  "cost_at_standard_usd": 0.022012,
+  "duration_s": 21.98,
+  "model_s": 14.42,
+  "device_s": 7.56,
+  "connect_s": 0.9,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Settings",
+   "subgoals": [
+    "Open the Settings app",
+    "Go to Connected devices or search for Bluetooth",
+    "Open the Bluetooth setting",
+    "Turn the Bluetooth switch Off"
+   ],
+   "success_check": {
+    "kind": "field_equals",
+    "value": "Off",
+    "field_hint": "Bluetooth"
+   }
+  },
+  "check": {
+   "passed": false,
+   "evaluable": false,
+   "detail": "field 'Bluetooth' not found"
+  },
+  "trace_dir": "data/runs/aw-2026-11-09-push-all-3e557d1-1109-235313-a528",
+  "envoy_commit": "3e557d1c7c51335df35a449886077200abd2a357",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-all-3e557d1/traces/SystemBluetoothTurnOffVerify__s719304292.jsonl.gz",
+  "wall_s": 24.5,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

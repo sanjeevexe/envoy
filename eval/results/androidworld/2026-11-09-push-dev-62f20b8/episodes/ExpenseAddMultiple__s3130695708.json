@@ -1,0 +1,128 @@
+{
+ "task": "ExpenseAddMultiple",
+ "seed": 3130695708,
+ "goal": "Add the following expenses into the pro expense:\nExpense: Social Club Dues\n amount_dollars: $67.41\n category_name: Social\n note: Monthly recurring\n\nExpense: Legal Fees\n amount_dollars: $10.14\n category_name: Others\n note: Monthly recurring\n\nExpense: Stationery\n amount_dollars: $118.93\n category_name: Others\n note: Remember to transfer funds\n",
+ "score": 1.0,
+ "aw_run_time_s": 127.4,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 20:37:20.553782",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-dev-62f20b8-1109-203516-0e4b",
+  "goal": "Add the following expenses into the pro expense:\nExpense: Social Club Dues\n amount_dollars: $67.41\n category_name: Social\n note: Monthly recurring\n\nExpense: Legal Fees\n amount_dollars: $10.14\n category_name: Others\n note: Monthly recurring\n\nExpense: Stationery\n amount_dollars: $118.93\n category_name: Others\n note: Remember to transfer funds\n",
+  "max_steps": 60,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Added expenses: Social Club Dues $67.41 (Social, Monthly recurring), Legal Fees $10.14 (Others, Monthly recurring), Stationery $118.93 (Others, Remember to transfer funds). All appear on Totals, total outcome 196.48 USD.",
+  "done": true,
+  "answer": "Added expenses: Social Club Dues $67.41 (Social, Monthly recurring), Legal Fees $10.14 (Others, Monthly recurring), Stationery $118.93 (Others, Remember to transfer funds). All appear on Totals, total outcome 196.48 USD.",
+  "steps_device": 30,
+  "iterations": 34,
+  "looks": 3,
+  "screenshots_sent": 4,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 11,
+   "type": 9,
+   "scroll": 3,
+   "look": 3,
+   "swipe": 5,
+   "back": 1,
+   "done": 1
+  },
+  "model_calls": 37,
+  "input_tokens": 93413,
+  "cached_tokens": 66116,
+  "output_tokens": 5947,
+  "reasoning_tokens": 1941,
+  "cost_usd": 0.241351,
+  "cost_at_standard_usd": 0.241351,
+  "duration_s": 118.66,
+  "model_s": 72.9,
+  "device_s": 45.76,
+  "connect_s": 0.88,
+  "approvals": [
+   {
+    "step": 7,
+    "description": "tap \"SAVE\" in com.arduia.expense",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 33,
+    "description": "tap \"SAVE\" in com.arduia.expense",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Pro Expense",
+   "subgoals": [
+    "Tap SAVE to finish Legal Fees and return to Totals",
+    "Tap the add button on Totals to open a new Expense Entry",
+    "Enter name 'Stationery' and amount '118.93'",
+    "Select the 'Others' category and enter note 'Remember to transfer funds'",
+    "Tap SAVE and confirm 'Stationery' appears on the Totals/list screen"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Stationery",
+    "field_hint": ""
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Stationery' is visible"
+  },
+  "trace_dir": "data/runs/aw-2026-11-09-push-dev-62f20b8-1109-203516-0e4b",
+  "envoy_commit": "62f20b8e90bb253974ab4e72e48613cdb5be5fe6",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-dev-62f20b8/traces/ExpenseAddMultiple__s3130695708.jsonl.gz",
+  "wall_s": 121.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.6
+  }
+ }
+}

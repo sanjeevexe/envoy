@@ -1,0 +1,103 @@
+{
+ "task": "TurnOnWifiAndOpenApp",
+ "seed": 1310213687,
+ "goal": "Turn on Wifi, then open the settings app",
+ "score": 1.0,
+ "aw_run_time_s": 31.8,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 21:34:41.042657",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-dev-62f20b8-1109-213412-3b43",
+  "goal": "Turn on Wifi, then open the settings app",
+  "max_steps": 20,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done_unverified",
+  "result": "Wi-Fi is turned on and the Settings app is open on the Internet/Wi-Fi page.",
+  "done": true,
+  "answer": "Wi-Fi is turned on and the Settings app is open on the Internet/Wi-Fi page.",
+  "steps_device": 4,
+  "iterations": 5,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 3,
+   "done": 1
+  },
+  "model_calls": 6,
+  "input_tokens": 11467,
+  "cached_tokens": 9144,
+  "output_tokens": 1413,
+  "reasoning_tokens": 892,
+  "cost_usd": 0.039381,
+  "cost_at_standard_usd": 0.039381,
+  "duration_s": 23.53,
+  "model_s": 16.62,
+  "device_s": 6.91,
+  "connect_s": 0.85,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Settings",
+   "subgoals": [
+    "Open the Settings app",
+    "Go to Network & internet settings",
+    "Open Wi-Fi and turn its switch On",
+    "Stay on the Wi-Fi page inside Settings"
+   ],
+   "success_check": {
+    "kind": "field_equals",
+    "value": "On",
+    "field_hint": "Use Wi-Fi"
+   }
+  },
+  "check": {
+   "passed": false,
+   "evaluable": false,
+   "detail": "field 'Use Wi-Fi' not found"
+  },
+  "trace_dir": "data/runs/aw-2026-11-09-push-dev-62f20b8-1109-213412-3b43",
+  "envoy_commit": "62f20b8e90bb253974ab4e72e48613cdb5be5fe6",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-dev-62f20b8/traces/TurnOnWifiAndOpenApp__s1310213687.jsonl.gz",
+  "wall_s": 26.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

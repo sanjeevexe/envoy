@@ -1,0 +1,126 @@
+{
+ "task": "MarkorDeleteNote",
+ "seed": 1361764517,
+ "goal": "Delete the note in Markor named bold_king_edited.",
+ "score": 1.0,
+ "aw_run_time_s": 46.1,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 20:45:24.366854",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-dev-62f20b8-1109-204441-e8ab",
+  "goal": "Delete the note in Markor named bold_king_edited.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Deleted the note named bold_king_edited in Markor.",
+  "done": true,
+  "answer": "Deleted the note named bold_king_edited in Markor.",
+  "steps_device": 4,
+  "iterations": 5,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "long_press": 1,
+   "tap": 2,
+   "done": 1
+  },
+  "model_calls": 6,
+  "input_tokens": 12798,
+  "cached_tokens": 9784,
+  "output_tokens": 1199,
+  "reasoning_tokens": 611,
+  "cost_usd": 0.037993,
+  "cost_at_standard_usd": 0.037993,
+  "duration_s": 36.94,
+  "model_s": 30.31,
+  "device_s": 6.63,
+  "connect_s": 0.87,
+  "approvals": [
+   {
+    "step": 3,
+    "description": "tap \"Delete\" in net.gsantner.markor",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 4,
+    "description": "tap \"OK\" in net.gsantner.markor",
+    "reasons": [
+     "screen: confirming something that can't be taken back",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Markor",
+   "subgoals": [
+    "Open Markor",
+    "Find the file named bold_king_edited in the file list",
+    "Open the file's long-press or overflow menu",
+    "Tap Delete and confirm deletion if prompted",
+    "Verify bold_king_edited is no longer in the file list"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "bold_king_edited no longer listed in Markor file list",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: Markor"
+  },
+  "trace_dir": "data/runs/aw-2026-11-09-push-dev-62f20b8-1109-204441-e8ab",
+  "envoy_commit": "62f20b8e90bb253974ab4e72e48613cdb5be5fe6",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-dev-62f20b8/traces/MarkorDeleteNote__s1361764517.jsonl.gz",
+  "wall_s": 39.7,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.6
+  }
+ }
+}

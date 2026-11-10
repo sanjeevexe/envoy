@@ -1,0 +1,127 @@
+{
+ "task": "RecipeDeleteDuplicateRecipes",
+ "seed": 536113126,
+ "goal": "Delete all but one of any recipes in the Broccoli app that are exact duplicates, ensuring at least one instance of each unique recipe remains",
+ "score": 1.0,
+ "aw_run_time_s": 59.9,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 22:55:28.264944",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-all-3e557d1-1109-225431-2462",
+  "goal": "Delete all but one of any recipes in the Broccoli app that are exact duplicates, ensuring at least one instance of each unique recipe remains",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Deleted the duplicate Chicken Alfredo Pasta recipe, leaving one copy of it and the other unique recipes in the Broccoli app.",
+  "done": true,
+  "answer": "Deleted the duplicate Chicken Alfredo Pasta recipe, leaving one copy of it and the other unique recipes in the Broccoli app.",
+  "steps_device": 9,
+  "iterations": 10,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "scroll": 4,
+   "tap": 4,
+   "done": 1
+  },
+  "model_calls": 12,
+  "input_tokens": 26007,
+  "cached_tokens": 18672,
+  "output_tokens": 3002,
+  "reasoning_tokens": 1695,
+  "cost_usd": 0.093114,
+  "cost_at_standard_usd": 0.093114,
+  "duration_s": 51.88,
+  "model_s": 36.62,
+  "device_s": 15.26,
+  "connect_s": 0.89,
+  "approvals": [
+   {
+    "step": 8,
+    "description": "tap \"Delete\" in com.flauschcode.broccoli",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 9,
+    "description": "tap \"DELETE\" in com.flauschcode.broccoli",
+    "reasons": [
+     "rule: target says 'DELETE'",
+     "screen: confirming a deletion",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Broccoli",
+   "subgoals": [
+    "Scroll down the Recipes list to survey all remaining recipes for exact duplicates",
+    "Identify any duplicate with the same name and description as another recipe, keeping one copy",
+    "Open an extra duplicate copy and delete it via More options, Delete, then DELETE",
+    "Repeat scrolling and deleting extra copies until no duplicates remain",
+    "Return to the Recipes list showing the remaining unique recipes"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "unique recipes in the Recipes list, each appearing exactly once",
+    "field_hint": ""
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: Chicken, Alfredo, Pasta"
+  },
+  "trace_dir": "data/runs/aw-2026-11-09-push-all-3e557d1-1109-225431-2462",
+  "envoy_commit": "3e557d1c7c51335df35a449886077200abd2a357",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-all-3e557d1/traces/RecipeDeleteDuplicateRecipes__s536113126.jsonl.gz",
+  "wall_s": 54.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.9
+  }
+ }
+}

@@ -1,0 +1,102 @@
+{
+ "task": "BrowserMultiply",
+ "seed": 1325351943,
+ "goal": "Open the file task.html in Downloads in the file manager; when prompted open it with Chrome. Then click the button 5 times, remember the numbers displayed, and enter their product in the form.",
+ "score": 0.0,
+ "aw_run_time_s": 112.4,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 21:52:06.860182",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-all-3e557d1-1109-215017-50b2",
+  "goal": "Open the file task.html in Downloads in the file manager; when prompted open it with Chrome. Then click the button 5 times, remember the numbers displayed, and enter their product in the form.",
+  "max_steps": 22,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "failed",
+  "result": "Out of steps before completing task: after restart, recorded clicks 1=10, 2=9, 3=5 (current display 5). Still need clicks 4 and 5, multiply all five numbers, and enter product in form and submit.",
+  "done": true,
+  "answer": null,
+  "steps_device": 19,
+  "iterations": 22,
+  "looks": 2,
+  "screenshots_sent": 5,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 16,
+   "look": 2,
+   "scroll": 1,
+   "back": 1,
+   "fail": 1
+  },
+  "model_calls": 24,
+  "input_tokens": 58824,
+  "cached_tokens": 40160,
+  "output_tokens": 6505,
+  "reasoning_tokens": 3782,
+  "cost_usd": 0.212788,
+  "cost_at_standard_usd": 0.212788,
+  "duration_s": 104.52,
+  "model_s": 80.05,
+  "device_s": 24.47,
+  "connect_s": 0.92,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Chrome",
+   "subgoals": [
+    "Click \"Click Me\" 5 times, noting the number displayed after each click (the current 9 is before clicking and does not count)",
+    "Multiply the five noted numbers together",
+    "Scroll down to reveal the product entry form",
+    "Enter the product in the form and tap Submit"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "confirmation or result shown after submitting the product of the five displayed numbers",
+    "field_hint": ""
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-2026-11-09-push-all-3e557d1-1109-215017-50b2",
+  "envoy_commit": "3e557d1c7c51335df35a449886077200abd2a357",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-all-3e557d1/traces/BrowserMultiply__s1325351943.jsonl.gz",
+  "wall_s": 107.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.6
+  }
+ }
+}

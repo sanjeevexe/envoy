@@ -1,0 +1,125 @@
+{
+ "task": "RecipeAddMultipleRecipesFromImage",
+ "seed": 2293877352,
+ "goal": "Add the recipes from recipes.jpg in Simple Gallery Pro to the Broccoli recipe app.",
+ "score": 1.0,
+ "aw_run_time_s": 229.3,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 22:46:35.696883",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-all-3e557d1-1109-224250-52b2",
+  "goal": "Add the recipes from recipes.jpg in Simple Gallery Pro to the Broccoli recipe app.",
+  "max_steps": 60,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Added recipes from recipes.jpg to Broccoli: Eggplant Parmesan, Baked Cod with Lemon and Dill, and Chickpea Vegetable Soup are now visible in the Recipes list.",
+  "done": true,
+  "answer": "Added recipes from recipes.jpg to Broccoli: Eggplant Parmesan, Baked Cod with Lemon and Dill, and Chickpea Vegetable Soup are now visible in the Recipes list.",
+  "steps_device": 47,
+  "iterations": 51,
+  "looks": 2,
+  "screenshots_sent": 2,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 1,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 1,
+  "actions": {
+   "launch": 6,
+   "tap": 16,
+   "look": 2,
+   "scroll": 7,
+   "type": 18,
+   "done": 2
+  },
+  "model_calls": 55,
+  "input_tokens": 152533,
+  "cached_tokens": 94236,
+  "output_tokens": 10265,
+  "reasoning_tokens": 4069,
+  "cost_usd": 0.457335,
+  "cost_at_standard_usd": 0.457335,
+  "duration_s": 219.52,
+  "model_s": 152.43,
+  "device_s": 67.09,
+  "connect_s": 0.91,
+  "approvals": [
+   {
+    "step": 20,
+    "description": "tap \"SAVE\" in com.flauschcode.broccoli",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 45,
+    "description": "tap \"SAVE\" in com.flauschcode.broccoli",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Broccoli",
+   "subgoals": [
+    "Fill in Baked Cod with Lemon and Dill: description, 2 servings, 45 mins time, ingredients 'subject to change', and its directions (scrolling down for Directions)",
+    "Tap SAVE and return to the Recipes list",
+    "Tap New Recipe and create Chickpea Vegetable Soup with its remembered description, 2 servings, 2 hrs time, ingredients 'as desired', and directions",
+    "Tap SAVE and return to the Recipes list"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Chickpea Vegetable Soup",
+    "field_hint": ""
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Chickpea Vegetable Soup' is visible"
+  },
+  "trace_dir": "data/runs/aw-2026-11-09-push-all-3e557d1-1109-224250-52b2",
+  "envoy_commit": "3e557d1c7c51335df35a449886077200abd2a357",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-all-3e557d1/traces/RecipeAddMultipleRecipesFromImage__s2293877352.jsonl.gz",
+  "wall_s": 222.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.3
+  }
+ }
+}

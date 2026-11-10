@@ -1,0 +1,810 @@
+{
+ "a": "2026-11-03-hybrid-7ed4aa6",
+ "b": "2026-11-09-push-dev-62f20b8",
+ "groups": {
+  "all": {
+   "a": {
+    "n": 58,
+    "solved": 38.0,
+    "rate": 0.6552,
+    "cost_total": 7.3,
+    "cost_mean": 0.1258,
+    "cost_median": 0.0849,
+    "cost_per_solved": 0.192,
+    "envoy_s_median": 46.3,
+    "model_s_median": 30.4,
+    "device_s_median": 14.9,
+    "aw_s_median": 55.0,
+    "steps": 782,
+    "model_calls": 888,
+    "ended": {
+     "done": 27,
+     "failed": 2,
+     "step_limit": 15,
+     "done_unverified": 12,
+     "cost_limit": 2
+    },
+    "dones_scored_0": 1,
+    "harness_exceptions": 0
+   },
+   "b": {
+    "n": 58,
+    "solved": 44.0,
+    "rate": 0.7586,
+    "cost_total": 7.14,
+    "cost_mean": 0.1232,
+    "cost_median": 0.0909,
+    "cost_per_solved": 0.1623,
+    "envoy_s_median": 50.2,
+    "model_s_median": 30.2,
+    "device_s_median": 17.3,
+    "aw_s_median": 61.4,
+    "steps": 805,
+    "model_calls": 923,
+    "ended": {
+     "done_unverified": 19,
+     "failed": 3,
+     "step_limit": 3,
+     "done": 31,
+     "cost_limit": 2
+    },
+    "dones_scored_0": 6,
+    "harness_exceptions": 0
+   },
+   "gained": [
+    "FilesMoveFile",
+    "NotesTodoItemCount",
+    "RecipeAddMultipleRecipesFromMarkor",
+    "RetroCreatePlaylist",
+    "SimpleCalendarFirstEventAfterStartTime",
+    "SimpleSmsResend",
+    "TasksDueNextWeek",
+    "TasksHighPriorityTasks"
+   ],
+   "lost": [
+    "AudioRecorderRecordAudioWithFileName",
+    "RetroPlayingQueue"
+   ],
+   "sign_test_p": 0.1094
+  },
+  "held_out": {
+   "a": {
+    "n": 0,
+    "solved": 0,
+    "rate": null,
+    "cost_total": 0,
+    "cost_mean": null,
+    "cost_median": null,
+    "cost_per_solved": null,
+    "envoy_s_median": null,
+    "model_s_median": null,
+    "device_s_median": null,
+    "aw_s_median": null,
+    "steps": 0,
+    "model_calls": 0,
+    "ended": {},
+    "dones_scored_0": 0,
+    "harness_exceptions": 0
+   },
+   "b": {
+    "n": 0,
+    "solved": 0,
+    "rate": null,
+    "cost_total": 0,
+    "cost_mean": null,
+    "cost_median": null,
+    "cost_per_solved": null,
+    "envoy_s_median": null,
+    "model_s_median": null,
+    "device_s_median": null,
+    "aw_s_median": null,
+    "steps": 0,
+    "model_calls": 0,
+    "ended": {},
+    "dones_scored_0": 0,
+    "harness_exceptions": 0
+   },
+   "gained": [],
+   "lost": [],
+   "sign_test_p": 1.0
+  },
+  "dev": {
+   "a": {
+    "n": 58,
+    "solved": 38.0,
+    "rate": 0.6552,
+    "cost_total": 7.3,
+    "cost_mean": 0.1258,
+    "cost_median": 0.0849,
+    "cost_per_solved": 0.192,
+    "envoy_s_median": 46.3,
+    "model_s_median": 30.4,
+    "device_s_median": 14.9,
+    "aw_s_median": 55.0,
+    "steps": 782,
+    "model_calls": 888,
+    "ended": {
+     "done": 27,
+     "failed": 2,
+     "step_limit": 15,
+     "done_unverified": 12,
+     "cost_limit": 2
+    },
+    "dones_scored_0": 1,
+    "harness_exceptions": 0
+   },
+   "b": {
+    "n": 58,
+    "solved": 44.0,
+    "rate": 0.7586,
+    "cost_total": 7.14,
+    "cost_mean": 0.1232,
+    "cost_median": 0.0909,
+    "cost_per_solved": 0.1623,
+    "envoy_s_median": 50.2,
+    "model_s_median": 30.2,
+    "device_s_median": 17.3,
+    "aw_s_median": 61.4,
+    "steps": 805,
+    "model_calls": 923,
+    "ended": {
+     "done_unverified": 19,
+     "failed": 3,
+     "step_limit": 3,
+     "done": 31,
+     "cost_limit": 2
+    },
+    "dones_scored_0": 6,
+    "harness_exceptions": 0
+   },
+   "gained": [
+    "FilesMoveFile",
+    "NotesTodoItemCount",
+    "RecipeAddMultipleRecipesFromMarkor",
+    "RetroCreatePlaylist",
+    "SimpleCalendarFirstEventAfterStartTime",
+    "SimpleSmsResend",
+    "TasksDueNextWeek",
+    "TasksHighPriorityTasks"
+   ],
+   "lost": [
+    "AudioRecorderRecordAudioWithFileName",
+    "RetroPlayingQueue"
+   ],
+   "sign_test_p": 0.1094
+  },
+  "easy": {
+   "a": {
+    "n": 31,
+    "solved": 27.0,
+    "rate": 0.871,
+    "cost_total": 2.44,
+    "cost_mean": 0.0786,
+    "cost_median": 0.0589,
+    "cost_per_solved": 0.0902,
+    "envoy_s_median": 32.3,
+    "model_s_median": 21.3,
+    "device_s_median": 11.6,
+    "aw_s_median": 41.1,
+    "steps": 266,
+    "model_calls": 314,
+    "ended": {
+     "done": 16,
+     "failed": 1,
+     "done_unverified": 11,
+     "step_limit": 3
+    },
+    "dones_scored_0": 0,
+    "harness_exceptions": 0
+   },
+   "b": {
+    "n": 31,
+    "solved": 26.0,
+    "rate": 0.8387,
+    "cost_total": 2.4,
+    "cost_mean": 0.0775,
+    "cost_median": 0.06,
+    "cost_per_solved": 0.0924,
+    "envoy_s_median": 39.8,
+    "model_s_median": 20.6,
+    "device_s_median": 14.8,
+    "aw_s_median": 48.3,
+    "steps": 278,
+    "model_calls": 330,
+    "ended": {
+     "done_unverified": 16,
+     "failed": 1,
+     "done": 14
+    },
+    "dones_scored_0": 4,
+    "harness_exceptions": 0
+   },
+   "gained": [
+    "SimpleCalendarFirstEventAfterStartTime"
+   ],
+   "lost": [
+    "AudioRecorderRecordAudioWithFileName",
+    "RetroPlayingQueue"
+   ],
+   "sign_test_p": 1.0
+  },
+  "medium": {
+   "a": {
+    "n": 18,
+    "solved": 10.0,
+    "rate": 0.5556,
+    "cost_total": 2.8,
+    "cost_mean": 0.1555,
+    "cost_median": 0.1029,
+    "cost_per_solved": 0.28,
+    "envoy_s_median": 49.3,
+    "model_s_median": 32.9,
+    "device_s_median": 16.0,
+    "aw_s_median": 57.9,
+    "steps": 301,
+    "model_calls": 337,
+    "ended": {
+     "done": 9,
+     "step_limit": 8,
+     "done_unverified": 1
+    },
+    "dones_scored_0": 0,
+    "harness_exceptions": 0
+   },
+   "b": {
+    "n": 18,
+    "solved": 16.0,
+    "rate": 0.8889,
+    "cost_total": 2.53,
+    "cost_mean": 0.1408,
+    "cost_median": 0.1025,
+    "cost_per_solved": 0.1584,
+    "envoy_s_median": 58.9,
+    "model_s_median": 36.2,
+    "device_s_median": 16.7,
+    "aw_s_median": 71.5,
+    "steps": 281,
+    "model_calls": 315,
+    "ended": {
+     "done": 13,
+     "done_unverified": 3,
+     "step_limit": 1,
+     "failed": 1
+    },
+    "dones_scored_0": 0,
+    "harness_exceptions": 0
+   },
+   "gained": [
+    "FilesMoveFile",
+    "NotesTodoItemCount",
+    "RetroCreatePlaylist",
+    "SimpleSmsResend",
+    "TasksDueNextWeek",
+    "TasksHighPriorityTasks"
+   ],
+   "lost": [],
+   "sign_test_p": 0.0312
+  },
+  "hard": {
+   "a": {
+    "n": 9,
+    "solved": 1.0,
+    "rate": 0.1111,
+    "cost_total": 2.06,
+    "cost_mean": 0.2289,
+    "cost_median": 0.1525,
+    "cost_per_solved": 2.0603,
+    "envoy_s_median": 69.8,
+    "model_s_median": 51.5,
+    "device_s_median": 20.5,
+    "aw_s_median": 77.1,
+    "steps": 215,
+    "model_calls": 237,
+    "ended": {
+     "step_limit": 4,
+     "done": 2,
+     "cost_limit": 2,
+     "failed": 1
+    },
+    "dones_scored_0": 1,
+    "harness_exceptions": 0
+   },
+   "b": {
+    "n": 9,
+    "solved": 2.0,
+    "rate": 0.2222,
+    "cost_total": 2.21,
+    "cost_mean": 0.245,
+    "cost_median": 0.1772,
+    "cost_per_solved": 1.1027,
+    "envoy_s_median": 118.8,
+    "model_s_median": 77.7,
+    "device_s_median": 30.0,
+    "aw_s_median": 127.1,
+    "steps": 246,
+    "model_calls": 278,
+    "ended": {
+     "step_limit": 2,
+     "done": 4,
+     "failed": 1,
+     "cost_limit": 2
+    },
+    "dones_scored_0": 2,
+    "harness_exceptions": 0
+   },
+   "gained": [
+    "RecipeAddMultipleRecipesFromMarkor"
+   ],
+   "lost": [],
+   "sign_test_p": 1.0
+  },
+  "held_out:easy": {
+   "a": {
+    "n": 0,
+    "solved": 0,
+    "rate": null,
+    "cost_total": 0,
+    "cost_mean": null,
+    "cost_median": null,
+    "cost_per_solved": null,
+    "envoy_s_median": null,
+    "model_s_median": null,
+    "device_s_median": null,
+    "aw_s_median": null,
+    "steps": 0,
+    "model_calls": 0,
+    "ended": {},
+    "dones_scored_0": 0,
+    "harness_exceptions": 0
+   },
+   "b": {
+    "n": 0,
+    "solved": 0,
+    "rate": null,
+    "cost_total": 0,
+    "cost_mean": null,
+    "cost_median": null,
+    "cost_per_solved": null,
+    "envoy_s_median": null,
+    "model_s_median": null,
+    "device_s_median": null,
+    "aw_s_median": null,
+    "steps": 0,
+    "model_calls": 0,
+    "ended": {},
+    "dones_scored_0": 0,
+    "harness_exceptions": 0
+   },
+   "gained": [],
+   "lost": [],
+   "sign_test_p": 1.0
+  },
+  "held_out:medium": {
+   "a": {
+    "n": 0,
+    "solved": 0,
+    "rate": null,
+    "cost_total": 0,
+    "cost_mean": null,
+    "cost_median": null,
+    "cost_per_solved": null,
+    "envoy_s_median": null,
+    "model_s_median": null,
+    "device_s_median": null,
+    "aw_s_median": null,
+    "steps": 0,
+    "model_calls": 0,
+    "ended": {},
+    "dones_scored_0": 0,
+    "harness_exceptions": 0
+   },
+   "b": {
+    "n": 0,
+    "solved": 0,
+    "rate": null,
+    "cost_total": 0,
+    "cost_mean": null,
+    "cost_median": null,
+    "cost_per_solved": null,
+    "envoy_s_median": null,
+    "model_s_median": null,
+    "device_s_median": null,
+    "aw_s_median": null,
+    "steps": 0,
+    "model_calls": 0,
+    "ended": {},
+    "dones_scored_0": 0,
+    "harness_exceptions": 0
+   },
+   "gained": [],
+   "lost": [],
+   "sign_test_p": 1.0
+  },
+  "held_out:hard": {
+   "a": {
+    "n": 0,
+    "solved": 0,
+    "rate": null,
+    "cost_total": 0,
+    "cost_mean": null,
+    "cost_median": null,
+    "cost_per_solved": null,
+    "envoy_s_median": null,
+    "model_s_median": null,
+    "device_s_median": null,
+    "aw_s_median": null,
+    "steps": 0,
+    "model_calls": 0,
+    "ended": {},
+    "dones_scored_0": 0,
+    "harness_exceptions": 0
+   },
+   "b": {
+    "n": 0,
+    "solved": 0,
+    "rate": null,
+    "cost_total": 0,
+    "cost_mean": null,
+    "cost_median": null,
+    "cost_per_solved": null,
+    "envoy_s_median": null,
+    "model_s_median": null,
+    "device_s_median": null,
+    "aw_s_median": null,
+    "steps": 0,
+    "model_calls": 0,
+    "ended": {},
+    "dones_scored_0": 0,
+    "harness_exceptions": 0
+   },
+   "gained": [],
+   "lost": [],
+   "sign_test_p": 1.0
+  },
+  "dev:easy": {
+   "a": {
+    "n": 31,
+    "solved": 27.0,
+    "rate": 0.871,
+    "cost_total": 2.44,
+    "cost_mean": 0.0786,
+    "cost_median": 0.0589,
+    "cost_per_solved": 0.0902,
+    "envoy_s_median": 32.3,
+    "model_s_median": 21.3,
+    "device_s_median": 11.6,
+    "aw_s_median": 41.1,
+    "steps": 266,
+    "model_calls": 314,
+    "ended": {
+     "done": 16,
+     "failed": 1,
+     "done_unverified": 11,
+     "step_limit": 3
+    },
+    "dones_scored_0": 0,
+    "harness_exceptions": 0
+   },
+   "b": {
+    "n": 31,
+    "solved": 26.0,
+    "rate": 0.8387,
+    "cost_total": 2.4,
+    "cost_mean": 0.0775,
+    "cost_median": 0.06,
+    "cost_per_solved": 0.0924,
+    "envoy_s_median": 39.8,
+    "model_s_median": 20.6,
+    "device_s_median": 14.8,
+    "aw_s_median": 48.3,
+    "steps": 278,
+    "model_calls": 330,
+    "ended": {
+     "done_unverified": 16,
+     "failed": 1,
+     "done": 14
+    },
+    "dones_scored_0": 4,
+    "harness_exceptions": 0
+   },
+   "gained": [
+    "SimpleCalendarFirstEventAfterStartTime"
+   ],
+   "lost": [
+    "AudioRecorderRecordAudioWithFileName",
+    "RetroPlayingQueue"
+   ],
+   "sign_test_p": 1.0
+  },
+  "dev:medium": {
+   "a": {
+    "n": 18,
+    "solved": 10.0,
+    "rate": 0.5556,
+    "cost_total": 2.8,
+    "cost_mean": 0.1555,
+    "cost_median": 0.1029,
+    "cost_per_solved": 0.28,
+    "envoy_s_median": 49.3,
+    "model_s_median": 32.9,
+    "device_s_median": 16.0,
+    "aw_s_median": 57.9,
+    "steps": 301,
+    "model_calls": 337,
+    "ended": {
+     "done": 9,
+     "step_limit": 8,
+     "done_unverified": 1
+    },
+    "dones_scored_0": 0,
+    "harness_exceptions": 0
+   },
+   "b": {
+    "n": 18,
+    "solved": 16.0,
+    "rate": 0.8889,
+    "cost_total": 2.53,
+    "cost_mean": 0.1408,
+    "cost_median": 0.1025,
+    "cost_per_solved": 0.1584,
+    "envoy_s_median": 58.9,
+    "model_s_median": 36.2,
+    "device_s_median": 16.7,
+    "aw_s_median": 71.5,
+    "steps": 281,
+    "model_calls": 315,
+    "ended": {
+     "done": 13,
+     "done_unverified": 3,
+     "step_limit": 1,
+     "failed": 1
+    },
+    "dones_scored_0": 0,
+    "harness_exceptions": 0
+   },
+   "gained": [
+    "FilesMoveFile",
+    "NotesTodoItemCount",
+    "RetroCreatePlaylist",
+    "SimpleSmsResend",
+    "TasksDueNextWeek",
+    "TasksHighPriorityTasks"
+   ],
+   "lost": [],
+   "sign_test_p": 0.0312
+  },
+  "dev:hard": {
+   "a": {
+    "n": 9,
+    "solved": 1.0,
+    "rate": 0.1111,
+    "cost_total": 2.06,
+    "cost_mean": 0.2289,
+    "cost_median": 0.1525,
+    "cost_per_solved": 2.0603,
+    "envoy_s_median": 69.8,
+    "model_s_median": 51.5,
+    "device_s_median": 20.5,
+    "aw_s_median": 77.1,
+    "steps": 215,
+    "model_calls": 237,
+    "ended": {
+     "step_limit": 4,
+     "done": 2,
+     "cost_limit": 2,
+     "failed": 1
+    },
+    "dones_scored_0": 1,
+    "harness_exceptions": 0
+   },
+   "b": {
+    "n": 9,
+    "solved": 2.0,
+    "rate": 0.2222,
+    "cost_total": 2.21,
+    "cost_mean": 0.245,
+    "cost_median": 0.1772,
+    "cost_per_solved": 1.1027,
+    "envoy_s_median": 118.8,
+    "model_s_median": 77.7,
+    "device_s_median": 30.0,
+    "aw_s_median": 127.1,
+    "steps": 246,
+    "model_calls": 278,
+    "ended": {
+     "step_limit": 2,
+     "done": 4,
+     "failed": 1,
+     "cost_limit": 2
+    },
+    "dones_scored_0": 2,
+    "harness_exceptions": 0
+   },
+   "gained": [
+    "RecipeAddMultipleRecipesFromMarkor"
+   ],
+   "lost": [],
+   "sign_test_p": 1.0
+  }
+ },
+ "by_app": {
+  "simple calendar pro": {
+   "n": 9,
+   "a": 8.0,
+   "b": 9.0
+  },
+  "settings": {
+   "n": 7,
+   "a": 7.0,
+   "b": 7.0
+  },
+  "markor": {
+   "n": 5,
+   "a": 3.0,
+   "b": 3.0
+  },
+  "multi-app": {
+   "n": 5,
+   "a": 2.0,
+   "b": 3.0
+  },
+  "broccoli app": {
+   "n": 5,
+   "a": 4.0,
+   "b": 4.0
+  },
+  "pro expense": {
+   "n": 3,
+   "a": 3.0,
+   "b": 3.0
+  },
+  "open tracks sports tracker": {
+   "n": 3,
+   "a": 1.0,
+   "b": 1.0
+  },
+  "tasks": {
+   "n": 3,
+   "a": 0.0,
+   "b": 2.0
+  },
+  "chrome": {
+   "n": 2,
+   "a": 0.0,
+   "b": 0.0
+  },
+  "clock": {
+   "n": 2,
+   "a": 2.0,
+   "b": 2.0
+  },
+  "joplin": {
+   "n": 2,
+   "a": 1.0,
+   "b": 2.0
+  },
+  "osmand": {
+   "n": 2,
+   "a": 1.0,
+   "b": 1.0
+  },
+  "retro music": {
+   "n": 2,
+   "a": 1.0,
+   "b": 1.0
+  },
+  "simple sms messenger": {
+   "n": 2,
+   "a": 1.0,
+   "b": 2.0
+  },
+  "audio recorder": {
+   "n": 1,
+   "a": 1.0,
+   "b": 0.0
+  },
+  "camera": {
+   "n": 1,
+   "a": 1.0,
+   "b": 1.0
+  },
+  "contacts": {
+   "n": 1,
+   "a": 1.0,
+   "b": 1.0
+  },
+  "files": {
+   "n": 1,
+   "a": 0.0,
+   "b": 1.0
+  },
+  "simple gallery pro": {
+   "n": 1,
+   "a": 0.0,
+   "b": 0.0
+  },
+  "vlc": {
+   "n": 1,
+   "a": 1.0,
+   "b": 1.0
+  }
+ },
+ "mechanisms": {
+  "all": {
+   "a": {
+    "steps": 778,
+    "screenshots": 78,
+    "scrolls": 72,
+    "scroll reports": 0,
+    "scroll reports: list end": 0,
+    "scroll reports: nothing new (all seen before)": 0,
+    "scroll reports: next part of a long text": 0,
+    "screens with row text": 0,
+    "screens with long text in parts": 0,
+    "replans": 32,
+    "failed (the agent's own fail)": 2,
+    "ended with a done in the last 5 steps": 15,
+    "ended with a done in the last 5 steps, scored 1": 15,
+    "ended with a done on the very last step": 1,
+    "ended with a done on the very last step, scored 1": 1
+   },
+   "b": {
+    "steps": 800,
+    "screenshots": 55,
+    "scrolls": 78,
+    "scroll reports": 78,
+    "scroll reports: list end": 49,
+    "scroll reports: nothing new (all seen before)": 0,
+    "scroll reports: next part of a long text": 3,
+    "screens with row text": 314,
+    "screens with long text in parts": 4,
+    "replans": 31,
+    "failed (the agent's own fail)": 3,
+    "ended with a done in the last 5 steps": 22,
+    "ended with a done in the last 5 steps, scored 1": 18,
+    "ended with a done on the very last step": 12,
+    "ended with a done on the very last step, scored 1": 8
+   }
+  },
+  "held_out": {
+   "a": {},
+   "b": {}
+  },
+  "dev": {
+   "a": {
+    "steps": 778,
+    "screenshots": 78,
+    "scrolls": 72,
+    "scroll reports": 0,
+    "scroll reports: list end": 0,
+    "scroll reports: nothing new (all seen before)": 0,
+    "scroll reports: next part of a long text": 0,
+    "screens with row text": 0,
+    "screens with long text in parts": 0,
+    "replans": 32,
+    "failed (the agent's own fail)": 2,
+    "ended with a done in the last 5 steps": 15,
+    "ended with a done in the last 5 steps, scored 1": 15,
+    "ended with a done on the very last step": 1,
+    "ended with a done on the very last step, scored 1": 1
+   },
+   "b": {
+    "steps": 800,
+    "screenshots": 55,
+    "scrolls": 78,
+    "scroll reports": 78,
+    "scroll reports: list end": 49,
+    "scroll reports: nothing new (all seen before)": 0,
+    "scroll reports: next part of a long text": 3,
+    "screens with row text": 314,
+    "screens with long text in parts": 4,
+    "replans": 31,
+    "failed (the agent's own fail)": 3,
+    "ended with a done in the last 5 steps": 22,
+    "ended with a done in the last 5 steps, scored 1": 18,
+    "ended with a done on the very last step": 12,
+    "ended with a done on the very last step, scored 1": 8
+   }
+  }
+ }
+}

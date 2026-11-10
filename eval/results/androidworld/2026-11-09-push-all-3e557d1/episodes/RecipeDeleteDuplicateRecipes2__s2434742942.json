@@ -1,0 +1,102 @@
+{
+ "task": "RecipeDeleteDuplicateRecipes2",
+ "seed": 2434742942,
+ "goal": "Delete all but one of any recipes in the Broccoli app that are exact duplicates, ensuring at least one instance of each unique recipe remains",
+ "score": 0.0,
+ "aw_run_time_s": 162.8,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 22:58:12.057824",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-all-3e557d1-1109-225532-f9cf",
+  "goal": "Delete all but one of any recipes in the Broccoli app that are exact duplicates, ensuring at least one instance of each unique recipe remains",
+  "max_steps": 24,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "failed",
+  "result": "Checked several Caprese Salad Skewers entries and found distinct servings/times (3-4 servings/45 mins, 6 servings/20 mins, 6 servings/30 mins), but did not finish comparing all Caprese, Pan-Seared Salmon, and Raspberry Almond Smoothie entries or delete any exact duplicates, so at least one of each unique recipe cannot be confirmed.",
+  "done": true,
+  "answer": null,
+  "steps_device": 23,
+  "iterations": 24,
+  "looks": 0,
+  "screenshots_sent": 1,
+  "replans": 2,
+  "stuck_recoveries": 2,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "scroll": 11,
+   "tap": 6,
+   "back": 4,
+   "fail": 1
+  },
+  "model_calls": 26,
+  "input_tokens": 66266,
+  "cached_tokens": 43592,
+  "output_tokens": 8388,
+  "reasoning_tokens": 5098,
+  "cost_usd": 0.267174,
+  "cost_at_standard_usd": 0.267174,
+  "duration_s": 155.12,
+  "model_s": 109.62,
+  "device_s": 45.5,
+  "connect_s": 0.89,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Broccoli",
+   "subgoals": [
+    "Open the second Caprese Salad Skewers entry in the list, not the first, and note its servings, time, ingredients, and directions",
+    "Go back and check each remaining Caprese entry in order, scrolling down as needed, comparing its full details with the entries already checked",
+    "For an entry that exactly matches an earlier kept entry, use the menu on its detail screen to delete it and confirm the deletion",
+    "Check the Pan-Seared Salmon and Raspberry Almond Smoothie entries near the end of the list for any duplicates",
+    "Return to the Recipes list and scroll from top to bottom to confirm only one copy of each exact-duplicate recipe remains"
+   ],
+   "success_check": {
+    "kind": "element_present",
+    "value": "New Recipe",
+    "field_hint": ""
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-2026-11-09-push-all-3e557d1-1109-225532-f9cf",
+  "envoy_commit": "3e557d1c7c51335df35a449886077200abd2a357",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-all-3e557d1/traces/RecipeDeleteDuplicateRecipes2__s2434742942.jsonl.gz",
+  "wall_s": 157.6,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

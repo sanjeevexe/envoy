@@ -1,0 +1,112 @@
+{
+ "task": "RecipeAddMultipleRecipesFromMarkor2",
+ "seed": 1406555389,
+ "goal": "Add the recipes from recipes.txt in Markor that take 10 mins to prepare into the Broccoli recipe app.",
+ "score": 0.0,
+ "aw_run_time_s": 189.3,
+ "aw_episode_length": 60,
+ "agent": "envoy",
+ "finished": "2026-11-09 22:53:41.023055",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-all-3e557d1-1109-225034-fc4e",
+  "goal": "Add the recipes from recipes.txt in Markor that take 10 mins to prepare into the Broccoli recipe app.",
+  "max_steps": 60,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "cost_limit",
+  "result": "stopped at $0.500",
+  "done": false,
+  "answer": null,
+  "steps_device": 47,
+  "iterations": 47,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 4,
+   "tap": 10,
+   "scroll": 8,
+   "type": 22,
+   "back": 3
+  },
+  "model_calls": 50,
+  "input_tokens": 168034,
+  "cached_tokens": 91304,
+  "output_tokens": 8758,
+  "reasoning_tokens": 2871,
+  "cost_usd": 0.500341,
+  "cost_at_standard_usd": 0.500341,
+  "duration_s": 182.15,
+  "model_s": 112.73,
+  "device_s": 69.42,
+  "connect_s": 0.88,
+  "approvals": [
+   {
+    "step": 28,
+    "description": "tap \"SAVE\" in com.flauschcode.broccoli",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Broccoli",
+   "subgoals": [
+    "Finish the current Pan-Seared Salmon with Quinoa recipe using the remembered description, 8 servings, 10 mins, n/a ingredients, and directions, then tap SAVE",
+    "Go back to the Recipes list and tap New Recipe",
+    "Add Raspberry Almond Smoothie with its remembered description, 2 servings, 10 mins, n/a ingredients, and directions",
+    "Tap SAVE for Raspberry Almond Smoothie",
+    "Confirm all three 10-minute recipes appear in the Broccoli recipe list"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Raspberry Almond Smoothie",
+    "field_hint": ""
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-2026-11-09-push-all-3e557d1-1109-225034-fc4e",
+  "envoy_commit": "3e557d1c7c51335df35a449886077200abd2a357",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-all-3e557d1/traces/RecipeAddMultipleRecipesFromMarkor2__s1406555389.jsonl.gz",
+  "wall_s": 184.7,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.0
+  }
+ }
+}

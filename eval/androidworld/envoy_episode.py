@@ -132,7 +132,7 @@ def write_digest(trace_dir: Path, dest: Path) -> None:
     if not steps_file.exists():
         return
     keep = ("step", "kind", "decision", "error", "risk", "approval", "result", "changed", "handler", "reason", "plan",
-            "tried", "vision", "recovery", "action", "timings_ms", "cost_usd", "placeholder")
+            "tried", "vision", "recovery", "action", "timings_ms", "cost_usd", "placeholder", "scroll")
     dest.parent.mkdir(parents=True, exist_ok=True)
     with gzip.open(dest, "wt") as f:
         for line in steps_file.read_text().splitlines():

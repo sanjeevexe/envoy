@@ -1,0 +1,104 @@
+{
+ "task": "TurnOffWifiAndTurnOnBluetooth",
+ "seed": 717787153,
+ "goal": "Turn off WiFi, then enable bluetooth",
+ "score": 1.0,
+ "aw_run_time_s": 59.3,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-10 00:10:18.205834",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-all-3e557d1-1110-000920-d261",
+  "goal": "Turn off WiFi, then enable bluetooth",
+  "max_steps": 20,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done_unverified",
+  "result": "Wi-Fi turned off and Bluetooth enabled (Use Bluetooth switch is on).",
+  "done": true,
+  "answer": "Wi-Fi turned off and Bluetooth enabled (Use Bluetooth switch is on).",
+  "steps_device": 10,
+  "iterations": 11,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 7,
+   "back": 2,
+   "done": 1
+  },
+  "model_calls": 13,
+  "input_tokens": 25813,
+  "cached_tokens": 20324,
+  "output_tokens": 2326,
+  "reasoning_tokens": 1186,
+  "cost_usd": 0.072541,
+  "cost_at_standard_usd": 0.072541,
+  "duration_s": 48.92,
+  "model_s": 30.78,
+  "device_s": 18.14,
+  "connect_s": 0.89,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Settings",
+   "subgoals": [
+    "Tap 'Connection preferences' on the Connected devices screen",
+    "Open the Bluetooth settings from Connection preferences",
+    "Turn the Bluetooth / 'Use Bluetooth' switch on",
+    "Confirm Bluetooth shows as on and stay on that screen"
+   ],
+   "success_check": {
+    "kind": "field_equals",
+    "value": "On",
+    "field_hint": "Use Bluetooth"
+   }
+  },
+  "check": {
+   "passed": false,
+   "evaluable": false,
+   "detail": "field 'Use Bluetooth' not found"
+  },
+  "trace_dir": "data/runs/aw-2026-11-09-push-all-3e557d1-1110-000920-d261",
+  "envoy_commit": "3e557d1c7c51335df35a449886077200abd2a357",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-all-3e557d1/traces/TurnOffWifiAndTurnOnBluetooth__s717787153.jsonl.gz",
+  "wall_s": 51.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

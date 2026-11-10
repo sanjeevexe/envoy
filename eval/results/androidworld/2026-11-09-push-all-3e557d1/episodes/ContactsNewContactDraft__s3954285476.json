@@ -1,0 +1,101 @@
+{
+ "task": "ContactsNewContactDraft",
+ "seed": 3954285476,
+ "goal": "Go to the new contact screen and enter the following details: First Name: Grace, Last Name: Taylor, Phone: 799-802-1530, Phone Label: Work. Do NOT hit save.",
+ "score": 1.0,
+ "aw_run_time_s": 40.0,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 21:56:42.383418",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-all-3e557d1-1109-215604-8399",
+  "goal": "Go to the new contact screen and enter the following details: First Name: Grace, Last Name: Taylor, Phone: 799-802-1530, Phone Label: Work. Do NOT hit save.",
+  "max_steps": 12,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "On the new Create contact screen, entered First Name: Grace, Last Name: Taylor, Phone: 799-802-1530 with Phone Label: Work. Did not hit save.",
+  "done": true,
+  "answer": "On the new Create contact screen, entered First Name: Grace, Last Name: Taylor, Phone: 799-802-1530 with Phone Label: Work. Did not hit save.",
+  "steps_device": 7,
+  "iterations": 8,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 3,
+   "type": 3,
+   "done": 1
+  },
+  "model_calls": 10,
+  "input_tokens": 20846,
+  "cached_tokens": 15112,
+  "output_tokens": 2096,
+  "reasoning_tokens": 1018,
+  "cost_usd": 0.067878,
+  "cost_at_standard_usd": 0.067878,
+  "duration_s": 33.81,
+  "model_s": 22.59,
+  "device_s": 11.22,
+  "connect_s": 0.88,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Contacts",
+   "subgoals": [
+    "Confirm Grace Taylor with phone 799-802-1530 and Work label is entered on the Create contact screen, without saving"
+   ],
+   "success_check": {
+    "kind": "field_equals",
+    "value": "799-802-1530",
+    "field_hint": "Phone"
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "field 'Phone' holds '799-802-1530'"
+  },
+  "trace_dir": "data/runs/aw-2026-11-09-push-all-3e557d1-1109-215604-8399",
+  "envoy_commit": "3e557d1c7c51335df35a449886077200abd2a357",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-all-3e557d1/traces/ContactsNewContactDraft__s3954285476.jsonl.gz",
+  "wall_s": 36.3,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

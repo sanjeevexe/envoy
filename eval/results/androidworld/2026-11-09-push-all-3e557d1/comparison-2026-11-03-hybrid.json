@@ -1,0 +1,936 @@
+{
+ "a": "2026-11-03-hybrid-7ed4aa6",
+ "b": "2026-11-09-push-all-3e557d1",
+ "groups": {
+  "all": {
+   "a": {
+    "n": 116,
+    "solved": 74.0,
+    "rate": 0.6379,
+    "cost_total": 14.54,
+    "cost_mean": 0.1253,
+    "cost_median": 0.0903,
+    "cost_per_solved": 0.1965,
+    "envoy_s_median": 51.8,
+    "model_s_median": 32.7,
+    "device_s_median": 16.1,
+    "aw_s_median": 60.5,
+    "steps": 1600,
+    "model_calls": 1837,
+    "ended": {
+     "done": 54,
+     "step_limit": 35,
+     "failed": 3,
+     "done_unverified": 22,
+     "cost_limit": 2
+    },
+    "dones_scored_0": 2,
+    "harness_exceptions": 0
+   },
+   "b": {
+    "n": 116,
+    "solved": 85.0,
+    "rate": 0.7328,
+    "cost_total": 14.54,
+    "cost_mean": 0.1254,
+    "cost_median": 0.1005,
+    "cost_per_solved": 0.1711,
+    "envoy_s_median": 54.9,
+    "model_s_median": 35.4,
+    "device_s_median": 17.9,
+    "aw_s_median": 66.2,
+    "steps": 1679,
+    "model_calls": 1942,
+    "ended": {
+     "done": 67,
+     "failed": 17,
+     "done_unverified": 25,
+     "step_limit": 4,
+     "cost_limit": 3
+    },
+    "dones_scored_0": 9,
+    "harness_exceptions": 0
+   },
+   "gained": [
+    "ExpenseDeleteDuplicates2",
+    "FilesMoveFile",
+    "MarkorChangeNoteContent",
+    "MarkorTranscribeReceipt",
+    "RecipeAddMultipleRecipesFromImage",
+    "RecipeDeleteDuplicateRecipes",
+    "RecipeDeleteMultipleRecipesWithConstraint",
+    "SaveCopyOfReceiptTaskEval",
+    "SimpleCalendarEventsInNextWeek",
+    "SimpleCalendarFirstEventAfterStartTime",
+    "SimpleDrawProCreateDrawing",
+    "SportsTrackerActivitiesOnDate",
+    "TasksDueNextWeek",
+    "TasksDueOnDate",
+    "TasksHighPriorityTasks"
+   ],
+   "lost": [
+    "MarkorCreateNoteAndSms",
+    "MarkorCreateNoteFromClipboard",
+    "RetroPlayingQueue",
+    "VlcCreateTwoPlaylists"
+   ],
+   "sign_test_p": 0.0192
+  },
+  "held_out": {
+   "a": {
+    "n": 58,
+    "solved": 36.0,
+    "rate": 0.6207,
+    "cost_total": 7.24,
+    "cost_mean": 0.1249,
+    "cost_median": 0.102,
+    "cost_per_solved": 0.2012,
+    "envoy_s_median": 52.7,
+    "model_s_median": 33.5,
+    "device_s_median": 17.9,
+    "aw_s_median": 63.3,
+    "steps": 818,
+    "model_calls": 949,
+    "ended": {
+     "done": 27,
+     "step_limit": 20,
+     "failed": 1,
+     "done_unverified": 10
+    },
+    "dones_scored_0": 1,
+    "harness_exceptions": 0
+   },
+   "b": {
+    "n": 58,
+    "solved": 44.0,
+    "rate": 0.7586,
+    "cost_total": 7.19,
+    "cost_mean": 0.124,
+    "cost_median": 0.1052,
+    "cost_per_solved": 0.1635,
+    "envoy_s_median": 59.4,
+    "model_s_median": 39.1,
+    "device_s_median": 20.2,
+    "aw_s_median": 70.7,
+    "steps": 836,
+    "model_calls": 989,
+    "ended": {
+     "done": 37,
+     "failed": 8,
+     "done_unverified": 10,
+     "step_limit": 3
+    },
+    "dones_scored_0": 4,
+    "harness_exceptions": 0
+   },
+   "gained": [
+    "ExpenseDeleteDuplicates2",
+    "MarkorTranscribeReceipt",
+    "RecipeAddMultipleRecipesFromImage",
+    "RecipeDeleteDuplicateRecipes",
+    "RecipeDeleteMultipleRecipesWithConstraint",
+    "SimpleCalendarEventsInNextWeek",
+    "SimpleDrawProCreateDrawing",
+    "SportsTrackerActivitiesOnDate",
+    "TasksDueOnDate"
+   ],
+   "lost": [
+    "MarkorCreateNoteAndSms"
+   ],
+   "sign_test_p": 0.0215
+  },
+  "dev": {
+   "a": {
+    "n": 58,
+    "solved": 38.0,
+    "rate": 0.6552,
+    "cost_total": 7.3,
+    "cost_mean": 0.1258,
+    "cost_median": 0.0849,
+    "cost_per_solved": 0.192,
+    "envoy_s_median": 46.3,
+    "model_s_median": 30.4,
+    "device_s_median": 14.9,
+    "aw_s_median": 55.0,
+    "steps": 782,
+    "model_calls": 888,
+    "ended": {
+     "done": 27,
+     "failed": 2,
+     "step_limit": 15,
+     "done_unverified": 12,
+     "cost_limit": 2
+    },
+    "dones_scored_0": 1,
+    "harness_exceptions": 0
+   },
+   "b": {
+    "n": 58,
+    "solved": 41.0,
+    "rate": 0.7069,
+    "cost_total": 7.35,
+    "cost_mean": 0.1267,
+    "cost_median": 0.0891,
+    "cost_per_solved": 0.1793,
+    "envoy_s_median": 54.2,
+    "model_s_median": 31.8,
+    "device_s_median": 14.7,
+    "aw_s_median": 62.0,
+    "steps": 843,
+    "model_calls": 953,
+    "ended": {
+     "done": 30,
+     "failed": 9,
+     "done_unverified": 15,
+     "step_limit": 1,
+     "cost_limit": 3
+    },
+    "dones_scored_0": 5,
+    "harness_exceptions": 0
+   },
+   "gained": [
+    "FilesMoveFile",
+    "MarkorChangeNoteContent",
+    "SaveCopyOfReceiptTaskEval",
+    "SimpleCalendarFirstEventAfterStartTime",
+    "TasksDueNextWeek",
+    "TasksHighPriorityTasks"
+   ],
+   "lost": [
+    "MarkorCreateNoteFromClipboard",
+    "RetroPlayingQueue",
+    "VlcCreateTwoPlaylists"
+   ],
+   "sign_test_p": 0.5078
+  },
+  "easy": {
+   "a": {
+    "n": 61,
+    "solved": 50.0,
+    "rate": 0.8197,
+    "cost_total": 4.93,
+    "cost_mean": 0.0808,
+    "cost_median": 0.0667,
+    "cost_per_solved": 0.0986,
+    "envoy_s_median": 37.2,
+    "model_s_median": 24.4,
+    "device_s_median": 12.4,
+    "aw_s_median": 45.0,
+    "steps": 554,
+    "model_calls": 663,
+    "ended": {
+     "done": 30,
+     "step_limit": 10,
+     "failed": 1,
+     "done_unverified": 20
+    },
+    "dones_scored_0": 0,
+    "harness_exceptions": 0
+   },
+   "b": {
+    "n": 61,
+    "solved": 54.0,
+    "rate": 0.8852,
+    "cost_total": 4.71,
+    "cost_mean": 0.0772,
+    "cost_median": 0.0652,
+    "cost_per_solved": 0.0872,
+    "envoy_s_median": 37.6,
+    "model_s_median": 22.6,
+    "device_s_median": 14.2,
+    "aw_s_median": 47.7,
+    "steps": 558,
+    "model_calls": 683,
+    "ended": {
+     "done": 39,
+     "failed": 3,
+     "done_unverified": 18,
+     "step_limit": 1
+    },
+    "dones_scored_0": 4,
+    "harness_exceptions": 0
+   },
+   "gained": [
+    "RecipeDeleteDuplicateRecipes",
+    "SimpleCalendarEventsInNextWeek",
+    "SimpleCalendarFirstEventAfterStartTime",
+    "SimpleDrawProCreateDrawing",
+    "TasksDueOnDate"
+   ],
+   "lost": [
+    "RetroPlayingQueue"
+   ],
+   "sign_test_p": 0.2188
+  },
+  "medium": {
+   "a": {
+    "n": 36,
+    "solved": 19.0,
+    "rate": 0.5278,
+    "cost_total": 5.27,
+    "cost_mean": 0.1465,
+    "cost_median": 0.1084,
+    "cost_per_solved": 0.2775,
+    "envoy_s_median": 56.5,
+    "model_s_median": 38.4,
+    "device_s_median": 16.9,
+    "aw_s_median": 66.7,
+    "steps": 567,
+    "model_calls": 650,
+    "ended": {
+     "step_limit": 17,
+     "done": 17,
+     "done_unverified": 2
+    },
+    "dones_scored_0": 0,
+    "harness_exceptions": 0
+   },
+   "b": {
+    "n": 36,
+    "solved": 23.0,
+    "rate": 0.6389,
+    "cost_total": 5.1,
+    "cost_mean": 0.1417,
+    "cost_median": 0.1141,
+    "cost_per_solved": 0.2218,
+    "envoy_s_median": 60.9,
+    "model_s_median": 39.1,
+    "device_s_median": 18.4,
+    "aw_s_median": 71.1,
+    "steps": 565,
+    "model_calls": 643,
+    "ended": {
+     "done_unverified": 5,
+     "done": 20,
+     "step_limit": 2,
+     "failed": 8,
+     "cost_limit": 1
+    },
+    "dones_scored_0": 2,
+    "harness_exceptions": 0
+   },
+   "gained": [
+    "ExpenseDeleteDuplicates2",
+    "FilesMoveFile",
+    "MarkorChangeNoteContent",
+    "MarkorTranscribeReceipt",
+    "TasksDueNextWeek",
+    "TasksHighPriorityTasks"
+   ],
+   "lost": [
+    "MarkorCreateNoteFromClipboard",
+    "VlcCreateTwoPlaylists"
+   ],
+   "sign_test_p": 0.2891
+  },
+  "hard": {
+   "a": {
+    "n": 19,
+    "solved": 5.0,
+    "rate": 0.2632,
+    "cost_total": 4.34,
+    "cost_mean": 0.2283,
+    "cost_median": 0.167,
+    "cost_per_solved": 0.8676,
+    "envoy_s_median": 92.4,
+    "model_s_median": 61.7,
+    "device_s_median": 29.5,
+    "aw_s_median": 100.0,
+    "steps": 479,
+    "model_calls": 524,
+    "ended": {
+     "step_limit": 8,
+     "done": 7,
+     "failed": 2,
+     "cost_limit": 2
+    },
+    "dones_scored_0": 2,
+    "harness_exceptions": 0
+   },
+   "b": {
+    "n": 19,
+    "solved": 8.0,
+    "rate": 0.4211,
+    "cost_total": 4.73,
+    "cost_mean": 0.2491,
+    "cost_median": 0.2128,
+    "cost_per_solved": 0.5916,
+    "envoy_s_median": 104.7,
+    "model_s_median": 78.9,
+    "device_s_median": 35.3,
+    "aw_s_median": 116.9,
+    "steps": 556,
+    "model_calls": 616,
+    "ended": {
+     "failed": 6,
+     "done": 8,
+     "step_limit": 1,
+     "cost_limit": 2,
+     "done_unverified": 2
+    },
+    "dones_scored_0": 3,
+    "harness_exceptions": 0
+   },
+   "gained": [
+    "RecipeAddMultipleRecipesFromImage",
+    "RecipeDeleteMultipleRecipesWithConstraint",
+    "SaveCopyOfReceiptTaskEval",
+    "SportsTrackerActivitiesOnDate"
+   ],
+   "lost": [
+    "MarkorCreateNoteAndSms"
+   ],
+   "sign_test_p": 0.375
+  },
+  "held_out:easy": {
+   "a": {
+    "n": 30,
+    "solved": 23.0,
+    "rate": 0.7667,
+    "cost_total": 2.49,
+    "cost_mean": 0.0831,
+    "cost_median": 0.0689,
+    "cost_per_solved": 0.1084,
+    "envoy_s_median": 40.0,
+    "model_s_median": 26.0,
+    "device_s_median": 13.4,
+    "aw_s_median": 51.3,
+    "steps": 288,
+    "model_calls": 349,
+    "ended": {
+     "done": 14,
+     "step_limit": 7,
+     "done_unverified": 9
+    },
+    "dones_scored_0": 0,
+    "harness_exceptions": 0
+   },
+   "b": {
+    "n": 30,
+    "solved": 27.0,
+    "rate": 0.9,
+    "cost_total": 2.43,
+    "cost_mean": 0.0809,
+    "cost_median": 0.0702,
+    "cost_per_solved": 0.0899,
+    "envoy_s_median": 41.7,
+    "model_s_median": 21.9,
+    "device_s_median": 15.6,
+    "aw_s_median": 53.4,
+    "steps": 282,
+    "model_calls": 364,
+    "ended": {
+     "done": 22,
+     "failed": 1,
+     "done_unverified": 6,
+     "step_limit": 1
+    },
+    "dones_scored_0": 1,
+    "harness_exceptions": 0
+   },
+   "gained": [
+    "RecipeDeleteDuplicateRecipes",
+    "SimpleCalendarEventsInNextWeek",
+    "SimpleDrawProCreateDrawing",
+    "TasksDueOnDate"
+   ],
+   "lost": [],
+   "sign_test_p": 0.125
+  },
+  "held_out:medium": {
+   "a": {
+    "n": 18,
+    "solved": 9.0,
+    "rate": 0.5,
+    "cost_total": 2.47,
+    "cost_mean": 0.1374,
+    "cost_median": 0.1173,
+    "cost_per_solved": 0.2749,
+    "envoy_s_median": 58.2,
+    "model_s_median": 40.1,
+    "device_s_median": 17.8,
+    "aw_s_median": 69.1,
+    "steps": 266,
+    "model_calls": 313,
+    "ended": {
+     "step_limit": 9,
+     "done": 8,
+     "done_unverified": 1
+    },
+    "dones_scored_0": 0,
+    "harness_exceptions": 0
+   },
+   "b": {
+    "n": 18,
+    "solved": 11.0,
+    "rate": 0.6111,
+    "cost_total": 2.38,
+    "cost_mean": 0.132,
+    "cost_median": 0.1154,
+    "cost_per_solved": 0.216,
+    "envoy_s_median": 62.8,
+    "model_s_median": 39.1,
+    "device_s_median": 21.7,
+    "aw_s_median": 72.9,
+    "steps": 266,
+    "model_calls": 310,
+    "ended": {
+     "done_unverified": 3,
+     "step_limit": 1,
+     "done": 10,
+     "failed": 4
+    },
+    "dones_scored_0": 2,
+    "harness_exceptions": 0
+   },
+   "gained": [
+    "ExpenseDeleteDuplicates2",
+    "MarkorTranscribeReceipt"
+   ],
+   "lost": [],
+   "sign_test_p": 0.5
+  },
+  "held_out:hard": {
+   "a": {
+    "n": 10,
+    "solved": 4.0,
+    "rate": 0.4,
+    "cost_total": 2.28,
+    "cost_mean": 0.2278,
+    "cost_median": 0.172,
+    "cost_per_solved": 0.5694,
+    "envoy_s_median": 92.4,
+    "model_s_median": 62.3,
+    "device_s_median": 31.9,
+    "aw_s_median": 101.2,
+    "steps": 264,
+    "model_calls": 287,
+    "ended": {
+     "done": 5,
+     "failed": 1,
+     "step_limit": 4
+    },
+    "dones_scored_0": 1,
+    "harness_exceptions": 0
+   },
+   "b": {
+    "n": 10,
+    "solved": 6.0,
+    "rate": 0.6,
+    "cost_total": 2.39,
+    "cost_mean": 0.2389,
+    "cost_median": 0.194,
+    "cost_per_solved": 0.3981,
+    "envoy_s_median": 113.7,
+    "model_s_median": 79.4,
+    "device_s_median": 39.1,
+    "aw_s_median": 127.9,
+    "steps": 288,
+    "model_calls": 315,
+    "ended": {
+     "done": 5,
+     "step_limit": 1,
+     "failed": 3,
+     "done_unverified": 1
+    },
+    "dones_scored_0": 1,
+    "harness_exceptions": 0
+   },
+   "gained": [
+    "RecipeAddMultipleRecipesFromImage",
+    "RecipeDeleteMultipleRecipesWithConstraint",
+    "SportsTrackerActivitiesOnDate"
+   ],
+   "lost": [
+    "MarkorCreateNoteAndSms"
+   ],
+   "sign_test_p": 0.625
+  },
+  "dev:easy": {
+   "a": {
+    "n": 31,
+    "solved": 27.0,
+    "rate": 0.871,
+    "cost_total": 2.44,
+    "cost_mean": 0.0786,
+    "cost_median": 0.0589,
+    "cost_per_solved": 0.0902,
+    "envoy_s_median": 32.3,
+    "model_s_median": 21.3,
+    "device_s_median": 11.6,
+    "aw_s_median": 41.1,
+    "steps": 266,
+    "model_calls": 314,
+    "ended": {
+     "done": 16,
+     "failed": 1,
+     "done_unverified": 11,
+     "step_limit": 3
+    },
+    "dones_scored_0": 0,
+    "harness_exceptions": 0
+   },
+   "b": {
+    "n": 31,
+    "solved": 27.0,
+    "rate": 0.871,
+    "cost_total": 2.28,
+    "cost_mean": 0.0736,
+    "cost_median": 0.0533,
+    "cost_per_solved": 0.0845,
+    "envoy_s_median": 33.8,
+    "model_s_median": 22.6,
+    "device_s_median": 11.2,
+    "aw_s_median": 41.0,
+    "steps": 276,
+    "model_calls": 319,
+    "ended": {
+     "done": 17,
+     "failed": 2,
+     "done_unverified": 12
+    },
+    "dones_scored_0": 3,
+    "harness_exceptions": 0
+   },
+   "gained": [
+    "SimpleCalendarFirstEventAfterStartTime"
+   ],
+   "lost": [
+    "RetroPlayingQueue"
+   ],
+   "sign_test_p": 1.0
+  },
+  "dev:medium": {
+   "a": {
+    "n": 18,
+    "solved": 10.0,
+    "rate": 0.5556,
+    "cost_total": 2.8,
+    "cost_mean": 0.1555,
+    "cost_median": 0.1029,
+    "cost_per_solved": 0.28,
+    "envoy_s_median": 49.3,
+    "model_s_median": 32.9,
+    "device_s_median": 16.0,
+    "aw_s_median": 57.9,
+    "steps": 301,
+    "model_calls": 337,
+    "ended": {
+     "done": 9,
+     "step_limit": 8,
+     "done_unverified": 1
+    },
+    "dones_scored_0": 0,
+    "harness_exceptions": 0
+   },
+   "b": {
+    "n": 18,
+    "solved": 12.0,
+    "rate": 0.6667,
+    "cost_total": 2.73,
+    "cost_mean": 0.1515,
+    "cost_median": 0.1074,
+    "cost_per_solved": 0.2272,
+    "envoy_s_median": 58.2,
+    "model_s_median": 40.8,
+    "device_s_median": 17.3,
+    "aw_s_median": 67.0,
+    "steps": 299,
+    "model_calls": 333,
+    "ended": {
+     "done": 10,
+     "step_limit": 1,
+     "failed": 4,
+     "done_unverified": 2,
+     "cost_limit": 1
+    },
+    "dones_scored_0": 0,
+    "harness_exceptions": 0
+   },
+   "gained": [
+    "FilesMoveFile",
+    "MarkorChangeNoteContent",
+    "TasksDueNextWeek",
+    "TasksHighPriorityTasks"
+   ],
+   "lost": [
+    "MarkorCreateNoteFromClipboard",
+    "VlcCreateTwoPlaylists"
+   ],
+   "sign_test_p": 0.6875
+  },
+  "dev:hard": {
+   "a": {
+    "n": 9,
+    "solved": 1.0,
+    "rate": 0.1111,
+    "cost_total": 2.06,
+    "cost_mean": 0.2289,
+    "cost_median": 0.1525,
+    "cost_per_solved": 2.0603,
+    "envoy_s_median": 69.8,
+    "model_s_median": 51.5,
+    "device_s_median": 20.5,
+    "aw_s_median": 77.1,
+    "steps": 215,
+    "model_calls": 237,
+    "ended": {
+     "step_limit": 4,
+     "done": 2,
+     "cost_limit": 2,
+     "failed": 1
+    },
+    "dones_scored_0": 1,
+    "harness_exceptions": 0
+   },
+   "b": {
+    "n": 9,
+    "solved": 2.0,
+    "rate": 0.2222,
+    "cost_total": 2.34,
+    "cost_mean": 0.2604,
+    "cost_median": 0.2128,
+    "cost_per_solved": 1.1719,
+    "envoy_s_median": 104.5,
+    "model_s_median": 65.1,
+    "device_s_median": 24.5,
+    "aw_s_median": 112.4,
+    "steps": 268,
+    "model_calls": 301,
+    "ended": {
+     "failed": 3,
+     "done": 3,
+     "cost_limit": 2,
+     "done_unverified": 1
+    },
+    "dones_scored_0": 2,
+    "harness_exceptions": 0
+   },
+   "gained": [
+    "SaveCopyOfReceiptTaskEval"
+   ],
+   "lost": [],
+   "sign_test_p": 1.0
+  }
+ },
+ "by_app": {
+  "simple calendar pro": {
+   "n": 17,
+   "a": 15.0,
+   "b": 17.0
+  },
+  "settings": {
+   "n": 14,
+   "a": 14.0,
+   "b": 14.0
+  },
+  "multi-app": {
+   "n": 11,
+   "a": 5.0,
+   "b": 5.0
+  },
+  "markor": {
+   "n": 10,
+   "a": 7.0,
+   "b": 8.0
+  },
+  "broccoli app": {
+   "n": 10,
+   "a": 6.0,
+   "b": 8.0
+  },
+  "pro expense": {
+   "n": 7,
+   "a": 5.0,
+   "b": 6.0
+  },
+  "open tracks sports tracker": {
+   "n": 6,
+   "a": 1.0,
+   "b": 2.0
+  },
+  "tasks": {
+   "n": 6,
+   "a": 0.0,
+   "b": 3.0
+  },
+  "simple sms messenger": {
+   "n": 5,
+   "a": 4.0,
+   "b": 4.0
+  },
+  "joplin": {
+   "n": 4,
+   "a": 3.0,
+   "b": 3.0
+  },
+  "retro music": {
+   "n": 4,
+   "a": 2.0,
+   "b": 1.0
+  },
+  "chrome": {
+   "n": 3,
+   "a": 0.0,
+   "b": 0.0
+  },
+  "clock": {
+   "n": 3,
+   "a": 3.0,
+   "b": 3.0
+  },
+  "osmand": {
+   "n": 3,
+   "a": 1.0,
+   "b": 1.0
+  },
+  "audio recorder": {
+   "n": 2,
+   "a": 2.0,
+   "b": 2.0
+  },
+  "camera": {
+   "n": 2,
+   "a": 1.0,
+   "b": 1.0
+  },
+  "contacts": {
+   "n": 2,
+   "a": 2.0,
+   "b": 2.0
+  },
+  "files": {
+   "n": 2,
+   "a": 1.0,
+   "b": 2.0
+  },
+  "vlc": {
+   "n": 2,
+   "a": 2.0,
+   "b": 1.0
+  },
+  "simple gallery pro": {
+   "n": 1,
+   "a": 0.0,
+   "b": 1.0
+  },
+  "simple draw pro": {
+   "n": 1,
+   "a": 0.0,
+   "b": 1.0
+  },
+  "clipper": {
+   "n": 1,
+   "a": 0.0,
+   "b": 0.0
+  }
+ },
+ "mechanisms": {
+  "all": {
+   "a": {
+    "steps": 1592,
+    "screenshots": 173,
+    "scrolls": 173,
+    "scroll reports": 0,
+    "scroll reports: list end": 0,
+    "scroll reports: nothing new (all seen before)": 0,
+    "scroll reports: next part of a long text": 0,
+    "screens with row text": 0,
+    "screens with long text in parts": 0,
+    "replans": 65,
+    "ended with a done in the last 5 steps": 28,
+    "ended with a done in the last 5 steps, scored 1": 27,
+    "failed (the agent's own fail)": 3,
+    "ended with a done on the very last step": 1,
+    "ended with a done on the very last step, scored 1": 1
+   },
+   "b": {
+    "steps": 1670,
+    "screenshots": 138,
+    "scrolls": 166,
+    "scroll reports": 168,
+    "scroll reports: list end": 107,
+    "scroll reports: nothing new (all seen before)": 51,
+    "scroll reports: next part of a long text": 5,
+    "screens with row text": 387,
+    "screens with long text in parts": 8,
+    "replans": 62,
+    "ended with a done in the last 5 steps": 40,
+    "ended with a done in the last 5 steps, scored 1": 33,
+    "failed (the agent's own fail)": 17,
+    "ended with a done on the very last step": 21,
+    "ended with a done on the very last step, scored 1": 15
+   }
+  },
+  "held_out": {
+   "a": {
+    "steps": 814,
+    "screenshots": 95,
+    "scrolls": 101,
+    "scroll reports": 0,
+    "scroll reports: list end": 0,
+    "scroll reports: nothing new (all seen before)": 0,
+    "scroll reports: next part of a long text": 0,
+    "screens with row text": 0,
+    "screens with long text in parts": 0,
+    "replans": 33,
+    "ended with a done in the last 5 steps": 13,
+    "ended with a done in the last 5 steps, scored 1": 12,
+    "failed (the agent's own fail)": 1
+   },
+   "b": {
+    "steps": 832,
+    "screenshots": 74,
+    "scrolls": 85,
+    "scroll reports": 87,
+    "scroll reports: list end": 57,
+    "scroll reports: nothing new (all seen before)": 25,
+    "scroll reports: next part of a long text": 2,
+    "screens with row text": 167,
+    "screens with long text in parts": 3,
+    "replans": 31,
+    "ended with a done in the last 5 steps": 19,
+    "ended with a done in the last 5 steps, scored 1": 16,
+    "failed (the agent's own fail)": 8,
+    "ended with a done on the very last step": 10,
+    "ended with a done on the very last step, scored 1": 8
+   }
+  },
+  "dev": {
+   "a": {
+    "steps": 778,
+    "screenshots": 78,
+    "scrolls": 72,
+    "scroll reports": 0,
+    "scroll reports: list end": 0,
+    "scroll reports: nothing new (all seen before)": 0,
+    "scroll reports: next part of a long text": 0,
+    "screens with row text": 0,
+    "screens with long text in parts": 0,
+    "replans": 32,
+    "failed (the agent's own fail)": 2,
+    "ended with a done in the last 5 steps": 15,
+    "ended with a done in the last 5 steps, scored 1": 15,
+    "ended with a done on the very last step": 1,
+    "ended with a done on the very last step, scored 1": 1
+   },
+   "b": {
+    "steps": 838,
+    "screenshots": 64,
+    "scrolls": 81,
+    "scroll reports": 81,
+    "scroll reports: list end": 50,
+    "scroll reports: nothing new (all seen before)": 26,
+    "scroll reports: next part of a long text": 3,
+    "screens with row text": 220,
+    "screens with long text in parts": 5,
+    "replans": 31,
+    "failed (the agent's own fail)": 9,
+    "ended with a done in the last 5 steps": 21,
+    "ended with a done in the last 5 steps, scored 1": 17,
+    "ended with a done on the very last step": 11,
+    "ended with a done on the very last step, scored 1": 7
+   }
+  }
+ }
+}

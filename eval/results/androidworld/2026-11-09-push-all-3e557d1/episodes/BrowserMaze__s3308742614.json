@@ -1,0 +1,100 @@
+{
+ "task": "BrowserMaze",
+ "seed": 3308742614,
+ "goal": "Open the file task.html in Downloads in the file manager; when prompted open it with Chrome. Then navigate the X to the bottom-right cell, by using the direction buttons.",
+ "score": 0.0,
+ "aw_run_time_s": 76.5,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 21:50:12.897634",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-all-3e557d1-1109-214858-0f54",
+  "goal": "Open the file task.html in Downloads in the file manager; when prompted open it with Chrome. Then navigate the X to the bottom-right cell, by using the direction buttons.",
+  "max_steps": 20,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "failed",
+  "result": "stuck on the same screen after two recoveries",
+  "done": true,
+  "answer": null,
+  "steps_device": 15,
+  "iterations": 18,
+  "looks": 2,
+  "screenshots_sent": 7,
+  "replans": 1,
+  "stuck_recoveries": 3,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 13,
+   "look": 2
+  },
+  "model_calls": 18,
+  "input_tokens": 44140,
+  "cached_tokens": 28852,
+  "output_tokens": 4152,
+  "reasoning_tokens": 2212,
+  "cost_usd": 0.149962,
+  "cost_at_standard_usd": 0.149962,
+  "duration_s": 69.06,
+  "model_s": 49.22,
+  "device_s": 19.84,
+  "connect_s": 0.92,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Chrome",
+   "subgoals": [
+    "Tap Down to move X from (1,1) to (1,2)",
+    "Tap Down again to move X to (1,3)",
+    "Tap Right to move X to (2,3)",
+    "Tap Right to move X into the bottom-right target cell (3,3)",
+    "Confirm X is in the bottom-right cell"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "whether X is in the bottom-right (green target) cell",
+    "field_hint": ""
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-2026-11-09-push-all-3e557d1-1109-214858-0f54",
+  "envoy_commit": "3e557d1c7c51335df35a449886077200abd2a357",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-all-3e557d1/traces/BrowserMaze__s3308742614.jsonl.gz",
+  "wall_s": 71.6,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

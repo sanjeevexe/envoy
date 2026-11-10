@@ -1,0 +1,101 @@
+{
+ "task": "SportsTrackerTotalDurationForCategoryThisWeek",
+ "seed": 1164347337,
+ "goal": "What was the total duration of running activities in the OpenTracks app this week? Assume the week starts from Monday. Express your answer in minutes as a single integer.",
+ "score": 0.0,
+ "aw_run_time_s": 75.1,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 23:52:44.397719",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-all-3e557d1-1109-235131-ca83",
+  "goal": "What was the total duration of running activities in the OpenTracks app this week? Assume the week starts from Monday. Express your answer in minutes as a single integer.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "failed",
+  "result": "Could not determine which activities this week (Mon Oct 9–Sun Oct 15, 2023) were running: the remembered list shows durations (e.g. Yesterday 30:00, Fri Quick Sweat 1:15:00) but not their categories, and aggregated stats are not week-filtered. Missing confirmed running durations to sum.",
+  "done": true,
+  "answer": null,
+  "steps_device": 9,
+  "iterations": 10,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 6,
+   "scroll": 1,
+   "back": 1,
+   "fail": 1
+  },
+  "model_calls": 11,
+  "input_tokens": 27317,
+  "cached_tokens": 18044,
+  "output_tokens": 4105,
+  "reasoning_tokens": 2806,
+  "cost_usd": 0.122801,
+  "cost_at_standard_usd": 0.122801,
+  "duration_s": 67.23,
+  "model_s": 53.29,
+  "device_s": 13.94,
+  "connect_s": 0.88,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "OpenTracks",
+   "subgoals": [
+    "Open OpenTracks and view the activities list",
+    "Identify running activities dated Monday, October 9, 2023 through Sunday, October 15, 2023",
+    "Note the duration of each running activity in that week, scrolling the list if needed",
+    "Sum the durations and convert the total to minutes as a single integer"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "total duration of running activities this week (Monday October 9 to Sunday October 15, 2023) in minutes as a single integer",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-2026-11-09-push-all-3e557d1-1109-235131-ca83",
+  "envoy_commit": "3e557d1c7c51335df35a449886077200abd2a357",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-all-3e557d1/traces/SportsTrackerTotalDurationForCategoryThisWeek__s1164347337.jsonl.gz",
+  "wall_s": 69.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.9
+  }
+ }
+}

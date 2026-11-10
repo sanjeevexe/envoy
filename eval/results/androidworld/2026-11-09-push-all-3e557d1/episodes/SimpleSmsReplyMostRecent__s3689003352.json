@@ -1,0 +1,116 @@
+{
+ "task": "SimpleSmsReplyMostRecent",
+ "seed": 3689003352,
+ "goal": "Reply to the most recent text message using Simple SMS Messenger with message: A quick brown fox.",
+ "score": 1.0,
+ "aw_run_time_s": 57.0,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 23:40:52.842961",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-all-3e557d1-1109-234014-82d4",
+  "goal": "Reply to the most recent text message using Simple SMS Messenger with message: A quick brown fox.",
+  "max_steps": 12,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Replied to the most recent conversation (+17594820731) with 'A quick brown fox.'",
+  "done": true,
+  "answer": "Replied to the most recent conversation (+17594820731) with 'A quick brown fox.'",
+  "steps_device": 4,
+  "iterations": 5,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 2,
+   "type": 1,
+   "done": 1
+  },
+  "model_calls": 6,
+  "input_tokens": 11832,
+  "cached_tokens": 9144,
+  "output_tokens": 952,
+  "reasoning_tokens": 417,
+  "cost_usd": 0.031621,
+  "cost_at_standard_usd": 0.031621,
+  "duration_s": 26.62,
+  "model_s": 14.74,
+  "device_s": 11.88,
+  "connect_s": 0.89,
+  "approvals": [
+   {
+    "step": 4,
+    "description": "tap \"SMS\" in com.simplemobiletools.smsmessenger",
+    "reasons": [
+     "rule: target id 'com.simplemobiletools.smsmessenger:id/thread_send_message'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "SMS Messenger",
+   "subgoals": [
+    "Open SMS Messenger",
+    "Open the most recent conversation",
+    "Tap the message input field",
+    "Type 'A quick brown fox.'",
+    "Tap Send"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "A quick brown fox.",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'A quick brown fox.' is visible"
+  },
+  "trace_dir": "data/runs/aw-2026-11-09-push-all-3e557d1-1109-234014-82d4",
+  "envoy_commit": "3e557d1c7c51335df35a449886077200abd2a357",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-all-3e557d1/traces/SimpleSmsReplyMostRecent__s3689003352.jsonl.gz",
+  "wall_s": 29.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.7
+  }
+ }
+}

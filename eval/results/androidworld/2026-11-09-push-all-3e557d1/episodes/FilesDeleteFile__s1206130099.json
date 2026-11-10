@@ -1,0 +1,129 @@
+{
+ "task": "FilesDeleteFile",
+ "seed": 1206130099,
+ "goal": "Delete the file q2a8_fancy_banana.mp3 from the Android filesystem located in the Notifications folder within the sdk_gphone_x86_64 storage area.",
+ "score": 1.0,
+ "aw_run_time_s": 80.7,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 22:12:48.413253",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-all-3e557d1-1109-221131-9bef",
+  "goal": "Delete the file q2a8_fancy_banana.mp3 from the Android filesystem located in the Notifications folder within the sdk_gphone_x86_64 storage area.",
+  "max_steps": 22,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Deleted q2a8_fancy_banana.mp3 from the Notifications folder; it no longer appears in the file list (edited_q2a8_fancy_banana.mp3 remains).",
+  "done": true,
+  "answer": "Deleted q2a8_fancy_banana.mp3 from the Notifications folder; it no longer appears in the file list (edited_q2a8_fancy_banana.mp3 remains).",
+  "steps_device": 14,
+  "iterations": 15,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 6,
+   "scroll": 3,
+   "type": 1,
+   "long_press": 1,
+   "wait": 1,
+   "back": 1,
+   "done": 1
+  },
+  "model_calls": 17,
+  "input_tokens": 38084,
+  "cached_tokens": 27572,
+  "output_tokens": 3592,
+  "reasoning_tokens": 1792,
+  "cost_usd": 0.119402,
+  "cost_at_standard_usd": 0.119402,
+  "duration_s": 72.05,
+  "model_s": 47.13,
+  "device_s": 24.92,
+  "connect_s": 0.9,
+  "approvals": [
+   {
+    "step": 10,
+    "description": "tap \"Delete\" in com.google.android.documentsui",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 11,
+    "description": "tap \"OK\" in com.google.android.documentsui",
+    "reasons": [
+     "screen: confirming a deletion",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Files",
+   "subgoals": [
+    "Select the file q2a8_fancy_banana.mp3 in the Notifications search results (not the edited_ file)",
+    "Open the delete option from the selection toolbar or overflow menu",
+    "Confirm deletion in the confirmation dialog",
+    "Verify q2a8_fancy_banana.mp3 no longer appears in the Notifications folder"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "confirmation that q2a8_fancy_banana.mp3 is no longer listed in the Notifications folder",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: q2a8, mp3, Notifications, q2a8"
+  },
+  "trace_dir": "data/runs/aw-2026-11-09-push-all-3e557d1-1109-221131-9bef",
+  "envoy_commit": "3e557d1c7c51335df35a449886077200abd2a357",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-all-3e557d1/traces/FilesDeleteFile__s1206130099.jsonl.gz",
+  "wall_s": 74.5,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

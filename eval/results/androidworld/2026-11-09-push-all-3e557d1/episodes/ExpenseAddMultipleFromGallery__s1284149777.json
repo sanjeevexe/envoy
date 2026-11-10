@@ -1,0 +1,136 @@
+{
+ "task": "ExpenseAddMultipleFromGallery",
+ "seed": 1284149777,
+ "goal": "Add the expenses from expenses.jpg in Simple Gallery Pro to pro expense.",
+ "score": 1.0,
+ "aw_run_time_s": 146.7,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 22:01:56.830491",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-all-3e557d1-1109-215934-b67d",
+  "goal": "Add the expenses from expenses.jpg in Simple Gallery Pro to pro expense.",
+  "max_steps": 60,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Added all expenses from expenses.jpg to Pro Expense: Dress $436.35 (Clothes, Paid by card), Furnishing $350.07 (Housing, A need), and Dental Care $39.54 (Health Care, A need). All three appear in the Recent list.",
+  "done": true,
+  "answer": "Added all expenses from expenses.jpg to Pro Expense: Dress $436.35 (Clothes, Paid by card), Furnishing $350.07 (Housing, A need), and Dental Care $39.54 (Health Care, A need). All three appear in the Recent list.",
+  "steps_device": 35,
+  "iterations": 40,
+  "looks": 4,
+  "screenshots_sent": 4,
+  "replans": 2,
+  "stuck_recoveries": 1,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 2,
+   "tap": 17,
+   "look": 4,
+   "type": 9,
+   "scroll": 3,
+   "back": 2,
+   "swipe": 2,
+   "done": 1
+  },
+  "model_calls": 43,
+  "input_tokens": 106331,
+  "cached_tokens": 72700,
+  "output_tokens": 7442,
+  "reasoning_tokens": 3081,
+  "cost_usd": 0.297904,
+  "cost_at_standard_usd": 0.297904,
+  "duration_s": 136.76,
+  "model_s": 87.17,
+  "device_s": 49.59,
+  "connect_s": 0.92,
+  "approvals": [
+   {
+    "step": 18,
+    "description": "tap \"SAVE\" in com.arduia.expense",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 26,
+    "description": "tap \"SAVE\" in com.arduia.expense",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 39,
+    "description": "tap \"SAVE\" in com.arduia.expense",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Pro Expense",
+   "subgoals": [
+    "Scroll the category list and select Health Care for Dental Care",
+    "Enter note \"A need\" and tap SAVE",
+    "Open the expense list/history from Totals",
+    "Confirm Dental Care $39.54 is shown in the list"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Dental Care",
+    "field_hint": ""
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Dental Care' is visible"
+  },
+  "trace_dir": "data/runs/aw-2026-11-09-push-all-3e557d1-1109-215934-b67d",
+  "envoy_commit": "3e557d1c7c51335df35a449886077200abd2a357",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-all-3e557d1/traces/ExpenseAddMultipleFromGallery__s1284149777.jsonl.gz",
+  "wall_s": 139.3,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

@@ -1,0 +1,126 @@
+{
+ "task": "RecipeDeleteDuplicateRecipes3",
+ "seed": 2676632063,
+ "goal": "Delete all but one of any recipes in the Broccoli app that are exact duplicates, ensuring at least one instance of each unique recipe remains",
+ "score": 0.0,
+ "aw_run_time_s": 201.6,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-09 23:01:34.827198",
+ "envoy": {
+  "run_id": "aw-2026-11-09-push-all-3e557d1-1109-225815-9d45",
+  "goal": "Delete all but one of any recipes in the Broccoli app that are exact duplicates, ensuring at least one instance of each unique recipe remains",
+  "max_steps": 34,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "failed",
+  "result": "Did not finish deleting exact duplicates. Found multiple distinct Butternut Squash Soup variants that must be kept: A 3-4 servings/1 hr/ingredients subject to change; B 6 servings/4 hrs/ingredients as desired; C 8 servings/4 hrs/ingredients varies; and current copy 2 servings/45 mins/ingredients subject to change. Still needed to check remaining Butternut copies and other apparent duplicates such as Avocado Toast with Egg, compare all fields, delete only later exact copies via More options > Delete, and re-scroll the Recipes list to confirm one instance of each unique recipe remains.",
+  "done": true,
+  "answer": null,
+  "steps_device": 27,
+  "iterations": 34,
+  "looks": 6,
+  "screenshots_sent": 6,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "scroll": 13,
+   "look": 6,
+   "tap": 9,
+   "back": 4,
+   "fail": 1
+  },
+  "model_calls": 37,
+  "input_tokens": 99710,
+  "cached_tokens": 58472,
+  "output_tokens": 10399,
+  "reasoning_tokens": 5882,
+  "cost_usd": 0.384626,
+  "cost_at_standard_usd": 0.384626,
+  "duration_s": 194.28,
+  "model_s": 135.7,
+  "device_s": 58.58,
+  "connect_s": 0.87,
+  "approvals": [
+   {
+    "step": 23,
+    "description": "tap \"Delete\" in com.flauschcode.broccoli",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 24,
+    "description": "tap \"DELETE\" in com.flauschcode.broccoli",
+    "reasons": [
+     "rule: target says 'DELETE'",
+     "screen: confirming a deletion",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Broccoli",
+   "subgoals": [
+    "From the Recipes list, scroll top to bottom and enumerate every recipe title and description, noting duplicate groups",
+    "Open copies in each duplicate group and compare servings, time, description, ingredients, and directions to distinguish exact duplicates from different variants",
+    "Keep one copy of each unique variant, including different Butternut Squash Soup variants already identified",
+    "For each later copy whose fields are identical to a kept copy, open More options, choose Delete, and confirm DELETE",
+    "Repeat checking the remaining duplicates, including Avocado Toast with Egg if duplicated, until no exact duplicates remain",
+    "Return to the Recipes list and scroll through it to confirm one instance of each unique recipe remains"
+   ],
+   "success_check": {
+    "kind": "element_present",
+    "value": "New Recipe",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-2026-11-09-push-all-3e557d1-1109-225815-9d45",
+  "envoy_commit": "3e557d1c7c51335df35a449886077200abd2a357",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-09-push-all-3e557d1/traces/RecipeDeleteDuplicateRecipes3__s2676632063.jsonl.gz",
+  "wall_s": 196.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.3
+  }
+ }
+}

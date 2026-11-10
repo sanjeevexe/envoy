@@ -1,0 +1,470 @@
+[
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-203917-bf74",
+  20,
+  "done",
+  {
+   "type": "done",
+   "result": "Moved holiday_photos.jpg from Podcasts to DCIM in the sdk_gphone storage area; after tapping MOVE in DCIM the file is no longer listed in Podcasts and the screen showed 'Moving 1 item.'"
+  },
+  false,
+  "read",
+  "read",
+  0.0096904
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-203917-bf74",
+  20,
+  "done",
+  {
+   "type": "done",
+   "result": "Moved holiday_photos.jpg from Podcasts to DCIM in the same storage area; the Files app showed 'Moving 1 item' after confirming MOVE in DCIM."
+  },
+  false,
+  "read",
+  "read",
+  0.015548
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-203917-bf74",
+  20,
+  "done",
+  {
+   "type": "done",
+   "result": "Moved holiday_photos.jpg from Podcasts to DCIM in the sdk_gphone storage area; Files shows 'Moving 1 item' and the file is no longer listed in Podcasts."
+  },
+  false,
+  "read",
+  "read",
+  0.004385600000000001
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-204959-7271",
+  10,
+  "done",
+  {
+   "type": "done",
+   "result": "3"
+  },
+  true,
+  "read",
+  "read",
+  0.022524
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-204959-7271",
+  10,
+  "done",
+  {
+   "type": "fail",
+   "reason": "Could not reach the Ideas folder to-do list to count its items; the screen shows an individual note instead."
+  },
+  false,
+  "read",
+  "read",
+  0.0112664
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-204959-7271",
+  10,
+  "done",
+  {
+   "type": "done",
+   "result": "3"
+  },
+  true,
+  "read",
+  "read",
+  0.013660799999999999
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-212301-004b",
+  12,
+  "done",
+  {
+   "type": "done",
+   "result": "Resent the message 'Inconceivable!' to Noa Mohammed in Simple SMS Messenger."
+  },
+  false,
+  "read",
+  "read",
+  0.0059304
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-212301-004b",
+  12,
+  "done",
+  {
+   "type": "done",
+   "result": "Resent \"Inconceivable!\" to Noa Mohammed. The conversation now shows the message twice, the most recent copy being the resent one."
+  },
+  false,
+  "read",
+  "read",
+  0.003092
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-212301-004b",
+  12,
+  "done",
+  {
+   "type": "done",
+   "result": "Resent the message 'Inconceivable!' to Noa Mohammed in Simple SMS Messenger. It now appears again as the most recent message in the conversation."
+  },
+  false,
+  "read",
+  "read",
+  0.003232
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-213105-3f53",
+  10,
+  "done",
+  {
+   "type": "done",
+   "result": "6"
+  },
+  true,
+  "read",
+  "read",
+  0.0209544
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-213105-3f53",
+  10,
+  "done",
+  {
+   "type": "done",
+   "result": "6"
+  },
+  true,
+  "read",
+  "read",
+  0.0166568
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-213105-3f53",
+  10,
+  "done",
+  {
+   "type": "done",
+   "result": "6"
+  },
+  true,
+  "read",
+  "read",
+  0.0114568
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-203259-d70e",
+  10,
+  "done",
+  {
+   "type": "done",
+   "result": "Timer created showing 00h 16m 35s, not started."
+  },
+  false,
+  "read",
+  "read",
+  0.0061744
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-203259-d70e",
+  10,
+  "done",
+  {
+   "type": "done",
+   "result": "Timer created showing 00h 16m 35s (0 hours, 16 minutes, 35 seconds), not started."
+  },
+  false,
+  "read",
+  "read",
+  0.003416
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-203259-d70e",
+  10,
+  "done",
+  {
+   "type": "done",
+   "result": "Timer created showing 00h 16m 35s (16 minutes 35 seconds), not started."
+  },
+  false,
+  "read",
+  "read",
+  0.003456
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-204335-0c38",
+  14,
+  "done",
+  {
+   "type": "done",
+   "result": "Deleted all 3 notes in Markor: art_project_sketches_st16.md, backup_favorite_book_quotes.md, and final_budget_home_renovation.md. The Files list then showed only the .. and .app folders, with no .md notes remaining."
+  },
+  false,
+  "read",
+  "read",
+  0.007254399999999999
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-204335-0c38",
+  14,
+  "done",
+  {
+   "type": "done",
+   "result": "All notes in Markor deleted: art_project_sketches_st16.md, backup_favorite_book_quotes.md, and final_budget_home_renovation.md were selected and deleted. The Files list afterwards showed only the '..' and '.app' folders, with no notes remaining."
+  },
+  false,
+  "read",
+  "read",
+  0.0043496
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-204335-0c38",
+  14,
+  "done",
+  {
+   "type": "done",
+   "result": "Deleted all 3 notes in Markor (art_project_sketches_st16.md, backup_favorite_book_quotes.md, final_budget_home_renovation.md). The Files list now only shows the .. and .app folders."
+  },
+  false,
+  "read",
+  "read",
+  0.0034096
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-212501-b416",
+  10,
+  "done",
+  {
+   "type": "done",
+   "result": "135"
+  },
+  true,
+  "read",
+  "read",
+  0.013016
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-212501-b416",
+  10,
+  "done",
+  {
+   "type": "done",
+   "result": "135"
+  },
+  true,
+  "read",
+  "read",
+  0.008218399999999999
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-212501-b416",
+  10,
+  "done",
+  {
+   "type": "done",
+   "result": "135"
+  },
+  true,
+  "read",
+  "read",
+  0.0060792
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-211708-4f7c",
+  14,
+  "done",
+  {
+   "type": "done",
+   "result": "All events on 2023-10-27 were deleted: Review session for Project X (11:00-11:15), Catch up on Project X (12:00-12:30), and Call with the Team (21:00-21:15). The October 27 day view now shows no events."
+  },
+  false,
+  "read",
+  "read",
+  0.016228
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-211708-4f7c",
+  14,
+  "done",
+  {
+   "type": "done",
+   "result": "Deleted all 3 calendar events on 2023-10-27 (Review session for Project X, Catch up on Project X, and Call with the Team). The October 27 day view now shows no events."
+  },
+  false,
+  "read",
+  "read",
+  0.0042
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-211708-4f7c",
+  14,
+  "done",
+  {
+   "type": "done",
+   "result": "Deleted all calendar events on 2023-10-27 (Review session for Project X, Catch up on Project X, and Call with the Team). The October 27 day view now shows no events."
+  },
+  false,
+  "read",
+  "read",
+  0.0046
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-211055-e668",
+  32,
+  "done",
+  {
+   "type": "fail",
+   "reason": "Could not finish in time: after rebuilding the cleared queue, Through the Storm, Hidden Paths, Forever Young and Whispers of the Past were added, but Heartbeat Away (5th) still needed to be added and the queue verified."
+  },
+  false,
+  "read",
+  "read",
+  0.0163144
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-211055-e668",
+  32,
+  "done",
+  {
+   "type": "done",
+   "result": "Added Through the Storm, Hidden Paths, Forever Young, Whispers of the Past, and Heartbeat Away to the playing queue in that order in Retro Music."
+  },
+  false,
+  "read",
+  "read",
+  0.013816799999999999
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-211055-e668",
+  32,
+  "done",
+  {
+   "type": "fail",
+   "reason": "Could not finish adding all five songs in order within step limit: rebuild had Through the Storm, Hidden Paths and Forever Young confirmed, Whispers of the Past was added at step 27, but Heartbeat Away still needed to be added and the final queue order verified."
+  },
+  false,
+  "read",
+  "read",
+  0.010036799999999999
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-212557-d1c7",
+  10,
+  "done",
+  {
+   "type": "done",
+   "result": "18668"
+  },
+  true,
+  "read",
+  "read",
+  0.013434399999999999
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-212557-d1c7",
+  10,
+  "done",
+  {
+   "type": "done",
+   "result": "18668"
+  },
+  true,
+  "read",
+  "read",
+  0.0117832
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-212557-d1c7",
+  10,
+  "done",
+  {
+   "type": "done",
+   "result": "18668"
+  },
+  true,
+  "read",
+  "read",
+  0.0098832
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-212709-d0d8",
+  10,
+  "done",
+  {
+   "type": "done",
+   "result": "30"
+  },
+  true,
+  "read",
+  "read",
+  0.019730400000000002
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-212709-d0d8",
+  10,
+  "done",
+  {
+   "type": "done",
+   "result": "30"
+  },
+  true,
+  "read",
+  "read",
+  0.0076863999999999995
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-212709-d0d8",
+  10,
+  "done",
+  {
+   "type": "done",
+   "result": "30"
+  },
+  true,
+  "read",
+  "read",
+  0.0102864
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-213301-bb0b",
+  10,
+  "done",
+  {
+   "type": "done",
+   "result": "Attend training session, Call client for follow-up, Research market trends, Change Air Filter, Renew Driver's License, Clean Out Fridge, Grocery Shopping, Learn to Play Guitar, Research Vacation Destinations, Water Plants, Read 'The Martian', Reply to Emails, Submit Expense Report, Organize Closet"
+  },
+  true,
+  "read",
+  "read",
+  0.0159944
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-213301-bb0b",
+  10,
+  "done",
+  {
+   "type": "done",
+   "result": "Attend training session, Call client for follow-up, Research market trends, Change Air Filter, Renew Driver's License, Clean Out Fridge, Grocery Shopping, Learn to Play Guitar, Research Vacation Destinations, Water Plants, Read 'The Martian', Reply to Emails, Submit Expense Report, Organize Closet"
+  },
+  true,
+  "read",
+  "read",
+  0.0126904
+ ],
+ [
+  "aw-2026-11-09-push-dev-62f20b8-1109-213301-bb0b",
+  10,
+  "done",
+  {
+   "type": "done",
+   "result": "Attend training session, Call client for follow-up, Research market trends, Change Air Filter, Renew Driver's License, Clean Out Fridge, Grocery Shopping, Learn to Play Guitar, Research Vacation Destinations, Water Plants, Read 'The Martian', Reply to Emails, Submit Expense Report, Organize Closet"
+  },
+  true,
+  "read",
+  "read",
+  0.0100304
+ ]
+]
