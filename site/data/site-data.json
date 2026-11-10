@@ -5692,50 +5692,63 @@
     "note": "Headline, Routines"
    },
    "hybrid": {
-    "date": "2026-11-03",
+    "date": "2026-11-09",
     "profile": "hybrid",
-    "commit": "7ed4aa6",
-    "stage": "2026-11-03-hybrid-7ed4aa6",
+    "commit": "3e557d1",
+    "stage": "2026-11-09-push-all-3e557d1",
     "all": {
-     "success": 74,
+     "success": 85,
      "n": 116,
-     "rate": 63.8
+     "rate": 73.3
     },
     "held": {
-     "success": 36,
+     "success": 44,
      "n": 58,
-     "rate": 62.1
+     "rate": 75.9
     },
-    "median_usd": 0.0903,
-    "median_s": 51.845,
-    "calls_median": 11.0,
+    "median_usd": 0.1005,
+    "median_s": 54.895,
+    "calls_median": 12.0,
+    "prev": {
+     "date": "2026-11-03",
+     "all": {
+      "success": 74,
+      "n": 116,
+      "rate": 63.8
+     },
+     "held": {
+      "success": 36,
+      "n": 58,
+      "rate": 62.1
+     }
+    },
     "vs": {
      "held": {
       "n": 58,
-      "before": 31.0,
-      "after": 36.0,
-      "gained": 8,
-      "lost": 3,
-      "p_paired": 0.2266
+      "before": 36.0,
+      "after": 44.0,
+      "gained": 9,
+      "lost": 1,
+      "p_paired": 0.0215
      },
      "all": {
       "n": 116,
-      "before": 57.0,
-      "after": 74.0,
-      "gained": 20,
-      "lost": 3,
-      "p_paired": 0.0005
+      "before": 74.0,
+      "after": 85.0,
+      "gained": 15,
+      "lost": 4,
+      "p_paired": 0.0192
      },
-     "before": "final-standard"
+     "before": "2026-11-03-hybrid-7ed4aa6"
     },
     "src": {
-     "path": "eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/README.md"
+     "path": "eval/results/androidworld/2026-11-09-push-all-3e557d1/README.md"
     },
     "summary_src": {
-     "path": "eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/summary.json"
+     "path": "eval/results/androidworld/2026-11-09-push-all-3e557d1/summary.json"
     },
     "compare_src": {
-     "path": "eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/compare_final-standard.json"
+     "path": "eval/results/androidworld/2026-11-09-push-all-3e557d1/compare_2026-11-03-hybrid-7ed4aa6.json"
     }
    }
   },
@@ -5754,8 +5767,8 @@
    }
   },
   "tests": {
-   "functions": 836,
-   "files": 58,
+   "functions": 844,
+   "files": 59,
    "src": {
     "path": "backend/tests"
    }
@@ -6163,10 +6176,10 @@
    },
    {
     "what": "AndroidWorld, the shipped default (hybrid) on main",
-    "commit": "7ed4aa6",
+    "commit": "3e557d1",
     "final": false,
-    "value": "74/116 (63.8%); held-out 36/58 (62.1%), 2026-11-03",
-    "src": "eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/summary.json"
+    "value": "85/116 (73.3%); held-out 44/58 (75.9%), 2026-11-09",
+    "src": "eval/results/androidworld/2026-11-09-push-all-3e557d1/summary.json"
    }
   ]
  }

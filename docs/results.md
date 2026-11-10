@@ -116,11 +116,12 @@ targets in the drawn-buttons row, and the test inboxes in the memory row.
 ## AndroidWorld (separate runs)
 
 On Google's AndroidWorld benchmark (116 tasks in 20 open-source apps; seed 30, pass@1, standard tier), Envoy went from
-**21 to 57 to 74 of 116 tasks (18.1% to 63.8%)** between Oct 28 and Nov 3, solving 82% of the easy tasks in the last run.
-The last step is a paired +20 −3 (p = 0.0005). It isn't a model-only comparison: `main` also has other agent changes since
-Oct 28, and a higher per-task cost cap. 63.8% is over twice the benchmark paper's best agent (GPT-4 Turbo, 30.6%) and above
-every tree-only entry on the public, self-reported leaderboard (best 59.5%); Envoy reads the tree and adds a screenshot on
-about 11% of steps. It's not like for like, and the board's top entries use frontier models with screenshots
+**21 to 57 to 74 to 85 of 116 tasks (18.1% to 73.3%)** between Oct 28 and Nov 10, solving 89% of the easy tasks and 42%
+of the hard ones in the last run. The last step changed only the agent's code (same model, profile, cost cap and
+settings): a paired +15 −4 (p = 0.019), and on the held-out half, which its five changes weren't chosen on, 36 to 44 of
+58 (+9 −1, p = 0.021). 73.3% is over twice the benchmark paper's best agent (GPT-4 Turbo, 30.6%) and above every
+tree-only entry on the public, self-reported leaderboard (best 59.5%); Envoy reads the tree and adds a screenshot on
+about 8% of steps. It's not like for like, and the board's top entries use frontier models with screenshots
 ([the comparison](androidworld-results.md#against-the-leaderboard)).
 
 **It keeps improving, by a repeatable loop:** study the failures, ship general fixes rather than app-specific ones, and
@@ -129,11 +130,18 @@ Envoy learns can then replay as a routine at a fraction of the cost (below).
 
 | Run | All 116 | Held-out half (58) | Mean cost per task |
 | --- | --- | --- | --- |
-| Nov 3, the shipped default (`hybrid`) on `main` (`7ed4aa6`) | **74 (63.8%)** | 36 (62.1%) | $0.125 |
+| Nov 9–10, the shipped default (`hybrid`) with five general changes (`3e557d1`, now on `main`) | **85 (73.3%)** | **44 (75.9%)** | $0.125 |
+| Nov 3, the shipped default (`hybrid`) on `main` (`7ed4aa6`) | 74 (63.8%) | 36 (62.1%) | $0.125 |
 | Oct 28, Spark profile: the agent with 13 general changes, chosen on the other half (the `androidworld` branch, `a80b976`) | 57 (49.1%) | 31 (53.4%) | $0.040 |
 | Oct 28, before those changes (Spark profile, `main`) | 21 (18.1%) | 12 (20.7%) | about $0.04 |
 
-- **The Nov 3 run** is Envoy as it ships, with agent steps on Muse Wonder, at about 3.1 times the cost per task. On the
+- **The Nov 9–10 run** adds five general changes, chosen from the Nov 3 run's dev-half failures: the step count near the
+  limit, replans that know what's done, scroll reports, row labels for unlabeled icons, and long text in parts. It is one
+  run on one seed. AndroidWorld passed two runs that the agent itself ended as failed; counting only runs it finished,
+  the held-out half is 43 of 58. Envoy's real-app, SkyLark and safety checks held
+  ([`eval/results/androidworld/2026-11-09-push-all-3e557d1/`](../eval/results/androidworld/2026-11-09-push-all-3e557d1/README.md),
+  [round 4](androidworld-results.md#round-4-nov-910-five-general-changes-on-the-shipped-default)).
+- **The Nov 3 run** has agent steps on Muse Wonder, at about 3.1 times the cost per task of Oct 28. On the
   held-out half alone the change against Oct 28 (+8 −3, p = 0.23) is within run-to-run noise, and that half had already
   been run on Oct 28 and 29 and helped choose `hybrid` as the default
   ([`eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/`](../eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/README.md)).

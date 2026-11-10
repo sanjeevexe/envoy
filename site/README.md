@@ -111,7 +111,7 @@ Section numbers are positions on the page (the page numbers itself); "E:" is a g
 | --- | --- | --- |
 | 1. The idea | The one-liner and the plain line | The words are in `site/index.html` |
 | 1 | The headline numbers | `eval/results/final/report.md`'s suite rows, parsed by the build (`headlines`), and the runs below; the wording follows the README's top |
-| 1, 3 | Muse's Nov 4 `cross_post` take; the tool count; "Changes since the evaluation" | `README.md` (`readme_facts` in the build; the tool count is checked against `backend/mcp_server/server.py`) |
+| 1, 3 | Muse's Nov 4 `cross_post` take; the tool count; "Changes since the evaluation" | `docs/features.md` (the take), `README.md` (the tool count, checked against `backend/mcp_server/server.py`) and `docs/results.md` (the changes); `readme_facts` in the build |
 | 1 | One post, start to finish; the four posts and which went live | `eval/results/showcase/live-2026-11-02/task-rows.json` (the live API's rows for the five real posts, read read-only); "live" for each done row, per `docs/demo-showcase.md` |
 | 1 | Learns: first run vs routine, medians over the real-app workflows | the cost curve's pass (see section 5) |
 | 1 | Watches: 1.57 s | `docs/reports/phone-watch-report.md` (see section 4) |

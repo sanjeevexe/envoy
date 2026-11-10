@@ -839,23 +839,28 @@ def models() -> dict:
     }
 
 
-# AndroidWorld on the shipped default (hybrid) at main, Nov 3: a separate run, shown next to the Oct 28-29 numbers.
-AW_HYBRID = REPO / "eval/results/androidworld/2026-11-03-hybrid-7ed4aa6"
+# AndroidWorld on the shipped default (hybrid) at main: the Nov 9-10 run with five general changes, compared by task with
+# the Nov 3 run before them (same model, profile, cap and settings). Both are separate runs, shown next to Oct 28-29's.
+AW_HYBRID = REPO / "eval/results/androidworld/2026-11-09-push-all-3e557d1"
+AW_HYBRID_BEFORE = "2026-11-03-hybrid-7ed4aa6"
 
 
 def aw_hybrid() -> dict:
-    """The run's own summary.json, and its paired comparison with Oct 28's final-standard (compare_final-standard.json)."""
+    """The run's own summary.json, its paired comparison with the Nov 3 run, and the Nov 3 run's own numbers."""
     sm = json.loads((AW_HYBRID / "summary.json").read_text())
-    cmp = json.loads((AW_HYBRID / "compare_final-standard.json").read_text())
-    m = re.match(r"(\d{4}-\d\d-\d\d)-(\w+)-([0-9a-f]{7})$", sm["stage"])
+    cmp_path = AW_HYBRID / f"compare_{AW_HYBRID_BEFORE}.json"
+    cmp = json.loads(cmp_path.read_text())
+    prev = json.loads((AW_HYBRID.parent / AW_HYBRID_BEFORE / "summary.json").read_text())
+    m = re.match(r"(\d{4}-\d\d-\d\d)-[\w-]+-([0-9a-f]{7})$", sm["stage"])
     pick = lambda h: {"success": int(h["success"]), "n": h["n"], "rate": h["rate"]}
-    return {"date": m.group(1), "profile": m.group(2), "commit": m.group(3), "stage": sm["stage"],
+    return {"date": m.group(1), "profile": "hybrid", "commit": m.group(2), "stage": sm["stage"],
             "all": pick(sm["overall"]), "held": pick(sm["by_half"]["held_out"]),
             "median_usd": sm["cost_standard_usd"]["median_task"], "median_s": sm["time_s"]["envoy_median"],
             "calls_median": sm["model_calls"]["median"],
+            "prev": {"date": AW_HYBRID_BEFORE[:10], "all": pick(prev["overall"]), "held": pick(prev["by_half"]["held_out"])},
             "vs": {"held": cmp["by_half"]["held_out"], "all": cmp["by_half"]["all"], "before": cmp["before"]},
             "src": src(rel(AW_HYBRID / "README.md")), "summary_src": src(rel(AW_HYBRID / "summary.json")),
-            "compare_src": src(rel(AW_HYBRID / "compare_final-standard.json"))}
+            "compare_src": src(rel(cmp_path))}
 
 
 def headlines(suites: list[dict]) -> dict:
@@ -876,15 +881,19 @@ def headlines(suites: list[dict]) -> dict:
 
 
 def readme_facts() -> dict:
-    """What the page takes from the README, its source for wording and scope: the tool count (checked against the code), the
-    Nov 4 cross_post take, and "Changes since the evaluation". Each is left out if the README stops saying it."""
+    """What the page takes from the README and the docs it points to, its sources for wording and scope: the tool count
+    (README, checked against the code), the Nov 4 cross_post take (docs/features.md), and "Changes since the evaluation"
+    (docs/results.md). Each is left out if its doc stops saying it."""
     md = (REPO / "README.md").read_text()
+    features = (REPO / "docs/features.md").read_text()
+    results = (REPO / "docs/results.md").read_text()
     code = (REPO / "backend/mcp_server/server.py").read_text()
     tools = len(re.findall(r"@\w+\.tool\b|\.tool\(", code))
     said = re.search(r"(\d+) built-in tools", md)
     assert not said or int(said[1]) == tools, ("README's tool count vs the code", said[1], tools)
-    take = re.search(r"In a (\w+ \d+) take, Muse made one `cross_post` call for ([^,]+, [^,]+ and [^,]+), and all three finished, at ([\d, and]+) model calls in Envoy's replay", md)
-    since = md.split("### Changes since the evaluation", 1)[1].split("\n## ", 1)[0] if "### Changes since the evaluation" in md else ""
+    take = re.search(r"In a (\w+ \d+) take, Muse made one `cross_post` call for ([^,]+, [^,]+ and [^,]+), and all three finished, at ([\d, and]+) model calls in Envoy's replay", features)
+    head = "\n## Changes since the evaluation"
+    since = results.split(head, 1)[1].split("\n## ", 1)[0] if head in results else ""
     items = re.findall(r"^- \*\*(.+?)\*\*:? (.+?)(?=^- \*\*|\Z)", since, re.M | re.S)
     clean = lambda t: re.sub(r"\s+", " ", plain(t)).strip().rstrip(":")
     return {"tools": tools, "take": take and {"date": take[1], "posts": take[2], "calls": take[3]},
@@ -910,7 +919,7 @@ def proof() -> dict:
     charts = {n: image(REPO / f"eval/results/final/charts/{n}.png", f"chart-{n}", 1600) for n in
               ["cost_and_time_over_repeated_runs", "success_by_system_and_layout", "recovery_by_injected_change", "real_apps_stages"]}
     aw = (REPO / "docs/androidworld-results.md").read_text()
-    head = re.search(r"\*\*Headline\.\*\* (.+)", aw).group(1)
+    head = re.search(r"\*\*Oct 28–29, the first round\.\*\* (.+)", aw).group(1)
     held = re.search(r"\*\*Held-out half:\*\* (.+)", aw)
     rt = re.search(r"they did (\d+) of (\d+) instances, against the full agent's (\d+), at (\d+) model call against (\d+), "
                    r"(\$[\d.]+) against (\$[\d.]+)", aw)

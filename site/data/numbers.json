@@ -101,10 +101,10 @@
   },
   {
    "what": "AndroidWorld, the shipped default (hybrid) on main",
-   "commit": "7ed4aa6",
+   "commit": "3e557d1",
    "final": false,
-   "value": "74/116 (63.8%); held-out 36/58 (62.1%), 2026-11-03",
-   "src": "eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/summary.json"
+   "value": "85/116 (73.3%); held-out 44/58 (75.9%), 2026-11-09",
+   "src": "eval/results/androidworld/2026-11-09-push-all-3e557d1/summary.json"
   }
  ]
 }

@@ -110,7 +110,7 @@ needed no fix, 17 a relaxed match or scroll, 2 a local repair and 4 the agent, w
 
 The agent loop ([`backend/agent/loop.py`](../backend/agent/loop.py)) plans once, then makes one model call per step. It
 reads the accessibility tree as numbered elements and adds a screenshot only when it asks to look, when an action
-changed nothing visible, or when the tree has fewer than 3 elements. That was about 11% of steps on AndroidWorld. Known
+changed nothing visible, or when the tree has fewer than 3 elements. That was about 8% of steps in the latest AndroidWorld run. Known
 pop-ups are dismissed in code and sign-in screens are handed to the person, with no model call, and a run that is stuck
 or going in circles replans.
 

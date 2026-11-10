@@ -26,7 +26,7 @@ with its own key and only the tools the person gives it. Envoy runs the task on 
 real Android phone over USB, or a cloud emulator) and tells the agent what happened.
 
 **1. Acts.** On a task it hasn't learned, an agent loop plans, then makes one model call per step. It reads the screen's
-accessibility tree as numbered elements and adds a screenshot only when it needs one (about 11% of steps on AndroidWorld).
+accessibility tree as numbered elements and adds a screenshot only when it needs one (about 8% of steps on AndroidWorld).
 On screens that are only pixels, SAM 3.1 proposes boxes and Spark picks one. Known pop-ups are dismissed and sign-ins
 handed to the person without a model call, and every action is checked by code rules as well as the model's own risk
 label.
@@ -98,9 +98,10 @@ noted. Scope, commits and every row: [`docs/results.md`](docs/results.md).
   run, 48/48 on an emulator on Google Cloud.
 - **Safety:** code rules alone caught 20/20 irreversible controls on saved screens; with instructions planted on screens,
   the agent followed them in 0 of 20 runs.
-- **AndroidWorld** (Google's benchmark, 116 tasks in 20 apps, seed 30, pass@1, a separate run): 74/116 (63.8%), up from
-  21 and then 57 through general agent changes. That's above every tree-only entry on the public, self-reported
-  leaderboard (best 59.5%); Envoy reads the tree and adds a screenshot on about 11% of steps, so it isn't like for like
+- **AndroidWorld** (Google's benchmark, 116 tasks in 20 apps, seed 30, pass@1, a separate run): 85/116 (73.3%), and
+  44/58 (75.9%) on the held-out half the latest changes weren't chosen on; up from 21, 57 and then 74 through general
+  agent changes. That's above every tree-only entry on the public, self-reported leaderboard (best 59.5%); Envoy reads
+  the tree and adds a screenshot on about 8% of steps, so it isn't like for like
   ([details](docs/androidworld-results.md)).
 - **Live posts** (separate runs): one clip went out as an Instagram Reel with a library song, a Story with a poll sticker, a TikTok with a
   sound and a YouTube Short, on test accounts, each started by an agent over MCP and approved on the iPhone.
