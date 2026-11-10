@@ -196,6 +196,11 @@ h3 { font-size: 20px; line-height: 1.25; }
 .larrow { display: grid; place-items: center; color: var(--sage); font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; position: relative; }
 .larrow::after { content: "→"; font-size: 22px; line-height: 1; }
 .larrow span { position: absolute; top: calc(50% - 26px); }
+/* Envoy's own app, under the diagram */
+.app-shot { margin: 28px 0 8px; padding: 12px; }
+.app-shot a { display: block; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); }
+.app-shot img { width: 100%; height: auto; display: block; }
+.app-shot figcaption { margin: 10px 4px 2px; font-size: 14px; color: var(--ink-2); text-align: left; }
 .pillars { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 10px; }
 .pillar.lead { grid-column: span 2; }
 .pillar.lead .big { font-size: 34px; }

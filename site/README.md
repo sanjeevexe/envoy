@@ -4,8 +4,8 @@ A guided tour of Envoy, built only from real recordings, captures and eval resul
 repo. Five sections tell one story, the same one as the demo video and the README's top, then an evidence appendix keeps the
 rest:
 
-- **1, the idea:** "Muse has a computer. Envoy gives it a phone." What it does, agent first; the demo video and the links; the
-  diagram; the headline numbers, from the final evaluation and from separate runs, as the README's top gives them; one request,
+- **1, the idea:** "Envoy gives AI agents a phone." What it does, agent first; the demo video and the links; the
+  diagram; Envoy's app; the headline numbers, from the final evaluation and from separate runs, as the README's top gives them; one request,
   start to finish.
 - **2, learns:** a first run step by step, the routine it becomes, first run vs routine on real apps, a new input, repairs,
   and a routine shared as an agent's tool; "Make it a routine", measured; Meta's models by job.

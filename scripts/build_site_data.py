@@ -1336,6 +1336,9 @@ def build() -> dict:
         "real": real_apps(),
         "learn_path": learn_path(),
         "readme": readme_facts(),
+        # Envoy's own app, as the README shows it (captures of a test copy on SkyLark, in docs/img).
+        "app": {"task": image(REPO / "docs/img/task.jpg", "app-task", 1600),
+                "approval": image(REPO / "docs/img/approval.jpg", "app-approval", 600)},
         "teach": teach(),
         "memory": memory(),
         "safety": safety(),

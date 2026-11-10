@@ -4187,6 +4187,10 @@ window.ENVOY = {
    "path": "backend/tests/test_crosspost.py"
   }
  },
+ "app": {
+  "task": "img/app-task.webp",
+  "approval": "img/app-approval.webp"
+ },
  "teach": {
   "rec": {
    "calendar": {

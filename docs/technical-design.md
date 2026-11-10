@@ -4,7 +4,7 @@ Oct 27, 2026. Updated Nov 2, 2026 for the phone-layer frame (main `947bf44`): th
 
 ## Overview
 
-**Envoy is the phone layer agents call.** It **acts** in Android apps, **learns** the tasks it does there, and **watches** the phone for events. The one-liner: *Muse has a computer. Envoy gives it a phone.*
+**Envoy is the phone layer agents call.** It **acts** in Android apps, **learns** the tasks it does there, and **watches** the phone for events. The one-liner: *Envoy gives AI agents a phone.*
 
 An agent such as Muse (Meta's assistant) already has the web, its connectors and, in Muse for Mac, the computer. Much of a person's life still runs through phone apps, and some features exist only there: a Reel set to a song from Instagram's library, a poll sticker on a Story, a sound on a TikTok or a YouTube Short. Muse's connector catalog also had none for TikTok, YouTube, Uber or DoorDash when we checked (Nov 1). Asked whether it can use the person's phone apps, Muse said: "On its own, Muse can't open and tap around in apps on your phone." Envoy is that missing layer, reached the way agents reach everything else: over MCP.
 
