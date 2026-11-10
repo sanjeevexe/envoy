@@ -474,6 +474,10 @@ class AgentRunner:
                         if f is not None:
                             field_value = ("On" if f.checked else "Off") if f.checkable else f.text
                     chk = evaluate(plan.success_check if plan else None, screen, result, field_value)
+                    if step >= self.config.max_steps:
+                        # A done on the last step is never reported as verified: on AndroidWorld 6 of the 21 given there were
+                        # guesses (an answer from part of a list, songs claimed added) that the plan's check let through.
+                        return finish("done_unverified", result, chk)
                     if chk.passed or not chk.evaluable:
                         return finish("done" if chk.passed else "done_unverified", result, chk)
                     rejections += 1

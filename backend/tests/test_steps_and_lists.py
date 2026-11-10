@@ -131,13 +131,14 @@ def test_a_replan_is_told_what_was_done_and_kept():
 class Model:
     """Answers the plan, then the given step outputs in order (the last one repeats)."""
 
-    def __init__(self, *steps: dict) -> None:
+    def __init__(self, *steps: dict, check: SuccessCheck | None = None) -> None:
         self.steps, self.prompts, self.plan_prompts = list(steps), [], []
+        self.check = check or SuccessCheck(kind="text_visible", value="Saved", field_hint=None)
 
     def call(self, job, content, **kw):
         if job == "plan":
             self.plan_prompts.append(content[0]["text"])
-            parsed = Plan(app=None, subgoals=["Open the app"], success_check=SuccessCheck(kind="text_visible", value="Saved", field_hint=None))
+            parsed = Plan(app=None, subgoals=["Open the app"], success_check=self.check)
         else:
             self.prompts.append(content[0]["text"])
             parsed = StepOutput.model_validate(self.steps.pop(0) if len(self.steps) > 1 else self.steps[0])
@@ -193,6 +194,12 @@ def test_a_done_on_the_last_step_is_accepted_though_the_plans_check_disagrees(tm
                       .run("Rename the song", task_id="last", memory=""))
     assert res.status == "done_unverified" and res.result == "Renamed it"
     assert "STEPS LEFT: 1 of 2 (this is the last step)" in model.prompts[1]
+    # a done on the last step that the plan's check accepts is still reported as unverified
+    model = Model(step({"type": "scroll", "direction": "down", "element": 2}), step({"type": "done", "result": "Song 06"}),
+                  check=SuccessCheck(kind="info", value="the first song shown", field_hint=None))
+    res = asyncio.run(AgentRunner(Songs(), model, ScriptedApprover(True), RunConfig(max_steps=2, data_scope="test_app"))
+                      .run("Which song is first?", task_id="lastinfo", memory=""))
+    assert res.status == "done_unverified" and res.check["passed"] and res.result == "Song 06"
     # with steps left, the first rejection still goes back to the model, as before
     model = Model(step({"type": "done", "result": "Renamed it"}))
     res = asyncio.run(AgentRunner(Songs(), model, ScriptedApprover(True), RunConfig(max_steps=5, data_scope="test_app"))
