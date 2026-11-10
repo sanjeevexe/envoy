@@ -546,7 +546,10 @@ class AgentRunner:
                 progress_streak = progress_streak + 1 if changed else 0
                 if progress_streak >= PROGRESS_STEPS:  # moving again: a later stuck spell starts its recoveries afresh
                     stuck_recoveries = 0
-                note = _scroll_note(screen, after, action, changed) if result_.ok else None
+                try:  # a report, never a reason for a run to fail
+                    note = _scroll_note(screen, after, action, changed) if result_.ok else None
+                except Exception as e:  # noqa: BLE001
+                    note, record["scroll_note_error"] = None, f"{type(e).__name__}: {e}"[:200]
                 record.update({
                     "device_action": action.model_dump(), "result": result_.model_dump(),
                     "target": element_record(screen.numbered[action.element - 1], screen) if action.element else None,

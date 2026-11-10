@@ -355,6 +355,12 @@ class AndroidDevice:
     def _page_text(self, el: Element, direction: str) -> None:
         """A scroll over a long text shown in parts moves the part shown (devices/screen.py, TEXT_PAGE_OVERLAP): the text
         itself, or one inside the list scrolled. The phone scrolls as well, as asked."""
+        try:
+            self._page_text_sync(el, direction)
+        except Exception:  # noqa: BLE001 - paging is a convenience; the scroll itself must still happen
+            pass
+
+    def _page_text_sync(self, el: Element, direction: str) -> None:
         last = self._last
         if last is None:
             return
